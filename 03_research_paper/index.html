@@ -1,0 +1,1089 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Semiconductor HVAC BM & LD-DOAS Portal</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Pretendard:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  
+  <style>
+    :root {
+      --bg: #090d16;
+      --surface: #0f172a;
+      --surface-card: #131d33;
+      --surface-border: #1e293b;
+      --surface-hover: #1e293b;
+      --text-main: #f8fafc;
+      --text-muted: #94a3b8;
+      --text-dim: #64748b;
+      --primary: #38bdf8;
+      --primary-glow: rgba(56, 189, 248, 0.15);
+      --accent: #34d399;
+      --warning: #fbbf24;
+      --purple: #c084fc;
+      --fab-brand: #f43f5e;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body { font-family: 'Pretendard', -apple-system, BlinkMacSystemFont, system-ui, sans-serif; background-color: var(--bg); color: var(--text-main); line-height: 1.6; padding: 0 1.25rem 5rem; }
+    .container { max-width: 1300px; margin: 0 auto; }
+    
+    .top-nav { display: flex; gap: 1rem; padding: 2rem 0; border-bottom: 1px solid var(--surface-border); margin-bottom: 2rem; align-items: center; justify-content: center; }
+    .top-nav-btn { background: transparent; border: 2px solid var(--surface-border); color: var(--text-muted); padding: 0.85rem 1.5rem; border-radius: 12px; font-size: 1.1rem; font-weight: 700; cursor: pointer; transition: all 0.2s; }
+    .top-nav-btn:hover { border-color: var(--text-dim); color: var(--text-main); }
+    .top-nav-btn.active.nav-ld { border-color: var(--primary); color: var(--primary); background: var(--primary-glow); }
+    .top-nav-btn.active.nav-fab { border-color: var(--fab-brand); color: var(--fab-brand); background: rgba(244, 63, 94, 0.15); }
+
+    .main-view { display: none; }
+    .main-view.active { display: block; animation: fadeIn 0.4s ease-out; }
+    @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+
+    header { padding: 1rem 0 2rem; margin-bottom: 2rem; text-align: center; }
+    .badge-hero { display: inline-flex; align-items: center; gap: 0.5rem; padding: 0.35rem 0.85rem; border-radius: 9999px; font-size: 0.82rem; font-weight: 600; background: var(--primary-glow); color: var(--primary); border: 1px solid rgba(56, 189, 248, 0.3); margin-bottom: 1rem; }
+    .badge-hero.fab-theme { background: rgba(244, 63, 94, 0.15); color: var(--fab-brand); border-color: rgba(244, 63, 94, 0.3); }
+    h1 { font-size: 2.45rem; font-weight: 800; letter-spacing: -0.03em; margin-bottom: 0.75rem; background: linear-gradient(135deg, #ffffff 0%, #cbd5e1 50%, var(--primary) 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+    h1.fab-title { background: linear-gradient(135deg, #ffffff 0%, #cbd5e1 50%, var(--fab-brand) 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+    .hero-desc { font-size: 1.05rem; color: var(--text-muted); max-width: 800px; margin: 0 auto; line-height: 1.65; }
+
+    /* Nav Tabs & Toolbars */
+    .nav-tabs { display: flex; gap: 0.5rem; border-bottom: 1px solid var(--surface-border); margin-bottom: 2rem; padding-bottom: 0.5rem; }
+    .nav-tab-btn { background: transparent; border: none; color: var(--text-muted); padding: 0.5rem 1rem; font-size: 0.95rem; font-weight: 600; cursor: pointer; border-bottom: 2px solid transparent; transition: all 0.2s; }
+    .nav-tab-btn:hover { color: var(--text-main); }
+    .nav-tab-btn.active { color: var(--primary); border-bottom-color: var(--primary); }
+    .tab-pane { display: none; }
+    .tab-pane.active { display: block; animation: fadeIn 0.3s; }
+    
+    /* Paper Grid */
+    .toolbar { display: flex; justify-content: space-between; align-items: center; margin-bottom: 2rem; flex-wrap: wrap; gap: 1rem; }
+    .filter-tabs { display: flex; gap: 0.5rem; flex-wrap: wrap; }
+    .filter-btn { background: var(--surface); border: 1px solid var(--surface-border); color: var(--text-muted); padding: 0.4rem 0.85rem; border-radius: 8px; font-size: 0.85rem; font-weight: 600; cursor: pointer; transition: all 0.2s; }
+    .filter-btn:hover { background: var(--surface-hover); color: var(--text-main); }
+    .filter-btn.active { background: var(--primary); color: #090d16; border-color: var(--primary); }
+    .sort-select, .search-input { background: #090d16; border: 1px solid var(--surface-border); color: var(--text-main); padding: 0.5rem 0.8rem; border-radius: 8px; font-size: 0.85rem; outline: none; }
+    .search-input { padding-left: 2.2rem; }
+    .search-box { position: relative; min-width: 250px; }
+    .search-icon { position: absolute; left: 0.75rem; top: 50%; transform: translateY(-50%); color: var(--text-muted); }
+    .papers-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(380px, 1fr)); gap: 1.35rem; }
+    .paper-card { background: var(--surface-card); border: 1px solid var(--surface-border); border-radius: 14px; padding: 1.45rem; display: flex; flex-direction: column; transition: transform 0.2s, box-shadow 0.2s; cursor: pointer; }
+    .paper-card:hover { transform: translateY(-3px); box-shadow: 0 10px 20px rgba(0,0,0,0.3); border-color: rgba(56, 189, 248, 0.4); }
+    .card-header { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 0.75rem; }
+    .category-badge { font-size: 0.75rem; padding: 0.2rem 0.6rem; border-radius: 4px; font-weight: 700; }
+    .badge-system { background: rgba(56, 189, 248, 0.15); color: #38bdf8; }
+    .badge-creco { background: rgba(52, 211, 153, 0.15); color: #34d399; }
+    .badge-control { background: rgba(251, 191, 36, 0.15); color: #fbbf24; }
+    .badge-fluid { background: rgba(192, 132, 252, 0.15); color: #c084fc; }
+    .paper-year { font-family: 'JetBrains Mono', monospace; font-size: 0.85rem; color: var(--text-muted); font-weight: 600; }
+    .paper-title { font-size: 1.1rem; font-weight: 700; line-height: 1.4; margin-bottom: 0.5rem; color: #ffffff; }
+    .paper-title a { color: inherit; text-decoration: none; }
+    .paper-author { font-size: 0.85rem; color: var(--text-muted); margin-bottom: 0.2rem; }
+    .paper-journal { font-size: 0.8rem; color: var(--text-dim); font-style: italic; margin-bottom: 1rem; }
+    .card-footer { display: flex; align-items: center; justify-content: space-between; gap: 0.5rem; padding-top: 0.85rem; border-top: 1px solid var(--surface-border); margin-top: auto; }
+    .btn-action { display: inline-flex; align-items: center; gap: 0.35rem; padding: 0.4rem 0.75rem; border-radius: 6px; font-size: 0.8rem; font-weight: 600; text-decoration: none; cursor: pointer; border: none; transition: all 0.2s; }
+    .btn-doi { background: var(--primary-glow); color: var(--primary); border: 1px solid rgba(56, 189, 248, 0.3); }
+    .btn-doi:hover { background: var(--primary); color: #090d16; }
+    .btn-note { background: #1e293b; color: #e2e8f0; border: 1px solid rgba(148, 163, 184, 0.2); }
+    .btn-note:hover { background: #334155; color: #ffffff; }
+
+    /* BM Architecture Cards */
+    .arch-card { background: var(--surface); border: 1px solid var(--surface-border); border-radius: 14px; padding: 2rem; margin-bottom: 2rem; box-shadow: 0 4px 6px rgba(0,0,0,0.1); }
+    .arch-card h3 { font-size: 1.45rem; font-weight: 700; color: #ffffff; margin-bottom: 1.25rem; display: flex; align-items: center; gap: 0.5rem; border-bottom: 1px solid var(--surface-border); padding-bottom: 0.75rem; }
+    .arch-card h3 .icon { font-size: 1.5rem; }
+    .arch-card h4 { font-size: 1.1rem; color: #38bdf8; margin: 1.5rem 0 0.5rem; font-weight: 600; }
+    .arch-card p { font-size: 1rem; color: #cbd5e1; line-height: 1.7; margin-bottom: 1rem; }
+    .arch-card ul { margin-left: 1.5rem; margin-bottom: 1.5rem; color: #cbd5e1; line-height: 1.6; }
+    .arch-card li { margin-bottom: 0.75rem; }
+    .arch-card li strong { color: #f8fafc; }
+    .formula-box { background: #090d16; border-left: 3px solid var(--primary); padding: 0.85rem 1.25rem; margin: 1.25rem 0; font-family: 'JetBrains Mono', monospace; color: #38bdf8; font-size: 0.95rem; line-height: 1.5; }
+    
+    /* HTML/CSS Infographic Dashboards */
+    .infographic { display: flex; align-items: center; justify-content: center; gap: 1.5rem; padding: 2.5rem 1.5rem; background: #0b1121; border-radius: 12px; border: 1px solid var(--surface-border); margin: 2rem 0; flex-wrap: wrap; box-shadow: inset 0 2px 15px rgba(0,0,0,0.4); }
+    .infographic.scrollable { flex-wrap: nowrap; overflow-x: auto; justify-content: flex-start; padding: 2.5rem; }
+    .ig-node { display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 1.25rem 1.5rem; border-radius: 16px; min-width: 170px; text-align: center; gap: 0.85rem; box-shadow: 0 8px 20px rgba(0,0,0,0.3); transition: transform 0.2s; position: relative; }
+    .ig-node:hover { transform: translateY(-5px); }
+    .ig-node i { font-size: 2.5rem; }
+    .ig-node span { font-size: 1.1rem; font-weight: 800; line-height: 1.3; }
+    .ig-desc { font-size: 0.85rem; opacity: 0.85; font-weight: 500; font-family: 'JetBrains Mono', monospace; }
+    
+    .ig-arrow { color: var(--text-muted); font-size: 1.8rem; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 0.5rem; }
+    .ig-arrow span { font-size: 0.85rem; color: var(--text-main); font-weight: 700; white-space: nowrap; background: var(--surface-card); padding: 0.2rem 0.6rem; border-radius: 20px; border: 1px solid var(--surface-border); }
+    .ig-arrow i { filter: drop-shadow(0 2px 4px rgba(0,0,0,0.5)); }
+
+    /* Thematic Node Colors */
+    .node-hot { background: linear-gradient(135deg, #7f1d1d, #b91c1c); color: #fecaca; border: 1px solid #f87171; }
+    .node-hot i { color: #fca5a5; }
+    .node-hot-2 { background: linear-gradient(135deg, #9a3412, #c2410c); color: #fed7aa; border: 1px solid #fb923c; }
+    .node-hot-2 i { color: #fdba74; }
+    
+    .node-cold { background: linear-gradient(135deg, #0c4a6e, #0369a1); color: #bae6fd; border: 1px solid #38bdf8; }
+    .node-cold i { color: #7dd3fc; }
+    .node-cold-2 { background: linear-gradient(135deg, #1e3a8a, #1d4ed8); color: #bfdbfe; border: 1px solid #60a5fa; }
+    .node-cold-2 i { color: #93c5fd; }
+    
+    .node-machine { background: linear-gradient(135deg, #1e293b, #334155); color: #f8fafc; border: 1px solid #64748b; }
+    .node-machine i { color: #cbd5e1; }
+    
+    .node-purify { background: linear-gradient(135deg, #3b0764, #6b21a8); color: #e9d5ff; border: 1px solid #c084fc; }
+    .node-purify i { color: #d8b4fe; }
+
+    .node-eco { background: linear-gradient(135deg, #14532d, #166534); color: #bbf7d0; border: 1px solid #4ade80; }
+    .node-eco i { color: #86efac; }
+    
+    .ig-group { display: flex; flex-direction: column; gap: 1.5rem; }
+
+    /* Modals & Toast */
+    .modal-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(9, 13, 22, 0.85); backdrop-filter: blur(4px); z-index: 1000; display: flex; align-items: center; justify-content: center; opacity: 0; pointer-events: none; transition: opacity 0.3s; }
+    .modal-overlay.active { opacity: 1; pointer-events: auto; }
+    .modal-card { background: var(--surface-card); border: 1px solid var(--surface-border); border-radius: 16px; padding: 2.5rem; max-width: 800px; width: 90%; max-height: 90vh; overflow-y: auto; position: relative; box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5); }
+    .modal-close { position: absolute; top: 1.5rem; right: 1.5rem; background: none; border: none; color: var(--text-muted); font-size: 1.5rem; cursor: pointer; transition: color 0.2s; }
+    .modal-close:hover { color: #ffffff; }
+    .modal-section { margin-top: 1.5rem; padding-top: 1.5rem; border-top: 1px solid var(--surface-border); }
+    .modal-section h4 { color: #ffffff; margin-bottom: 0.5rem; font-size: 1.05rem; }
+    .modal-section p { color: #cbd5e1; font-size: 0.95rem; line-height: 1.6; }
+    .bibtex-box { background: #090d16; color: #a5b4fc; padding: 1rem; border-radius: 8px; font-family: 'JetBrains Mono', monospace; font-size: 0.8rem; white-space: pre-wrap; overflow-x: auto; margin-top: 0.5rem; border: 1px solid var(--surface-border); }
+    
+    footer { text-align: center; margin-top: 4rem; padding-top: 2rem; border-top: 1px solid var(--surface-border); font-size: 0.85rem; color: #64748b; }
+    footer a { color: var(--primary); text-decoration: none; }
+  </style>
+</head>
+<body>
+  <div class="container">
+    
+    <div class="top-nav">
+      <button class="top-nav-btn nav-ld active" data-view="view-ld-doas"><i class="fa-solid fa-microscope"></i> 1. Liquid Desiccant DOAS Research</button>
+      <button class="top-nav-btn nav-fab" data-view="view-fab-bm"><i class="fa-solid fa-industry"></i> 2. Global Semiconductor HVAC Benchmark</button>
+    </div>
+
+    <!-- VIEW 1: LD-DOAS -->
+    <div id="view-ld-doas" class="main-view active">
+      <header>
+        <div class="badge-hero"><i class="fa-solid fa-flask"></i> Liquid Desiccant DOAS Research Archive</div>
+        <h1>CrecoPLUS 5100C ([EMIM][DEP]) DOAS Literature Portal</h1>
+        <p class="hero-desc">기존 냉각감습 외조기에서 이온성 액체를 활용한 차세대 액체식 제습 외조기(LD-DOAS)로의 패러다임 전환을 위한 연구 포털입니다.</p>
+      </header>
+      
+      <!-- FIXED: 3 Tabs properly included here -->
+      <div class="nav-tabs">
+        <button class="nav-tab-btn active" data-tab="catalog"><i class="fa-solid fa-book"></i> Paper Catalog (22)</button>
+        <button class="nav-tab-btn" data-tab="blueprint"><i class="fa-solid fa-screwdriver-wrench"></i> DOAS Engineering Blueprint</button>
+        <button class="nav-tab-btn" data-tab="benchmark"><i class="fa-solid fa-flask-vial"></i> Working Fluid Benchmark</button>
+      </div>
+
+      <!-- TAB 1: CATALOG -->
+      <div id="tab-catalog" class="tab-pane active">
+        <div class="toolbar">
+          <div class="filter-tabs">
+            <button class="filter-btn active" data-filter="all">All (22)</button>
+            <button class="filter-btn" data-filter="System DOAS">System DOAS</button>
+            <button class="filter-btn" data-filter="CrecoPLUS System">CrecoPLUS</button>
+            <button class="filter-btn" data-filter="Control & Dynamics">Control & Dynamics</button>
+            <button class="filter-btn" data-filter="Ionic Liquids & Fluid">Fluid</button>
+          </div>
+          <div class="sort-and-search">
+            <select class="sort-select" id="sortSelect">
+              <option value="year-desc">Year: Newest First</option>
+              <option value="title-asc">Title: A to Z</option>
+            </select>
+            <div class="search-box">
+              <span class="search-icon"><i class="fa-solid fa-magnifying-glass"></i></span>
+              <input type="text" class="search-input" id="searchInput" placeholder="Search title, author, keyword...">
+            </div>
+          </div>
+        </div>
+        <div class="papers-grid" id="papersGrid"></div>
+      </div>
+
+      <!-- TAB 2: BLUEPRINT -->
+      <div id="tab-blueprint" class="tab-pane">
+        <div class="arch-card">
+          <h3><i class="fa-solid fa-water icon" style="color:#38bdf8;"></i> 1. 고점도 유체역학 및 핀-튜브 대향류 낙하막(Falling-Film) 구조</h3>
+          <p>CrecoPLUS 5100C는 20~50 mPa·s의 고점도를 지녀 기존 스프레이 분사 방식을 사용할 경우 미립화 불량 및 극심한 액적 비산이 발생합니다. 본 시스템은 <strong>내부 냉각 핀-튜브 수직 낙하막(Falling Film) 접촉기</strong>를 채택하여 완벽한 표면 젖음성(Wettability)을 확보합니다. 점도가 높을수록 액막 두께(δ)가 두꺼워집니다.</p>
+          <div class="formula-box">
+            <i class="fa-solid fa-square-root-variable"></i> 낙하 액막 두께 공식: δ = (3·μ_L·Γ / (ρ_L²·g))^(1/3) ∝ μ_L^(1/3)
+          </div>
+        </div>
+
+        <div class="arch-card">
+          <h3><i class="fa-solid fa-stopwatch icon" style="color:#fbbf24;"></i> 2. 제어 시정수(Time Constant) 극복 및 PI 밸브 제어 전략</h3>
+          <p>두꺼운 액막 두께는 접촉기 내부의 액체 체류량(Liquid Holdup)을 극도로 증가시켜, 온습도 제어의 물리적 지연 시간을 크게 늘립니다. 이를 우회하기 위한 기구학적 제어 전략은 다음과 같습니다.</p>
+          <ul>
+            <li><strong>제습액 펌프 고정 유량 운전</strong>: 액막이 깨지는 현상을 막고 열교환 면적을 100% 확보하기 위해, 흡수액 펌프는 <strong>최대 정풍량(Constant Volume)</strong>으로 고정합니다.</li>
+            <li><strong>냉각수 비례 제어 (PICV)</strong>: 핀-튜브 내부로 흐르는 <strong>공정 냉각수(PCW) 밸브의 개도율을 PI 제어</strong>하여 출구 공기의 온도와 습도를 즉각적으로 타겟팅합니다.</li>
+          </ul>
+          
+          <div class="infographic" style="padding: 1.5rem; justify-content: flex-start; overflow-x: auto; flex-wrap: nowrap;">
+            <div class="ig-node node-machine">
+              <i class="fa-solid fa-pump-water"></i>
+              <span>제습액 펌프</span>
+              <div class="ig-desc">100% 정유량 고정</div>
+            </div>
+            <div class="ig-arrow">
+              <span style="border-color:#ef4444; color:#ef4444; margin-bottom: 0.3rem;">조작 금지</span>
+              <i class="fa-solid fa-xmark" style="color:#ef4444; font-size: 1.2rem;"></i>
+            </div>
+            <div class="ig-node node-cold">
+              <i class="fa-solid fa-faucet-drip"></i>
+              <span>내부 냉각수 밸브</span>
+              <div class="ig-desc">PICV 유량 비례 제어</div>
+            </div>
+            <div class="ig-arrow">
+              <span style="border-color:#22c55e; color:#22c55e; margin-bottom: 0.3rem;">즉각 응답</span>
+              <i class="fa-solid fa-check" style="color:#22c55e; font-size: 1.2rem;"></i>
+            </div>
+            <div class="ig-node node-eco">
+              <i class="fa-solid fa-wind"></i>
+              <span>출구 습도 (SA)</span>
+              <div class="ig-desc">정밀 온습도 타겟 달성</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="arch-card">
+          <h3><i class="fa-solid fa-recycle icon" style="color:#a78bfa;"></i> 3. 실내 배기(EA) 스캐빈징(Scavenging)을 통한 재생 효율 증폭</h3>
+          <p>Zheng et al. (2025) 연구 및 팹(Fab) 벤치마크에 기반하여, 액체 재생기(Regenerator) 측면 외기(OA) 도입 대신 실내 공조 후 버려지는 <strong>건조한 실내 배기(EA, Exhaust Air)</strong>를 스캐빈징 가스로 투입합니다. 건조한 EA가 흡수액 표면의 수분 분압차를 극대화시켜, 탈거(Desorption) 성능을 <strong>무려 42% 이상 폭증</strong>시키면서 재생열 투입을 대폭 절약합니다.</p>
+        </div>
+      </div>
+
+      <!-- TAB 3: BENCHMARK -->
+      <div id="tab-benchmark" class="tab-pane">
+        <div class="arch-card">
+          <h3><i class="fa-solid fa-flask-vial icon" style="color:#f43f5e;"></i> 🧪 흡수제(Working Fluid) 물성 한계 돌파 벤치마크</h3>
+          <p>기존 상용화된 액체식 제습기(염화리튬, LiCl / 브롬화리튬, LiBr)의 치명적인 단점인 '장비 부식'과 '결정화(Crystallization)' 문제를 완벽히 해결한 <strong>CrecoPLUS 5100C ([EMIM][DEP])</strong> 이온액체의 물성 비교표입니다. (Luo & Yang 2022)</p>
+          
+          <div style="display:flex; gap: 1.5rem; flex-wrap:wrap; margin-top: 2rem;">
+            <div class="ig-node node-eco" style="flex: 1; min-width: 250px;">
+              <i class="fa-solid fa-shield-halved"></i>
+              <span>완전 무부식성</span>
+              <div class="ig-desc">Zero Corrosion (티타늄 불필요)</div>
+            </div>
+            <div class="ig-node node-cold" style="flex: 1; min-width: 250px;">
+              <i class="fa-solid fa-snowflake"></i>
+              <span>결정화 원천 방지</span>
+              <div class="ig-desc">-20℃ 액상 유지 (얼지 않음)</div>
+            </div>
+            <div class="ig-node node-purify" style="flex: 1; min-width: 250px;">
+              <i class="fa-solid fa-cloud-arrow-up"></i>
+              <span>증발 및 손실 Zero</span>
+              <div class="ig-desc">증기압 0 kPa (클린룸 유입 전무)</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- VIEW 2: SEMICONDUCTOR HVAC BENCHMARK -->
+    <div id="view-fab-bm" class="main-view">
+      <header>
+        <div class="badge-hero fab-theme"><i class="fa-solid fa-microchip"></i> Global Semiconductor Fab HVAC Benchmark (2026)</div>
+        <h1 class="fab-title">반도체 설비/공조(HVAC) 첨단 신기술 도입 동향</h1>
+        <p class="hero-desc">삼성전자(Memory/Foundry), SK하이닉스, 마이크론, TSMC, 인텔 등 글로벌 Top-Tier 반도체 기업들의 냉동기, 냉각탑, 외조기(MAU) 및 초정밀 수처리(PCW) 설비 관련 신기술 적용 벤치마크 심층 분석 보고서입니다.</p>
+      </header>
+
+      <!-- 1. CHILLER -->
+      <div class="arch-card">
+        <h3><i class="fa-solid fa-snowflake icon" style="color:#38bdf8;"></i> 1. 냉동기 및 열회수 기술 (Chiller & Heat Recovery)</h3>
+        <p>반도체 공정 장비에서 대량으로 발생하는 폐열을 활용하는 기술과 압축기 효율을 극대화하는 신기술 도입이 가속화되고 있습니다.</p>
+        
+        <h4>🔹 주요 반도체 기업 적용 신기술</h4>
+        <ul>
+          <li><strong>삼성전자 (SEC)</strong>: 25~30°C의 저온 PCW 폐열을 버리지 않고 <strong>초대형 열회수 냉동기(HRC)</strong> 증발기 열원으로 회수. 동절기 MAU 난방용 50~65°C 온수를 생산해 화석 연료 보일러 스팀을 전면 대체하며 탄소 중립(Net Zero)을 선도.</li>
+          <li><strong>TSMC</strong>: 팹 내 칠러 플랜트를 이중 온도 루프(High Temp 12-14°C, Low Temp 5-7°C)로 분리 운영하여 냉동기 종합 COP 극대화. 마그네틱 베어링 원심식 냉동기 적극 채택.</li>
+          <li><strong>마이크론 (Micron)</strong>: 가변속 드라이브(VSD) 냉동기와 대규모 축냉조(TES) 시스템을 결합, 심야 전력으로 축냉 후 주간 피크 전력을 상쇄(Peak Shifting)하는 기술 적용.</li>
+        </ul>
+        
+        <!-- Beautiful HTML Infographic for HRC -->
+        <div class="infographic">
+          <div class="ig-node node-hot">
+            <i class="fa-solid fa-fire"></i>
+            <span>PCW 폐열</span>
+            <div class="ig-desc">25~30°C 환수</div>
+          </div>
+          
+          <div class="ig-arrow">
+            <span>열원 회수</span>
+            <i class="fa-solid fa-arrow-right"></i>
+          </div>
+          
+          <div class="ig-node node-machine">
+            <i class="fa-solid fa-fan"></i>
+            <span>열회수 냉동기<br>(HRC)</span>
+            <div class="ig-desc">히트펌프 사이클 승온</div>
+          </div>
+          
+          <div class="ig-arrow">
+            <div style="display:flex; flex-direction:column; gap: 1rem;">
+              <span><i class="fa-solid fa-arrow-up-right"></i> 응축 발열</span>
+              <span><i class="fa-solid fa-arrow-down-right"></i> 증발 냉각</span>
+            </div>
+          </div>
+          
+          <div class="ig-group">
+            <div class="ig-node node-hot-2">
+              <i class="fa-solid fa-temperature-arrow-up"></i>
+              <span>난방 온수 공급</span>
+              <div class="ig-desc">50~65°C (MAU 난방)</div>
+            </div>
+            <div class="ig-node node-cold">
+              <i class="fa-solid fa-droplet"></i>
+              <span>PCW 냉수 재공급</span>
+              <div class="ig-desc">10~15°C (초순수 팹 투입)</div>
+            </div>
+          </div>
+        </div>
+        
+        <div class="formula-box">
+          <i class="fa-solid fa-lightbulb"></i> <strong>LD-DOAS 융합 포인트:</strong> 삼성전자의 HRC에서 생산되는 50~65°C 온수는 CrecoPLUS 5100C의 재생 온도 범위와 정확히 일치합니다. 별도의 스팀 보일러 추가 없이 반도체 공장 폐열만으로 액체식 제습 외조기(LD-DOAS)의 100% 자립 운전이 가능합니다.
+        </div>
+      </div>
+
+      <!-- 2. MAU & AMC -->
+      <div class="arch-card">
+        <h3><i class="fa-solid fa-wind icon" style="color:#a78bfa;"></i> 2. 외조기(MAU) 및 대기 분자 오염물질(AMC) 제어</h3>
+        <p>클린룸 압력 및 온습도 유지의 핵심인 MAU는, 3nm 이하 공정에서 수용성 가스나 유기 화합물(AMC)이 웨이퍼에 흡착되어 수율을 떨어뜨리는 현상을 막기 위해 첨단 필터링 기술과 결합하고 있습니다.</p>
+
+        <h4>🔹 주요 반도체 기업 적용 신기술</h4>
+        <ul>
+          <li><strong>TSMC</strong>: 2nm 공정을 위해 암모니아(NH3) 등 수용성 가스를 포집하는 <strong>순수(UPW) 기반 수세정기(Air Washer)</strong>와 <strong>이온교환수지 케미컬 필터(Chemical Filter)</strong>를 직렬 다단으로 배치하는 엄격한 AMC 제어 표준 확립.</li>
+          <li><strong>SK하이닉스</strong>: 팹 내부에서 배출되는 실내 배기(EA) 열을 <strong>런어라운드 코일(Run-around Coil)</strong>로 회수하여 외기(OA)를 동절기에 예열하거나 하절기에 예냉하는 피크 컷 기술 적용.</li>
+        </ul>
+
+        <!-- Scrollable Flow Diagram for MAU -->
+        <div class="infographic scrollable">
+          <div class="ig-node node-machine">
+            <i class="fa-solid fa-cloud"></i>
+            <span>외기 (OA)</span>
+            <div class="ig-desc">100% Outdoor Air</div>
+          </div>
+          <div class="ig-arrow"><i class="fa-solid fa-chevron-right"></i></div>
+          
+          <div class="ig-node node-cold">
+            <i class="fa-solid fa-temperature-arrow-down"></i>
+            <span>Cooling Coil</span>
+            <div class="ig-desc">강제 냉각/감습</div>
+          </div>
+          <div class="ig-arrow"><i class="fa-solid fa-chevron-right"></i></div>
+          
+          <div class="ig-node node-cold-2">
+            <i class="fa-solid fa-shower"></i>
+            <span>Air Washer</span>
+            <div class="ig-desc">수용성 AMC 세정 (UPW)</div>
+          </div>
+          <div class="ig-arrow"><i class="fa-solid fa-chevron-right"></i></div>
+          
+          <div class="ig-node node-purify">
+            <i class="fa-solid fa-filter"></i>
+            <span>Chemical Filter</span>
+            <div class="ig-desc">VOCs 및 산성 가스 차단</div>
+          </div>
+          <div class="ig-arrow"><i class="fa-solid fa-chevron-right"></i></div>
+          
+          <div class="ig-node node-eco">
+            <i class="fa-solid fa-microchip"></i>
+            <span>Cleanroom</span>
+            <div class="ig-desc">공정 챔버 공급</div>
+          </div>
+        </div>
+        
+        <div class="formula-box">
+          <i class="fa-solid fa-lightbulb"></i> <strong>LD-DOAS 융합 포인트:</strong> CrecoPLUS 이온액체는 화학적 특성상 제습 시 NH3, H2S 등 극성 AMC를 강력하게 동시 흡수합니다. LD-DOAS 도입 시 막대한 압력 손실을 유발하는 에어와셔(Air Washer) 공정을 생략하거나 케미컬 필터 수명을 획기적으로 연장할 수 있습니다.
+        </div>
+      </div>
+
+      <!-- 3. COOLING TOWER -->
+      <div class="arch-card">
+        <h3><i class="fa-solid fa-tower-observation icon" style="color:#4ade80;"></i> 3. 냉각탑 초절수 및 백연 저감 기술 (Water-Free)</h3>
+        <p>글로벌 팹들은 ESG 수자원 보호를 위해 냉각탑의 증발수 소모 억제(Water-Free) 신기술을 도입 중입니다.</p>
+        
+        <h4>🔹 주요 반도체 기업 적용 신기술</h4>
+        <ul>
+          <li><strong>인텔 / SK하이닉스</strong>: 단순 증발식 냉각탑을 <strong>하이브리드(건식/습식 전환형) 냉각탑</strong>으로 전면 교체. 겨울철엔 물을 뿌리지 않고 핀튜브 열교환을 통한 '외기 현열'만으로 냉각하여 증발 용수 소모 100% 차단 및 백연(Plume) 원천 방지.</li>
+          <li><strong>TSMC</strong>: 냉각수 내 스케일(Scale) 축적을 막기 위해 <strong>전해수 처리 장치(Electrolytic Scale Removal)</strong> 상용화. 농축 사이클(CoC)을 7~10배까지 끌어올려 블로우다운 배출수 극감.</li>
+        </ul>
+
+        <!-- Hybrid Cooling Tower Switch Graphic -->
+        <div class="infographic">
+          <div class="ig-node node-machine">
+            <i class="fa-solid fa-industry"></i>
+            <span>하이브리드 냉각탑</span>
+            <div class="ig-desc">모드 자동 전환형 PACT</div>
+          </div>
+          
+          <div class="ig-arrow">
+            <span>계절/외기 온도</span>
+            <i class="fa-solid fa-code-branch"></i>
+          </div>
+          
+          <div class="ig-group">
+            <div class="ig-node node-cold" style="border: 2px solid #38bdf8;">
+              <i class="fa-solid fa-cloud-showers-heavy"></i>
+              <span>하절기 (습식 모드)</span>
+              <div class="ig-desc">증발 잠열 냉각 (용수 소모 발생)</div>
+            </div>
+            <div class="ig-node node-eco" style="border: 2px solid #4ade80;">
+              <i class="fa-solid fa-leaf"></i>
+              <span>동절기 (건식 모드)</span>
+              <div class="ig-desc">외기 현열 핀튜브 냉각 (용수 소모 Zero)</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 4. PCW & SYSTEM -->
+      <div class="arch-card">
+        <h3><i class="fa-solid fa-network-wired icon" style="color:#fbbf24;"></i> 4. 공정 냉각수(PCW) 정밀 제어 및 AI 디지털 트윈</h3>
+        <p>단위 면적당 발열량이 급증하는 EUV 노광 장비 도입으로 인해 인프라 제어 체계가 근본적으로 변화하고 있습니다.</p>
+
+        <h4>🔹 초정밀 수처리 및 AI 제어 신기술</h4>
+        <ul>
+          <li><strong>EUV 장비 전용 L/L 열교환 (TSMC, ASML)</strong>: 수백 kW 열을 발산하는 장비의 극한 온도 제어를 위해, 장비 전용 <strong>Liquid-to-Liquid (L/L) 열교환기 및 Secondary Loop 모듈</strong>을 Sub-fab에 개별 설치.</li>
+          <li><strong>AI-HVAC 모델 예측 제어 (Samsung, TSMC)</strong>: 기존 PID 센서 제어를 탈피. 팹의 디지털 트윈을 구축하여 기상 예보와 양산 스케줄을 딥러닝으로 분석, 냉동기 스태징(Staging)과 냉각수 설정 온도를 선제적으로 변경하는 MPC(Model Predictive Control) 적용.</li>
+        </ul>
+      </div>
+
+    </div>
+
+    <!-- Hidden Modals -->
+    <div class="modal-overlay" id="modalOverlay">
+      <div class="modal-card">
+        <button class="modal-close" id="modalClose">✕</button>
+        <h2 class="paper-title" id="modalTitle" style="font-size: 1.3rem;">Title</h2>
+        <div class="paper-author" id="modalAuthor" style="font-size: 0.95rem;">Authors</div>
+        <div class="paper-journal" id="modalJournal">Journal</div>
+        <div class="modal-section"><h4>📌 Executive Summary (BLUF)</h4><p id="modalBluf"></p></div>
+        <div class="modal-section"><h4>📑 BibTeX Citation</h4><div class="bibtex-box" id="modalBibtex"></div></div>
+        <div style="display: flex; gap: 0.75rem; margin-top: 1.5rem; justify-content: flex-end;">
+          <a href="#" id="modalNoteLink" class="btn-action btn-note" target="_blank" rel="noopener noreferrer">📄 Open Note</a>
+          <a href="#" id="modalDoiLink" class="btn-action btn-doi" target="_blank" rel="noopener noreferrer">🔗 DOI</a>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    let currentFilter = 'all';
+    let currentSort = 'year-desc';
+    let searchQuery = '';
+
+    const topNavBtns = document.querySelectorAll('.top-nav-btn');
+    const mainViews = document.querySelectorAll('.main-view');
+
+    topNavBtns.forEach(btn => {
+      btn.addEventListener('click', () => {
+        topNavBtns.forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+        const targetId = btn.getAttribute('data-view');
+        mainViews.forEach(v => v.classList.remove('active'));
+        document.getElementById(targetId).classList.add('active');
+      });
+    });
+
+    const papers = [
+  {
+    "id": 1,
+    "category": "System DOAS",
+    "cat_class": "badge-system",
+    "year": 2014,
+    "author": "Jeong, J. W., Cho, H. J., Jeong, S. G., Cho, S.",
+    "title": "Annual operating energy savings of liquid desiccant and evaporative-cooling-assisted 100% outdoor air system",
+    "journal": "Energy and Buildings, Vol. 76, pp. 569–583",
+    "doi": "10.1016/j.enbuild.2014.03.006",
+    "doi_url": "https://doi.org/10.1016/j.enbuild.2014.03.006",
+    "file_url": "01_hvac-ldas/2014_Jeong_EnergySavings_LD_DOAS.md",
+    "summary": "Seoul climate: 51% annual operating energy reduction compared to conventional cooling coil VAV by eliminating deep subcooling and reheat.",
+    "bluf": "Evaluates annual energy consumption of a 100% DOAS assisted by liquid desiccant versus conventional VAV cooling coil with reheat. Confirms 51% operating energy reduction.",
+    "params": "Seoul climate weather data, 100% outdoor air ventilation, sensible/latent decoupled operation.",
+    "control_insight": "Eliminating reheat loop removes complex air-side temperature/humidity coupled oscillations.",
+    "takeaway": "Provides benchmark quantitative energy saving proof (51%) for replacing condensation DOAS with LD-DOAS in temperate/humid climates.",
+    "tags": [
+      "LD-DOAS",
+      "Energy Savings",
+      "100% OA",
+      "Decoupled Cooling"
+    ],
+    "bibtex": "@article{Jeong2014,\n  author = {Jeong, J. W., Cho, H. J., Jeong, S. G., Cho, S.},\n  title = {Annual operating energy savings of liquid desiccant and evaporative-cooling-assisted 100% outdoor air system},\n  journal = {Energy and Buildings},\n  year = {2014},\n  doi = {10.1016/j.enbuild.2014.03.006}\n}"
+  },
+  {
+    "id": 2,
+    "category": "System DOAS",
+    "cat_class": "badge-system",
+    "year": 2013,
+    "author": "Jeong, J. W., Jeong, S. G., Cho, H. J.",
+    "title": "Energy saving potential of liquid desiccant in evaporative-cooling-assisted 100% outdoor air system",
+    "journal": "Energy, Vol. 59, pp. 725–736",
+    "doi": "10.1016/j.energy.2013.07.018",
+    "doi_url": "https://doi.org/10.1016/j.energy.2013.07.018",
+    "file_url": "01_hvac-ldas/2013_Jeong_Potential_LD_DOAS.md",
+    "summary": "Complete thermodynamic decoupling of sensible and latent cooling loads in ventilation, eliminating coil condensation issues.",
+    "bluf": "Demonstrates thermodynamic decoupling of cooling loads where liquid desiccant absorbs up to 70-80% of summer outdoor latent loads isothermally.",
+    "params": "Dedicated Outdoor Air System (DOAS), indirect/direct evaporative cooling integration.",
+    "control_insight": "Allows high-temperature chilled water (14–17 °C) for sensible cooling, raising chiller COP.",
+    "takeaway": "Validates core thermodynamic rationale: moisture is extracted by chemical potential, not mechanical subcooling.",
+    "tags": [
+      "Decoupled Cooling",
+      "Latent Load",
+      "Reheat Elimination"
+    ],
+    "bibtex": "@article{Jeong2013,\n  author = {Jeong, J. W., Jeong, S. G., Cho, H. J.},\n  title = {Energy saving potential of liquid desiccant in evaporative-cooling-assisted 100% outdoor air system},\n  journal = {Energy},\n  year = {2013},\n  doi = {10.1016/j.energy.2013.07.018}\n}"
+  },
+  {
+    "id": 3,
+    "category": "System DOAS",
+    "cat_class": "badge-system",
+    "year": 2018,
+    "author": "Park, J. Y., Kim, B. J., Yoon, S. Y., Jeong, J. W.",
+    "title": "Experimental analysis of dehumidification performance of an evaporative cooling-assisted internally cooled liquid desiccant dehumidifier",
+    "journal": "Applied Energy, Vol. 228, pp. 1471–1481",
+    "doi": "10.1016/j.apenergy.2018.10.101",
+    "doi_url": "https://doi.org/10.1016/j.apenergy.2018.10.101",
+    "file_url": "01_hvac-ldas/2018_Park_InternallyCooled_Dehumidifier_Jeong.md",
+    "summary": "In-situ removal of latent heat of absorption maintains a cold solution film, boosting dehumidification effectiveness by 35% over adiabatic towers.",
+    "bluf": "Internally-cooled liquid desiccant dehumidifier (ICLDD) maintains solution film at low vapor pressure by continuous heat removal, preventing thermal degradation of absorption.",
+    "params": "Fin-tube coil contactor, evaporative cooling water at 18–24 °C, air face velocity 1.0–2.5 m/s.",
+    "control_insight": "Cooling water flow rate and temperature directly govern desiccant surface vapor pressure.",
+    "takeaway": "Mandatory architecture: Internal cooling must be adopted in DOAS cores to prevent desiccant heating from latent heat release.",
+    "tags": [
+      "Internally Cooled",
+      "ICLDD",
+      "Evaporative Cooling",
+      "Absorption Heat"
+    ],
+    "bibtex": "@article{Park2018,\n  author = {Park, J. Y., Kim, B. J., Yoon, S. Y., Jeong, J. W.},\n  title = {Experimental analysis of dehumidification performance of an evaporative cooling-assisted internally cooled liquid desiccant dehumidifier},\n  journal = {Applied Energy},\n  year = {2018},\n  doi = {10.1016/j.apenergy.2018.10.101}\n}"
+  },
+  {
+    "id": 4,
+    "category": "System DOAS",
+    "cat_class": "badge-system",
+    "year": 2021,
+    "author": "Gurubalan, A., Simonson, C. J. et al.",
+    "title": "A comprehensive review of dehumidifiers and regenerators for liquid desiccant air conditioning system",
+    "journal": "Energy Conversion and Management, Vol. 238, 114234",
+    "doi": "10.1016/j.enconman.2021.114234",
+    "doi_url": "https://doi.org/10.1016/j.enconman.2021.114234",
+    "file_url": "01_hvac-ldas/2021_Gurubalan_Review_Dehumidifiers_Regenerators.md",
+    "summary": "Technical review categorizing packed towers, falling-film fin-tubes, and membrane contactors. Internally cooled fin-tubes achieve lowest liquid inventory.",
+    "bluf": "Comprehensive state-of-the-art review classifying contactor geometries, pressure drop, liquid carryover risk, and volumetric mass transfer coefficients.",
+    "params": "Cross-flow, counter-flow, parallel-flow geometries across packed bed, plate, and tube configurations.",
+    "control_insight": "Fin-tube falling film provides minimal liquid holdup volume compared to deep packed columns, reducing thermal inertia.",
+    "takeaway": "Fin-tube internally cooled contactors provide optimal balance of high mass transfer area and compact physical footprint.",
+    "tags": [
+      "Contactor Review",
+      "Fin-Tube",
+      "Membrane",
+      "Packed Bed"
+    ],
+    "bibtex": "@article{Gurubalan2021,\n  author = {Gurubalan, A., Simonson, C. J. et al.},\n  title = {A comprehensive review of dehumidifiers and regenerators for liquid desiccant air conditioning system},\n  journal = {Energy Conversion and Management},\n  year = {2021},\n  doi = {10.1016/j.enconman.2021.114234}\n}"
+  },
+  {
+    "id": 5,
+    "category": "CrecoPLUS System",
+    "cat_class": "badge-creco",
+    "year": 2025,
+    "author": "Fu, B. R., Hsueh, W. W., Chen, C. H., Wang, S.",
+    "title": "Heat and mass transfer in an internally cooled ionic liquid dehumidification system: Experimental study and empirical modeling",
+    "journal": "Case Studies in Thermal Engineering, Vol. 76, 107483",
+    "doi": "10.1016/j.csite.2025.107483",
+    "doi_url": "https://doi.org/10.1016/j.csite.2025.107483",
+    "file_url": "04_crecoplus-system/2025_Fu_CrecoPLUS_HeatMassTransfer.md",
+    "summary": "Direct CrecoPLUS 5100C testing: Fin-tube internally cooled absorber. Higher IL flow rate ensures wetting, boosting efficiency by 238% and mass transfer by >3x. Sherwood/Nusselt correlations provided.",
+    "bluf": "First paper to explicitly test CrecoPLUS 5100C in a fin-tube counterflow internally-cooled dehumidifier. Proves high flow rate is required to overcome high-viscosity dewetting.",
+    "params": "CrecoPLUS 5100C ([EMIM][DEP]), cooling water 15–25 °C, air velocity 0.8–2.0 m/s.",
+    "control_insight": "Varying solution flow rate causes drastic nonlinear gain changes and wetting hysteresis. Flow rate must remain constant.",
+    "takeaway": "Primary design benchmark: Use Fu et al. Sherwood and Nusselt empirical correlations for coil sizing.",
+    "tags": [
+      "CrecoPLUS 5100C",
+      "Internally Cooled",
+      "Wetting",
+      "Sh/Nu Correlation"
+    ],
+    "bibtex": "@article{Fu2025,\n  author = {Fu, B. R., Hsueh, W. W., Chen, C. H., Wang, S.},\n  title = {Heat and mass transfer in an internally cooled ionic liquid dehumidification system: Experimental study and empirical modeling},\n  journal = {Case Studies in Thermal Engineering},\n  year = {2025},\n  doi = {10.1016/j.csite.2025.107483}\n}"
+  },
+  {
+    "id": 6,
+    "category": "CrecoPLUS System",
+    "cat_class": "badge-creco",
+    "year": 2026,
+    "author": "Chen, C. H., Wang, S. H., Fang, Y. H., Lee, W. C., Jeng, M. S. (ITRI)",
+    "title": "New Ionic Liquid for Liquid Desiccant Air Conditioning System",
+    "journal": "E3S Web of Conf., Vol. 716, 01008 (CLIMA/IAQVEC 2026)",
+    "doi": "10.1051/e3sconf/202671601008",
+    "doi_url": "https://doi.org/10.1051/e3sconf/202671601008",
+    "file_url": "04_crecoplus-system/2026_Chen_CrecoPLUS_3000CMH_LDAC.md",
+    "summary": "ITRI 3,000 CMH pilot plant demonstration using [EMIM][DEP] (CrecoPLUS 5100C). Matches LiCl dehumidification effectiveness with zero metal corrosion and no crystallization.",
+    "bluf": "Real-world 3,000 CMH air handling capacity pilot demonstration constructed by Taiwan ITRI using CrecoPLUS 5100C. Proves drop-in feasibility to replace LiCl.",
+    "params": "Air volume 3,000 m³/h, aluminum fins, copper tubes, galvanized steel casing.",
+    "control_insight": "System demonstrated long-term stability without salt clogging or nozzle scaling.",
+    "takeaway": "Eliminates expensive titanium and plastic linings; standard AHU metallurgy can be used safely.",
+    "tags": [
+      "CrecoPLUS 5100C",
+      "Pilot Plant",
+      "3000 CMH",
+      "Corrosion-Free"
+    ],
+    "bibtex": "@article{Chen2026,\n  author = {Chen, C. H., Wang, S. H., Fang, Y. H., Lee, W. C., Jeng, M. S. (ITRI)},\n  title = {New Ionic Liquid for Liquid Desiccant Air Conditioning System},\n  journal = {E3S Web of Conf.},\n  year = {2026},\n  doi = {10.1051/e3sconf/202671601008}\n}"
+  },
+  {
+    "id": 7,
+    "category": "CrecoPLUS System",
+    "cat_class": "badge-creco",
+    "year": 2026,
+    "author": "Chiu, Y. C., Yen, S. W., Li, Y. M., Chen, C. H., Wang, C. C. (NYCU & ITRI)",
+    "title": "Deep-desiccant ionic-liquid defrosting under subzero conditions: coupled heat–mass transfer and energy efficiency for commercial refrigeration systems",
+    "journal": "Applied Thermal Engineering, Vol. 281, 131633",
+    "doi": "10.1016/j.applthermaleng.2026.131633",
+    "doi_url": "https://doi.org/10.1016/j.applthermaleng.2026.131633",
+    "file_url": "04_crecoplus-system/2026_Chiu_CrecoPLUS_Subzero_Defrosting.md",
+    "summary": "ITRI/NYCU team tests CrecoPLUS 5100C under subzero air (-5 to 5 °C). Proves non-freezing liquid state without crystallization during subzero operation.",
+    "bluf": "Investigates CrecoPLUS 5100C under extreme subzero air conditions. Confirms complete absence of crystallization and robust dehumidification down to freezing temperatures.",
+    "params": "Air temperature -5 to 5 °C, relative humidity 70–95%, CrecoPLUS 5100C.",
+    "control_insight": "Enables continuous winter operation without brine crystallization freezing risks.",
+    "takeaway": "Enables four-season DOAS operation: CrecoPLUS 5100C handles winter frost prevention and summer deep dehumidification in one unit.",
+    "tags": [
+      "CrecoPLUS 5100C",
+      "ITRI",
+      "Subzero Operation",
+      "Frost Prevention"
+    ],
+    "bibtex": "@article{Chiu2026,\n  author = {Chiu, Y. C., Yen, S. W., Li, Y. M., Chen, C. H., Wang, C. C. (NYCU & ITRI)},\n  title = {Deep-desiccant ionic-liquid defrosting under subzero conditions: coupled heat–mass transfer and energy efficiency for commercial refrigeration systems},\n  journal = {Applied Thermal Engineering},\n  year = {2026},\n  doi = {10.1016/j.applthermaleng.2026.131633}\n}"
+  },
+  {
+    "id": 8,
+    "category": "CrecoPLUS System",
+    "cat_class": "badge-creco",
+    "year": 2025,
+    "author": "Zheng, J. W., Wu, Y. L., Li, S., Chen, C. H., Chen, J. J. (ITRI)",
+    "title": "Investigation of regeneration performance of an ionic liquid-based dehumidification system operated in two air inlet modes",
+    "journal": "Int. J. Low-Carbon Technologies, ctaf081",
+    "doi": "10.1093/ijlct/ctaf081",
+    "doi_url": "https://doi.org/10.1093/ijlct/ctaf081",
+    "file_url": "04_crecoplus-system/2025_Zheng_Regeneration_IonicLiquid_DOAS.md",
+    "summary": "Regeneration coil optimization for [EMIM][DEP]. Using indoor exhaust air for scavenging increases moisture desorption by 42.66% and coil optimization increases capacity by 69.82%.",
+    "bluf": "Optimizes regeneration coil temperature and scavenging air source for CrecoPLUS 5100C. Exhaust air utilization increases regeneration moisture capacity by 42.66%.",
+    "params": "Regeneration coil 55–75 °C, outdoor air vs. building return air scavenging.",
+    "control_insight": "Scavenging air humidity ratio is the primary driving force for moisture desorption.",
+    "takeaway": "Design rule: Always direct DOAS building exhaust air (EA) to the regenerator scavenging intake to lower required hot water temperature.",
+    "tags": [
+      "Regeneration",
+      "Exhaust Air Scavenging",
+      "Low-Temp Heat"
+    ],
+    "bibtex": "@article{Zheng2025,\n  author = {Zheng, J. W., Wu, Y. L., Li, S., Chen, C. H., Chen, J. J. (ITRI)},\n  title = {Investigation of regeneration performance of an ionic liquid-based dehumidification system operated in two air inlet modes},\n  journal = {Int. J. Low-Carbon Technologies},\n  year = {2025},\n  doi = {10.1093/ijlct/ctaf081}\n}"
+  },
+  {
+    "id": 9,
+    "category": "CrecoPLUS System",
+    "cat_class": "badge-creco",
+    "year": 2022,
+    "author": "Wang, L., Liu, X. et al.",
+    "title": "Review of liquid desiccant air dehumidification systems coupled with heat pump: System configurations, component design, and performance",
+    "journal": "Energy and Buildings, Vol. 277, 112655",
+    "doi": "10.1016/j.enbuild.2022.112655",
+    "doi_url": "https://doi.org/10.1016/j.enbuild.2022.112655",
+    "file_url": "04_crecoplus-system/2022_Wang_HeatPump_LiquidDesiccant_Integration.md",
+    "summary": "Single heat pump integration: Evaporator cools dehumidifier fin-tubes (15–20 °C) while condenser regenerates liquid desiccant (50–65 °C) in a unified closed loop.",
+    "bluf": "Comprehensive review of heat-pump driven liquid desiccant air conditioning (HP-LDAC). Demonstrates COP doubling by utilizing both evaporator cold and condenser heat simultaneously.",
+    "params": "DX heat pump package, condensation heat 55–65 °C, evaporation 15–20 °C.",
+    "control_insight": "System heat balance: Latent heat removed at evaporator equals heat rejected at regenerator condenser.",
+    "takeaway": "Optimal equipment packaging: Combine a single vapor compression heat pump with DOAS for a standalone, boiler-free unit.",
+    "tags": [
+      "Heat Pump Integration",
+      "Closed Loop",
+      "COP Enhancement"
+    ],
+    "bibtex": "@article{Wang2022,\n  author = {Wang, L., Liu, X. et al.},\n  title = {Review of liquid desiccant air dehumidification systems coupled with heat pump: System configurations, component design, and performance},\n  journal = {Energy and Buildings},\n  year = {2022},\n  doi = {10.1016/j.enbuild.2022.112655}\n}"
+  },
+  {
+    "id": 10,
+    "category": "CrecoPLUS System",
+    "cat_class": "badge-creco",
+    "year": 2023,
+    "author": "Cao, B., Yin, Y., Xu, G. et al.",
+    "title": "Experimental and modeling study of bubble absorption-based deep dehumidification using the ionic liquid: Parametric analysis on heat and mass transfer",
+    "journal": "Energy Conversion and Management, Vol. 288, 117169",
+    "doi": "10.1016/j.enconman.2023.117169",
+    "doi_url": "https://doi.org/10.1016/j.enconman.2023.117169",
+    "file_url": "04_crecoplus-system/2023_Cao_BubbleAbsorption_IonicLiquid_Dehumidification.md",
+    "summary": "Solves high viscosity liquid-side mass transfer resistance of ionic liquids via bubbling column contactor for deep dehumidification.",
+    "bluf": "Replaces falling film with a bubble column contactor where air bubbles through an ionic liquid pool, breaking the liquid-side diffusion resistance through intense interfacial shear.",
+    "params": "Orifice gas sparger, bubble diameter 2–5 mm, ionic liquid depth 100–300 mm.",
+    "control_insight": "Air pressure drop across bubble liquid pool is higher than falling film, but mass transfer rate is tripled.",
+    "takeaway": "Provides an alternative contactor architecture for deep dehumidification (dew point < 10 °C).",
+    "tags": [
+      "Viscosity Mitigation",
+      "Bubble Absorption",
+      "Mass Transfer Enhancement"
+    ],
+    "bibtex": "@article{Cao2023,\n  author = {Cao, B., Yin, Y., Xu, G. et al.},\n  title = {Experimental and modeling study of bubble absorption-based deep dehumidification using the ionic liquid: Parametric analysis on heat and mass transfer},\n  journal = {Energy Conversion and Management},\n  year = {2023},\n  doi = {10.1016/j.enconman.2023.117169}\n}"
+  },
+  {
+    "id": 11,
+    "category": "CrecoPLUS System",
+    "cat_class": "badge-creco",
+    "year": 2025,
+    "author": "Liang, J. D. & Hung, C. K.",
+    "title": "A Theoretical Model for a Spray-type Ionic Solutions Dehumidifier Driven by Industrial Waste Heat",
+    "journal": "E3S Web of Conf., Vol. 634, 01003",
+    "doi": "10.1051/e3sconf/202563401003",
+    "doi_url": "https://doi.org/10.1051/e3sconf/202563401003",
+    "file_url": "04_crecoplus-system/2025_Liang_WasteHeat_IonicDehumidifier.md",
+    "summary": "Theoretical model for ionic solution dehumidifier. Determines optimal solution-to-air (L/G) ratio to avoid pump oversizing and excess power consumption.",
+    "bluf": "Simulates year-round operation with 80% ionic solution powered by waste heat. Provides explicit L/G ratio optimization to avoid pump power wastage.",
+    "params": "80% ionic liquid solution, industrial waste heat regeneration at 60–75 °C.",
+    "control_insight": "Overestimating liquid flow rate increases pump power without proportional mass transfer gains.",
+    "takeaway": "Determines exact minimum L/G threshold for required dew point suppression.",
+    "tags": [
+      "Waste Heat",
+      "L/G Ratio",
+      "Pump Optimization"
+    ],
+    "bibtex": "@article{Liang2025,\n  author = {Liang, J. D. & Hung, C. K.},\n  title = {A Theoretical Model for a Spray-type Ionic Solutions Dehumidifier Driven by Industrial Waste Heat},\n  journal = {E3S Web of Conf.},\n  year = {2025},\n  doi = {10.1051/e3sconf/202563401003}\n}"
+  },
+  {
+    "id": 12,
+    "category": "CrecoPLUS System",
+    "cat_class": "badge-creco",
+    "year": 2021,
+    "author": "Gao, Z., Kumar, N., Yang, Z. et al. (ORNL)",
+    "title": "Internally cooled membrane-based absorber for dehumidification and water heating: Validated model and simulation study",
+    "journal": "Energy Conversion and Management, Vol. 231, 113787",
+    "doi": "10.1016/j.enconman.2020.113787",
+    "doi_url": "https://doi.org/10.1016/j.enconman.2020.113787",
+    "file_url": "04_crecoplus-system/2021_Gao_InternallyCooled_Membrane_Absorber.md",
+    "summary": "ORNL study on internally-cooled membrane contactor for ionic liquids. Hollow-fiber membranes isolate liquid desiccant, guaranteeing zero chemical droplet carryover.",
+    "bluf": "Combines hollow-fiber microporous membranes with internal cooling tubes to achieve complete separation of ionic liquid and air stream with zero droplet entrainment.",
+    "params": "PVDF hollow fiber membrane, counter-flow configuration, internal cooling water tubes.",
+    "control_insight": "Membrane mass transfer resistance adds ~15–25% to overall resistance, but eliminates all mist eliminators.",
+    "takeaway": "Critical benchmark for cleanrooms, hospitals, and pharmaceutical DOAS where zero aerosol carryover is mandated.",
+    "tags": [
+      "Membrane Absorber",
+      "Zero Carryover",
+      "Hollow Fiber",
+      "ORNL"
+    ],
+    "bibtex": "@article{Gao2021,\n  author = {Gao, Z., Kumar, N., Yang, Z. et al. (ORNL)},\n  title = {Internally cooled membrane-based absorber for dehumidification and water heating: Validated model and simulation study},\n  journal = {Energy Conversion and Management},\n  year = {2021},\n  doi = {10.1016/j.enconman.2020.113787}\n}"
+  },
+  {
+    "id": 13,
+    "category": "Control & Dynamics",
+    "cat_class": "badge-control",
+    "year": 2017,
+    "author": "Wang, L., Xiao, F., Niu, X., Gao, D. C.",
+    "title": "A dynamic dehumidifier model for simulations and control of liquid desiccant hybrid air conditioning systems",
+    "journal": "Energy and Buildings, Vol. 139, pp. 441–454",
+    "doi": "10.1016/j.enbuild.2017.01.073",
+    "doi_url": "https://doi.org/10.1016/j.enbuild.2017.01.073",
+    "file_url": "02_control-dynamics/2017_Wang_DynamicDehumidifierModel.md",
+    "summary": "Quantifies solution holdup (M_sol) capacitance lag. Proves higher liquid holdup (inherent in thick viscous IL films) significantly enlarges the control time constant.",
+    "bluf": "First 1D dynamic model accounting for the thermal capacitance of packing and liquid holdup. Proves solution holdup is the primary source of dynamic delay and phase lag.",
+    "params": "Counter-flow packed bed, dynamic solution holdup M_sol, packing thermal mass.",
+    "control_insight": "Time constant tau is directly proportional to liquid holdup volume divided by mass flow rate (tau ~ M_sol / m_dot).",
+    "takeaway": "Since high viscosity thickens liquid films by 2-3x, controller tuning must account for enlarged time constants.",
+    "tags": [
+      "Dynamic Model",
+      "Holdup Capacitance",
+      "Control Lag",
+      "Time Constant"
+    ],
+    "bibtex": "@article{Wang2017,\n  author = {Wang, L., Xiao, F., Niu, X., Gao, D. C.},\n  title = {A dynamic dehumidifier model for simulations and control of liquid desiccant hybrid air conditioning systems},\n  journal = {Energy and Buildings},\n  year = {2017},\n  doi = {10.1016/j.enbuild.2017.01.073}\n}"
+  },
+  {
+    "id": 14,
+    "category": "Control & Dynamics",
+    "cat_class": "badge-control",
+    "year": 2017,
+    "author": "Wang, L., Xiao, F., Niu, X., Gao, D. C.",
+    "title": "Experimental study of dynamic characteristics of liquid desiccant dehumidification processes",
+    "journal": "Science and Technology for the Built Environment, 23(1), pp. 127–137",
+    "doi": "10.1080/23744731.2016.1211875",
+    "doi_url": "https://doi.org/10.1080/23744731.2016.1211875",
+    "file_url": "02_control-dynamics/2016_Wang_DynamicCharacteristics_TimeConstant.md",
+    "summary": "Experimental step response testing: Settling time decreases as solution circulation rate increases. Humidity ratio stabilizes faster than solution/air temperature.",
+    "bluf": "Experimental step-response tests measuring time constants and settling times across air and solution perturbations. Humidity ratio settles faster than air temperature.",
+    "params": "Step changes in solution flow (+/-30%), inlet temperature (+/-5 °C), air humidity (+/-2 g/kg).",
+    "control_insight": "Settling time decreases with higher solution flow rate, but increases with contactor height.",
+    "takeaway": "Confirms why maintaining high liquid circulation rate accelerates dynamic settling times.",
+    "tags": [
+      "Step Response",
+      "Settling Time",
+      "Experimental Dynamics"
+    ],
+    "bibtex": "@article{Wang2017,\n  author = {Wang, L., Xiao, F., Niu, X., Gao, D. C.},\n  title = {Experimental study of dynamic characteristics of liquid desiccant dehumidification processes},\n  journal = {Science and Technology for the Built Environment},\n  year = {2017},\n  doi = {10.1080/23744731.2016.1211875}\n}"
+  },
+  {
+    "id": 15,
+    "category": "Control & Dynamics",
+    "cat_class": "badge-control",
+    "year": 2019,
+    "author": "Li, W., Yao, Y., Shekhar, D. K.",
+    "title": "State-space model for transient behavior of membrane-based liquid desiccant dehumidifier",
+    "journal": "Int. J. Heat and Mass Transfer, Vol. 144, 118711",
+    "doi": "10.1016/j.ijheatmasstransfer.2019.118711",
+    "doi_url": "https://doi.org/10.1016/j.ijheatmasstransfer.2019.118711",
+    "file_url": "02_control-dynamics/2019_Li_StateSpaceTransientDehumidifier.md",
+    "summary": "State-space dynamic formulation. Solution temperature state response has substantially larger time constant than air stream variables, ideal for modern MPC design.",
+    "bluf": "Formulates validated state-space transient model. Discloses that solution-side states exhibit significant transport delay relative to gas-phase variables.",
+    "params": "Linearized state-space matrix (A, B, C, D), counter-flow membrane contactor.",
+    "control_insight": "State-space formulation enables multivariable optimal control (LQR/MPC) to decouple temperature and humidity.",
+    "takeaway": "Provides the mathematical foundation for modern model predictive control (MPC) for DOAS.",
+    "tags": [
+      "State-Space",
+      "Transient Model",
+      "Multivariable Control"
+    ],
+    "bibtex": "@article{Li2019,\n  author = {Li, W., Yao, Y., Shekhar, D. K.},\n  title = {State-space model for transient behavior of membrane-based liquid desiccant dehumidifier},\n  journal = {Int. J. Heat and Mass Transfer},\n  year = {2019},\n  doi = {10.1016/j.ijheatmasstransfer.2019.118711}\n}"
+  },
+  {
+    "id": 16,
+    "category": "Control & Dynamics",
+    "cat_class": "badge-control",
+    "year": 2011,
+    "author": "Ge, G., Xiao, F., Niu, X.",
+    "title": "Control strategies for a liquid desiccant air-conditioning system",
+    "journal": "Energy and Buildings, Vol. 43, Issue 8, pp. 1957–1966",
+    "doi": "10.1016/j.enbuild.2011.02.011",
+    "doi_url": "https://doi.org/10.1016/j.enbuild.2011.02.011",
+    "file_url": "02_control-dynamics/2011_Ge_ControlStrategies_LiquidDesiccant.md",
+    "summary": "Compares liquid flow vs. cooling water control: Solution temperature control via cooling water exhibits fast, monotonic response without flow-reduction hunting.",
+    "bluf": "Evaluates control pairings for liquid desiccant systems. Proves controlling solution temperature via cooling water delivers faster settling times and higher stability than modulating solution flow rate.",
+    "params": "Direct feedback vs. cascading feedback, PID tuning parameters, step load disturbance.",
+    "control_insight": "Modulating liquid flow rate causes severe nonlinearity and hunting; cooling water valve modulation is linear and monotonic.",
+    "takeaway": "Core control rule: Fix solution circulation flow rate at maximum wetting rate, and manipulate cooling water 2-way/3-way valve.",
+    "tags": [
+      "Control Strategies",
+      "Decoupled Loops",
+      "Hunting Prevention"
+    ],
+    "bibtex": "@article{Ge2011,\n  author = {Ge, G., Xiao, F., Niu, X.},\n  title = {Control strategies for a liquid desiccant air-conditioning system},\n  journal = {Energy and Buildings},\n  year = {2011},\n  doi = {10.1016/j.enbuild.2011.02.011}\n}"
+  },
+  {
+    "id": 17,
+    "category": "Control & Dynamics",
+    "cat_class": "badge-control",
+    "year": 2011,
+    "author": "Ge, G., Xiao, F., Xu, X.",
+    "title": "Model-based optimal control of a dedicated outdoor air-chilled ceiling system using liquid desiccant and membrane-based total heat recovery",
+    "journal": "Applied Energy, Vol. 88, Issue 11, pp. 4180–4190",
+    "doi": "10.1016/j.apenergy.2011.04.045",
+    "doi_url": "https://doi.org/10.1016/j.apenergy.2011.04.045",
+    "file_url": "02_control-dynamics/2011_Ge_OptimalControl_LD_DOAS.md",
+    "summary": "Supervisory model-based optimal control saves 17.5% daily energy by optimizing solution temperature/concentration setpoints dynamically based on outdoor air forecast.",
+    "bluf": "Supervisory optimization framework that optimizes solution temperature and concentration setpoints dynamically based on weather forecasts, saving 17.5% daily energy.",
+    "params": "DOAS + chilled ceiling, hourly weather predictions, nonlinear optimizer.",
+    "control_insight": "Supervisory layer updates setpoints every 15–30 minutes, while regulatory PID loops handle fast disturbances.",
+    "takeaway": "Hierarchical control structure: Use supervisory optimization for setpoints and fast feedback PID for cooling water valves.",
+    "tags": [
+      "Optimal Control",
+      "Supervisory Control",
+      "LD-DOAS"
+    ],
+    "bibtex": "@article{Ge2011,\n  author = {Ge, G., Xiao, F., Xu, X.},\n  title = {Model-based optimal control of a dedicated outdoor air-chilled ceiling system using liquid desiccant and membrane-based total heat recovery},\n  journal = {Applied Energy},\n  year = {2011},\n  doi = {10.1016/j.apenergy.2011.04.045}\n}"
+  },
+  {
+    "id": 18,
+    "category": "Control & Dynamics",
+    "cat_class": "badge-control",
+    "year": 2016,
+    "author": "Luo, Y., Chen, Y., Yang, H., Luo, J.",
+    "title": "Study on an internally-cooled liquid desiccant dehumidifier with CFD model",
+    "journal": "Applied Energy, Vol. 176, pp. 248–261",
+    "doi": "10.1016/j.apenergy.2016.05.133",
+    "doi_url": "https://doi.org/10.1016/j.apenergy.2016.05.133",
+    "file_url": "02_control-dynamics/2016_Luo_CFD_InternallyCooled_Dehumidifier.md",
+    "summary": "Detailed 2D/3D multiphase CFD model of falling liquid film. Resolves steep concentration boundary layers that cause liquid-side mass transfer delay in viscous fluids.",
+    "bluf": "Multiphase VOF CFD simulation resolving velocity, thermal, and concentration boundary layers in an internally-cooled falling film dehumidifier.",
+    "params": "Falling liquid film, laminar flow Re < 50, internal coolant channels, conjugate heat/mass transfer.",
+    "control_insight": "Diffusion within thick viscous liquid film is slow, creating a surface saturation layer that impedes further absorption.",
+    "takeaway": "Shows why surface waves or fin turbulators are beneficial to induce liquid mixing and reduce diffusion lag.",
+    "tags": [
+      "CFD Model",
+      "Falling Film",
+      "Boundary Layer",
+      "Liquid-Side Resistance"
+    ],
+    "bibtex": "@article{Luo2016,\n  author = {Luo, Y., Chen, Y., Yang, H., Luo, J.},\n  title = {Study on an internally-cooled liquid desiccant dehumidifier with CFD model},\n  journal = {Applied Energy},\n  year = {2016},\n  doi = {10.1016/j.apenergy.2016.05.133}\n}"
+  },
+  {
+    "id": 19,
+    "category": "Ionic Liquids & Fluid",
+    "cat_class": "badge-fluid",
+    "year": 2022,
+    "author": "Luo, J. & Yang, H.",
+    "title": "A state-of-the-art review on the liquid properties regarding energy and environmental performance in liquid desiccant air-conditioning systems",
+    "journal": "Applied Energy, Vol. 325, 119853",
+    "doi": "10.1016/j.apenergy.2022.119853",
+    "doi_url": "https://doi.org/10.1016/j.apenergy.2022.119853",
+    "file_url": "03_ionic-liquids/2022_Luo_Properties_IL_LiquidDesiccant.md",
+    "summary": "Benchmark review comparing Halide salts (LiCl), Glycols, and Ionic Liquids: ILs eliminate corrosion and crystallization with near-zero vapor pressure (no VOC emission).",
+    "bluf": "Comprehensive property comparison between LiCl, LiBr, glycols, and ionic liquids. Confirms ILs eliminate all corrosion and crystallization while presenting zero vapor pressure.",
+    "params": "Density, dynamic viscosity, surface tension, vapor pressure, crystallization limit, corrosiveness.",
+    "control_insight": "High viscosity (10–30x water) increases laminar friction factor and pumping power, requiring larger pipe diameters.",
+    "takeaway": "Definitive proof that ionic liquids represent the safest, most durable working fluid for commercial building HVAC.",
+    "tags": [
+      "Fluid Comparison",
+      "Non-Corrosive",
+      "Non-Crystallizing",
+      "Zero Vapor Pressure"
+    ],
+    "bibtex": "@article{Luo2022,\n  author = {Luo, J. & Yang, H.},\n  title = {A state-of-the-art review on the liquid properties regarding energy and environmental performance in liquid desiccant air-conditioning systems},\n  journal = {Applied Energy},\n  year = {2022},\n  doi = {10.1016/j.apenergy.2022.119853}\n}"
+  },
+  {
+    "id": 20,
+    "category": "Ionic Liquids & Fluid",
+    "cat_class": "badge-fluid",
+    "year": 2022,
+    "author": "Skonieczny, M. & Królikowska, M.",
+    "title": "Thermodynamic Properties of {Diethyl Phosphate-Based Ionic Liquid (1) + Ethanol (2)} Systems, Experimental Data and Correlation",
+    "journal": "J. Chem. Eng. Data, Vol. 67, Issue 4, pp. 939–953",
+    "doi": "10.1021/acs.jced.1c00924",
+    "doi_url": "https://doi.org/10.1021/acs.jced.1c00924",
+    "file_url": "03_ionic-liquids/2022_Skonieczny_EMIMDEP_Thermodynamics.md",
+    "summary": "Precision measurement of [EMIM][DEP] density and viscosity (20–65 °C). Pure IL is 280–320 mPa·s at 25 °C; working concentration (70–80 wt%) is 20–50 mPa·s.",
+    "bluf": "Precision experimental determination of dynamic viscosity and density for pure 1-ethyl-3-methylimidazolium diethyl phosphate across 293.15–338.15 K.",
+    "params": "Pure [EMIM][DEP], temperature 20–65 °C, atmospheric pressure, Anton Paar viscometer.",
+    "control_insight": "Viscosity drops by >50% as temperature rises from 20 °C to 50 °C, meaning regenerator section has much lower viscosity.",
+    "takeaway": "Primary thermophysical dataset for pump sizing, pressure drop calculation, and Reynolds number evaluation.",
+    "tags": [
+      "[EMIM][DEP]",
+      "Viscosity Data",
+      "Density Data",
+      "Thermophysical"
+    ],
+    "bibtex": "@article{Skonieczny2022,\n  author = {Skonieczny, M. & Królikowska, M.},\n  title = {Thermodynamic Properties of {Diethyl Phosphate-Based Ionic Liquid (1) + Ethanol (2)} Systems, Experimental Data and Correlation},\n  journal = {J. Chem. Eng. Data},\n  year = {2022},\n  doi = {10.1021/acs.jced.1c00924}\n}"
+  },
+  {
+    "id": 21,
+    "category": "Ionic Liquids & Fluid",
+    "cat_class": "badge-fluid",
+    "year": 2026,
+    "author": "Meyer, T. A. et al.",
+    "title": "Experimental data on mutual mass diffusivities of two ionic liquids in their aqueous solution obtained by the diaphragm cell method",
+    "journal": "Int. J. Refrigeration, 107027",
+    "doi": "10.1016/j.ijrefrig.2026.107027",
+    "doi_url": "https://doi.org/10.1016/j.ijrefrig.2026.107027",
+    "file_url": "03_ionic-liquids/2026_Meyer_MutualDiffusivity_IonicLiquids.md",
+    "summary": "Measures mutual mass diffusivity of IL aqueous solutions: Water diffusion drops by 10–50x due to high viscosity, explaining liquid-side mass transfer resistance.",
+    "bluf": "Experimental diaphragm-cell measurement proving mutual diffusion coefficient D_AB drops to 10^-10 ~ 10^-11 m^2/s in viscous ionic liquid solutions.",
+    "params": "Diaphragm cell method, aqueous IL solutions, mass fraction 0.5–0.85.",
+    "control_insight": "Stokes-Einstein relationship D ~ 1/mu confirms that high viscosity inherently suppresses liquid-side diffusion.",
+    "takeaway": "Proves liquid-side mass transfer resistance (1/k_L) cannot be neglected when modeling CrecoPLUS 5100C.",
+    "tags": [
+      "Mass Diffusivity",
+      "Stokes-Einstein",
+      "Liquid-Side Resistance"
+    ],
+    "bibtex": "@article{Meyer2026,\n  author = {Meyer, T. A. et al.},\n  title = {Experimental data on mutual mass diffusivities of two ionic liquids in their aqueous solution obtained by the diaphragm cell method},\n  journal = {Int. J. Refrigeration},\n  year = {2026},\n  doi = {10.1016/j.ijrefrig.2026.107027}\n}"
+  },
+  {
+    "id": 22,
+    "category": "Ionic Liquids & Fluid",
+    "cat_class": "badge-fluid",
+    "year": 2018,
+    "author": "Wen, T., Lu, L., Dong, C.",
+    "title": "Investigation on the regeneration performance of liquid desiccant by adding surfactant PVP-K30",
+    "journal": "Int. J. Heat and Mass Transfer, Vol. 124, pp. 691–699",
+    "doi": "10.1016/j.ijheatmasstransfer.2018.03.005",
+    "doi_url": "https://doi.org/10.1016/j.ijheatmasstransfer.2018.03.005",
+    "file_url": "03_ionic-liquids/2018_Wen_Surfactant_LiquidDesiccant_Regeneration.md",
+    "summary": "Adding trace surfactant (PVP-K30) lowers surface tension and enhances wettability, increasing mass transfer coefficients by up to 28%.",
+    "bluf": "Investigates trace surfactant addition to liquid desiccants. Reduces surface tension, suppresses dry patches on contactor surfaces, and enhances mass transfer by up to 28%.",
+    "params": "Surfactant PVP-K30 concentration 0.05–0.2 wt%, surface tension measurement, regeneration rate.",
+    "control_insight": "Low surface tension prevents film dewetting and dry spots at lower circulation rates.",
+    "takeaway": "Provides a viable chemical additive pathway to mitigate high-viscosity wetting issues without pump oversizing.",
+    "tags": [
+      "Surfactants",
+      "Surface Tension",
+      "Wetting Enhancement",
+      "Viscosity Mitigation"
+    ],
+    "bibtex": "@article{Wen2018,\n  author = {Wen, T., Lu, L., Dong, C.},\n  title = {Investigation on the regeneration performance of liquid desiccant by adding surfactant PVP-K30},\n  journal = {Int. J. Heat and Mass Transfer},\n  year = {2018},\n  doi = {10.1016/j.ijheatmasstransfer.2018.03.005}\n}"
+  }
+];
+    const grid = document.getElementById('papersGrid');
+    const searchInput = document.getElementById('searchInput');
+    const filterBtns = document.querySelectorAll('.filter-btn');
+    const sortSelect = document.getElementById('sortSelect');
+
+    const tabBtns = document.querySelectorAll('.nav-tab-btn');
+    tabBtns.forEach(btn => {
+      btn.addEventListener('click', () => {
+        tabBtns.forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+        document.querySelectorAll('#view-ld-doas .tab-pane').forEach(p => p.classList.remove('active'));
+        document.getElementById('tab-' + btn.getAttribute('data-tab')).classList.add('active');
+      });
+    });
+
+    const modalOverlay = document.getElementById('modalOverlay');
+    const modalClose = document.getElementById('modalClose');
+    modalClose.addEventListener('click', () => modalOverlay.classList.remove('active'));
+    modalOverlay.addEventListener('click', (e) => {
+      if (e.target === modalOverlay) modalOverlay.classList.remove('active');
+    });
+
+    function openModal(p) {
+      document.getElementById('modalTitle').textContent = p.title;
+      document.getElementById('modalAuthor').textContent = p.author;
+      document.getElementById('modalJournal').textContent = p.journal;
+      document.getElementById('modalBluf').textContent = p.bluf;
+      document.getElementById('modalBibtex').textContent = p.bibtex;
+      document.getElementById('modalNoteLink').href = 'https://github.com/gusgitgit/research_paper/blob/main/' + p.file_url;
+      document.getElementById('modalDoiLink').href = p.doi_url;
+      modalOverlay.classList.add('active');
+    }
+
+    function renderPapers() {
+      if(!grid) return;
+      grid.innerHTML = '';
+      let filtered = papers.filter(p => {
+        const matchesCategory = (currentFilter === 'all') || (p.category === currentFilter);
+        const q = searchQuery ? searchQuery.toLowerCase() : '';
+        const matchesSearch = !q || p.title.toLowerCase().includes(q) || p.author.toLowerCase().includes(q);
+        return matchesCategory && matchesSearch;
+      });
+      if (currentSort === 'year-desc') filtered.sort((a, b) => b.year - a.year);
+      else if (currentSort === 'title-asc') filtered.sort((a, b) => a.title.localeCompare(b.title));
+
+      filtered.forEach(p => {
+        const card = document.createElement('div');
+        card.className = 'paper-card';
+        card.innerHTML = `
+          <div>
+            <div class="card-header"><span class="category-badge ${p.cat_class}">${p.category}</span><span class="paper-year">${p.year}</span></div>
+            <h3 class="paper-title"><a href="${p.doi_url}" target="_blank">${p.title}</a></h3>
+            <div class="paper-author">${p.author}</div>
+          </div>
+          <div class="card-footer">
+            <button class="btn-action btn-note btn-open-modal" data-id="${p.id}">🔍 View</button>
+            <a href="${p.doi_url}" class="btn-action btn-doi" target="_blank">🔗 DOI</a>
+          </div>
+        `;
+        card.addEventListener('click', (e) => {
+          if (!e.target.closest('a') && !e.target.closest('button')) openModal(p);
+        });
+        grid.appendChild(card);
+      });
+      document.querySelectorAll('.btn-open-modal').forEach(btn => {
+        btn.addEventListener('click', (e) => {
+          e.stopPropagation();
+          openModal(papers.find(item => item.id == btn.getAttribute('data-id')));
+        });
+      });
+    }
+
+    if(filterBtns) {
+      filterBtns.forEach(btn => {
+        btn.addEventListener('click', () => {
+          filterBtns.forEach(b => b.classList.remove('active'));
+          btn.classList.add('active');
+          currentFilter = btn.getAttribute('data-filter');
+          renderPapers();
+        });
+      });
+    }
+    if(sortSelect) sortSelect.addEventListener('change', (e) => { currentSort = e.target.value; renderPapers(); });
+    if(searchInput) searchInput.addEventListener('input', (e) => { searchQuery = e.target.value; renderPapers(); });
+
+    renderPapers();
+  </script>
+</body>
+</html>

@@ -1,12 +1,100 @@
-<!DOCTYPE html>
-<html lang="ko">
+﻿<!DOCTYPE html>
+<html lang="ko" data-theme="dark">
 <head>
     <meta charset="UTF-8">
-    <title>HVAC BM</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>HVAC BM - Work Knowledge Base</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        window.tailwind = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    colors: {
+                        bg: '#090d16',
+                        surface: '#0f172a',
+                        surface_card: '#131d33',
+                        surface_border: '#1e293b',
+                        text_main: '#f8fafc',
+                        text_muted: '#94a3b8',
+                        hvac: '#10b981'
+                    },
+                    fontFamily: {
+                        sans: ['Pretendard', '-apple-system', 'sans-serif'],
+                    }
+                }
+            }
+        }
+    </script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <style>
+        body { background-color: #090d16; color: #f8fafc; font-family: 'Pretendard', sans-serif; line-height: 1.6; }
+        .hero-title { background: linear-gradient(135deg, #ffffff 0%, #cbd5e1 50%, #10b981 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+        .glass-card { background: #131d33; border: 1px solid #1e293b; border-radius: 1rem; padding: 2rem; }
+    </style>
 </head>
-<body>
-    <h1>HVAC BM</h1>
-    <p>공조 시스템 비즈니스 모델 관련 자료가 위치할 곳입니다.</p>
-    <a href="../index.html">← 메인으로 돌아가기</a>
+<body class="min-h-screen p-6 md:p-12">
+
+    <!-- Header -->
+    <header class="max-w-5xl mx-auto mb-12 flex items-center justify-between">
+        <div>
+            <h1 class="text-3xl font-extrabold hero-title mb-2">HVAC Business Model (BM)</h1>
+            <p class="text-text_muted">공조 시스템 비즈니스 모델 및 시장 솔루션 기획</p>
+        </div>
+        <a href="../index.html" class="px-4 py-2 rounded-lg border border-surface_border hover:bg-surface_card text-text_muted hover:text-text_main transition-colors">
+            <i class="fas fa-arrow-left mr-2"></i> 대시보드로 돌아가기
+        </a>
+    </header>
+
+    <!-- Main Content -->
+    <main class="max-w-5xl mx-auto space-y-8">
+        
+        <!-- BM 1 -->
+        <section class="glass-card">
+            <div class="flex items-center gap-3 mb-6 border-b border-surface_border pb-4">
+                <i class="fas fa-sync text-hvac text-2xl"></i>
+                <h2 class="text-2xl font-bold">1. EaaS (Energy as a Service) 및 구독형 공조 모델</h2>
+            </div>
+            <div class="space-y-4 text-text_muted">
+                <p><strong class="text-text_main">개요:</strong> 고객이 초기 대규모 자본 지출(CAPEX) 없이 고효율 HVAC 시스템을 도입하고, 매월 절감된 에너지 비용 내에서 서비스 구독료를 지불하는 모델(OPEX 전환)입니다.</p>
+                <p><strong class="text-text_main">핵심 가치:</strong> 장비 소유권은 서비스 제공자(ESCO 등)가 가지며, 장비 운전, 유지보수, 수리까지 모두 포함된 Turn-key 솔루션을 제공합니다.</p>
+                <ul class="list-disc pl-5 space-y-2">
+                    <li>초기 투자비 Zero화로 진입 장벽 해소</li>
+                    <li>고객은 본업에 집중하고, 설비 리스크는 제공자가 부담</li>
+                    <li>에너지 절감액이 구독료보다 커야 성립 (Win-Win)</li>
+                </ul>
+            </div>
+        </section>
+
+        <!-- BM 2 -->
+        <section class="glass-card">
+            <div class="flex items-center gap-3 mb-6 border-b border-surface_border pb-4">
+                <i class="fas fa-microchip text-hvac text-2xl"></i>
+                <h2 class="text-2xl font-bold">2. 예지 보전 (Predictive Maintenance) 솔루션</h2>
+            </div>
+            <div class="space-y-4 text-text_muted">
+                <p><strong class="text-text_main">개요:</strong> IoT 센서와 AI 데이터 분석을 결합하여, 칠러, 냉각탑, 공조기의 고장 징후를 사전에 포착하고 다운타임을 방지하는 고부가가치 솔루션입니다.</p>
+                <p><strong class="text-text_main">수익 모델:</strong> SaaS(Software as a Service) 형태의 월 구독료 또는 연간 라이선스 비용 청구. 센서 설치비(하드웨어) + 플랫폼 이용료(소프트웨어).</p>
+                <ul class="list-disc pl-5 space-y-2">
+                    <li>설비 수명 연장 및 돌발 정지(Unplanned Downtime) 리스크 최소화</li>
+                    <li>진동, 온도, 소비전력 데이터를 기반으로 최적 수리/교체 시기 권고</li>
+                    <li>데이터 기반의 에너지 효율 최적화(운전 가이드) 병행 제공 가능</li>
+                </ul>
+            </div>
+        </section>
+
+        <!-- BM 3 -->
+        <section class="glass-card">
+            <div class="flex items-center gap-3 mb-6 border-b border-surface_border pb-4">
+                <i class="fas fa-leaf text-hvac text-2xl"></i>
+                <h2 class="text-2xl font-bold">3. 그린 리모델링 (Energy Retrofit) 연계 사업</h2>
+            </div>
+            <div class="space-y-4 text-text_muted">
+                <p><strong class="text-text_main">개요:</strong> 노후 건축물의 에너지 효율을 개선하기 위해 고효율 냉난방기(히트펌프 등), 내부 열교환기(IHX) 등을 도입하고, 정부 보조금 및 탄소배출권(Credits)과 연계하는 비즈니스입니다.</p>
+                <p><strong class="text-text_main">시장 동향:</strong> 넷제로(Net-Zero) 및 ESG 경영 기조에 따라 B2B 시장에서 폭발적으로 성장 중이며, 노후 공조설비의 교체 사이클과 맞물려 거대한 시장을 형성하고 있습니다.</p>
+            </div>
+        </section>
+
+    </main>
 </body>
 </html>

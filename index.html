@@ -1,86 +1,121 @@
-<!DOCTYPE html>
-<html lang="ko">
+﻿<!DOCTYPE html>
+<html lang="ko" data-theme="dark">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Work Knowledge Base</title>
     <script src="https://cdn.tailwindcss.com"></script>
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
+    <script>
+        window.tailwind = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    colors: {
+                        bg: '#090d16',
+                        surface: '#0f172a',
+                        surface_card: '#131d33',
+                        surface_border: '#1e293b',
+                        text_main: '#f8fafc',
+                        text_muted: '#94a3b8',
+                        primary: '#38bdf8',
+                        accent: '#34d399',
+                        ihx: '#818cf8',
+                        hvac: '#10b981',
+                        research: '#c084fc',
+                        cooling: '#06b6d4'
+                    },
+                    fontFamily: {
+                        sans: ['Pretendard', '-apple-system', 'sans-serif'],
+                    }
+                }
+            }
+        }
+    </script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
     <style>
-        body { font-family: 'Pretendard', -apple-system, BlinkMacSystemFont, system-ui, Roboto, 'Helvetica Neue', 'Segoe UI', 'Apple SD Gothic Neo', 'Noto Sans KR', 'Malgun Gothic', sans-serif; background-color: #f3f4f6; }
-        .card:hover { transform: translateY(-5px); transition: transform 0.3s ease; box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05); }
+        body { background-color: #090d16; color: #f8fafc; font-family: 'Pretendard', sans-serif; line-height: 1.6; }
+        .hero-title { background: linear-gradient(135deg, #ffffff 0%, #cbd5e1 50%, #38bdf8 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+        .glass-card { background: #131d33; border: 1px solid #1e293b; border-radius: 1rem; padding: 1.5rem; transition: all 0.3s ease; }
+        .glass-card:hover { transform: translateY(-5px); border-color: #38bdf8; box-shadow: 0 10px 30px -10px rgba(56,189,248,0.2); }
     </style>
 </head>
-<body class="text-gray-800">
+<body class="min-h-screen p-6 md:p-12">
 
     <!-- Header -->
-    <header class="bg-blue-900 text-white shadow-md">
-        <div class="container mx-auto px-6 py-8">
-            <h1 class="text-3xl font-bold flex items-center">
-                <i class="fas fa-book-open mr-4"></i> Work Knowledge Base
-            </h1>
-            <p class="text-blue-200 mt-2">업무 관련 자료 중앙 대시보드</p>
+    <header class="max-w-6xl mx-auto mb-16 text-center">
+        <div class="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-blue-900/30 text-primary border border-blue-500/30 text-sm font-semibold mb-6">
+            <i class="fas fa-database"></i> Centralized Repository
         </div>
+        <h1 class="text-4xl md:text-5xl font-extrabold hero-title mb-4">Work Knowledge Base</h1>
+        <p class="text-text_muted text-lg max-w-2xl mx-auto">업무 관련 R&D 자료, 비즈니스 모델(BM), 기술 문서를 통합 관리하는 중앙 대시보드입니다.</p>
     </header>
 
     <!-- Main Content -->
-    <main class="container mx-auto px-6 py-10">
+    <main class="max-w-6xl mx-auto grid grid-cols-1 md:grid-cols-2 gap-8">
         
-        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 gap-8">
-            
-            <!-- IHX Card -->
-            <a href="./01_ihx/index.html" class="card bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden block">
-                <div class="h-2 bg-blue-500"></div>
-                <div class="p-6">
-                    <div class="flex items-center justify-between mb-4">
-                        <h2 class="text-xl font-bold text-gray-800">IHX (Internal Heat Exchanger)</h2>
-                        <div class="bg-blue-100 text-blue-600 p-3 rounded-full"><i class="fas fa-exchange-alt"></i></div>
-                    </div>
-                    <p class="text-gray-600 mb-4">내부 열교환기 관련 설계, 성능 분석, 특허 및 기술 동향 자료</p>
-                    <span class="text-sm font-semibold text-blue-600">자료 보기 &rarr;</span>
+        <!-- IHX Card -->
+        <a href="./01_ihx/index.html" class="glass-card group block">
+            <div class="flex items-center justify-between mb-4">
+                <div class="flex items-center gap-4">
+                    <div class="w-12 h-12 rounded-lg bg-ihx/10 flex items-center justify-center text-ihx text-xl group-hover:scale-110 transition-transform"><i class="fas fa-exchange-alt"></i></div>
+                    <h2 class="text-2xl font-bold text-text_main">IHX <span class="text-text_muted text-base font-normal ml-1">(열교환기)</span></h2>
                 </div>
-            </a>
+                <i class="fas fa-arrow-right text-text_muted group-hover:text-ihx transition-colors"></i>
+            </div>
+            <p class="text-text_muted mb-4">내부 열교환기(Internal Heat Exchanger) 관련 설계, 성능 분석, 특허 및 기술 동향 포털</p>
+            <div class="flex gap-2">
+                <span class="text-xs font-medium px-2 py-1 rounded bg-surface_border text-text_muted">Thermal</span>
+                <span class="text-xs font-medium px-2 py-1 rounded bg-surface_border text-text_muted">Engineering</span>
+            </div>
+        </a>
 
-            <!-- HVAC BM Card -->
-            <a href="./02_hvac_bm/index.html" class="card bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden block">
-                <div class="h-2 bg-green-500"></div>
-                <div class="p-6">
-                    <div class="flex items-center justify-between mb-4">
-                        <h2 class="text-xl font-bold text-gray-800">HVAC BM</h2>
-                        <div class="bg-green-100 text-green-600 p-3 rounded-full"><i class="fas fa-building"></i></div>
-                    </div>
-                    <p class="text-gray-600 mb-4">공조 시스템 비즈니스 모델(BM), 시장 분석, 솔루션 기획 자료</p>
-                    <span class="text-sm font-semibold text-green-600">자료 보기 &rarr;</span>
+        <!-- HVAC BM Card -->
+        <a href="./02_hvac_bm/index.html" class="glass-card group block">
+            <div class="flex items-center justify-between mb-4">
+                <div class="flex items-center gap-4">
+                    <div class="w-12 h-12 rounded-lg bg-hvac/10 flex items-center justify-center text-hvac text-xl group-hover:scale-110 transition-transform"><i class="fas fa-building"></i></div>
+                    <h2 class="text-2xl font-bold text-text_main">HVAC BM</h2>
                 </div>
-            </a>
+                <i class="fas fa-arrow-right text-text_muted group-hover:text-hvac transition-colors"></i>
+            </div>
+            <p class="text-text_muted mb-4">공조 시스템 비즈니스 모델(BM), 구독형 서비스, 에너지 절감 솔루션 기획 자료</p>
+            <div class="flex gap-2">
+                <span class="text-xs font-medium px-2 py-1 rounded bg-surface_border text-text_muted">Business Model</span>
+                <span class="text-xs font-medium px-2 py-1 rounded bg-surface_border text-text_muted">Strategy</span>
+            </div>
+        </a>
 
-            <!-- Research Paper Card -->
-            <a href="./03_research_paper/index.html" class="card bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden block">
-                <div class="h-2 bg-purple-500"></div>
-                <div class="p-6">
-                    <div class="flex items-center justify-between mb-4">
-                        <h2 class="text-xl font-bold text-gray-800">논문 정리 (Research Papers)</h2>
-                        <div class="bg-purple-100 text-purple-600 p-3 rounded-full"><i class="fas fa-file-alt"></i></div>
-                    </div>
-                    <p class="text-gray-600 mb-4">LDAS, 액체제습, 이온액체, 공조 제어 등 관련 논문 요약 및 리뷰 자료</p>
-                    <span class="text-sm font-semibold text-purple-600">자료 보기 &rarr;</span>
+        <!-- Research Paper Card -->
+        <a href="./03_research_paper/index.html" class="glass-card group block">
+            <div class="flex items-center justify-between mb-4">
+                <div class="flex items-center gap-4">
+                    <div class="w-12 h-12 rounded-lg bg-research/10 flex items-center justify-center text-research text-xl group-hover:scale-110 transition-transform"><i class="fas fa-file-alt"></i></div>
+                    <h2 class="text-2xl font-bold text-text_main">논문 정리</h2>
                 </div>
-            </a>
+                <i class="fas fa-arrow-right text-text_muted group-hover:text-research transition-colors"></i>
+            </div>
+            <p class="text-text_muted mb-4">LDAS, 액체제습, 이온액체, 공조 제어 등 관련 논문 요약 및 리뷰 자료</p>
+            <div class="flex gap-2">
+                <span class="text-xs font-medium px-2 py-1 rounded bg-surface_border text-text_muted">Research</span>
+                <span class="text-xs font-medium px-2 py-1 rounded bg-surface_border text-text_muted">Review</span>
+            </div>
+        </a>
 
-            <!-- Cooling Tower Card -->
-            <a href="./04_cooling_tower/index.html" class="card bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden block">
-                <div class="h-2 bg-cyan-500"></div>
-                <div class="p-6">
-                    <div class="flex items-center justify-between mb-4">
-                        <h2 class="text-xl font-bold text-gray-800">냉각탑용수 절감 (Cooling Tower)</h2>
-                        <div class="bg-cyan-100 text-cyan-600 p-3 rounded-full"><i class="fas fa-tint"></i></div>
-                    </div>
-                    <p class="text-gray-600 mb-4">증발수 포집, 밀폐형/하이브리드 냉각탑 등 수자원 절감 솔루션 및 기술 검토</p>
-                    <span class="text-sm font-semibold text-cyan-600">자료 보기 &rarr;</span>
+        <!-- Cooling Tower Card -->
+        <a href="./04_cooling_tower/index.html" class="glass-card group block">
+            <div class="flex items-center justify-between mb-4">
+                <div class="flex items-center gap-4">
+                    <div class="w-12 h-12 rounded-lg bg-cooling/10 flex items-center justify-center text-cooling text-xl group-hover:scale-110 transition-transform"><i class="fas fa-tint"></i></div>
+                    <h2 class="text-2xl font-bold text-text_main">냉각탑용수 절감</h2>
                 </div>
-            </a>
-
-        </div>
+                <i class="fas fa-arrow-right text-text_muted group-hover:text-cooling transition-colors"></i>
+            </div>
+            <p class="text-text_muted mb-4">증발수 포집, 밀폐형/하이브리드 냉각탑 등 수자원 절감 솔루션 및 기술 검토</p>
+            <div class="flex gap-2">
+                <span class="text-xs font-medium px-2 py-1 rounded bg-surface_border text-text_muted">Water Saving</span>
+                <span class="text-xs font-medium px-2 py-1 rounded bg-surface_border text-text_muted">Eco-Tech</span>
+            </div>
+        </a>
 
     </main>
 </body>

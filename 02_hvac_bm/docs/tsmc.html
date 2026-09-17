@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="ko" data-theme="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TSMC - HVAC & ESG BM</title>
+    <script>
+        tailwind = { config: {
+            darkMode: 'class',
+            theme: { extend: { colors: { bg: '#090d16', surface: '#0f172a', surface_card: '#131d33', surface_border: '#1e293b', text_main: '#f8fafc', text_muted: '#94a3b8', primary: '#38bdf8', tsmc: '#CC0000' }, fontFamily: { sans: ['Pretendard', '-apple-system', 'sans-serif'] } } }
+        } }
+    </script>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <style>
+        body { background-color: #090d16; color: #f8fafc; font-family: 'Pretendard', sans-serif; line-height: 1.6; }
+        .hero-title { background: linear-gradient(135deg, #ffffff 0%, #cbd5e1 50%, #CC0000 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+        .glass-card { background: #131d33; border: 1px solid #1e293b; border-radius: 1rem; padding: 2rem; }
+    </style>
+</head>
+<body class="min-h-screen p-6 md:p-12">
+    <header class="max-w-4xl mx-auto mb-12 flex items-center justify-between">
+        <div>
+            <h1 class="text-3xl font-extrabold hero-title mb-2"><i class="fas fa-microchip text-tsmc mr-3"></i> TSMC</h1>
+            <p class="text-text_muted">AI 칠러 최적화 및 고강도 수자원 절감(Water Positive) 모델</p>
+        </div>
+        <a href="../index.html" class="px-4 py-2 rounded-lg border border-surface_border hover:bg-surface_card text-text_muted hover:text-text_main transition-colors">
+            <i class="fas fa-arrow-left mr-2"></i> 돌아가기
+        </a>
+    </header>
+
+    <main class="max-w-4xl mx-auto space-y-8">
+        <section class="glass-card">
+            <h2 class="text-2xl font-bold mb-6 border-b border-surface_border pb-4">1. AI 기반 칠러(Chiller) 제어 시스템</h2>
+            <div class="space-y-4 text-text_muted">
+                <p><strong class="text-text_main">머신러닝 최적화:</strong> TSMC는 클린룸 냉수를 공급하는 칠러 시스템에 인공지능(AI) 신경망 알고리즘을 선도적으로 도입했습니다. 이 알고리즘은 실시간으로 최적의 운전 파라미터를 결정하여 칠러 효율을 10~19%까지 끌어올렸습니다.</p>
+                <p><strong class="text-text_main">고효율 냉각탑 관리:</strong> 단일/다중 냉동기 압축기의 이상 에너지 소비를 감지하고, 고효율 냉각탑 팬(Fan) 시스템을 적용하여 연간 수백만 kWh의 전력을 절감하고 있습니다.</p>
+            </div>
+        </section>
+
+        <section class="glass-card">
+            <h2 class="text-2xl font-bold mb-6 border-b border-surface_border pb-4">2. 수자원 절감 및 재활용</h2>
+            <div class="space-y-4 text-text_muted">
+                <p><strong class="text-text_main">1.4억 톤 재이용:</strong> 대만의 고질적인 물 부족 사태에 대응하기 위해, 2024년 기준 1억 4천만 입방미터 이상의 폐수를 재활용했습니다.</p>
+                <p><strong class="text-text_main">크로스 리전 워터 셰어링:</strong> 단순히 공장 내 재활용을 넘어, 타 지역 및 외부 기업과 재생수를 교환하는 혁신적인 수자원 탄력성(Water Resilience) 모델을 구축하고 있습니다.</p>
+            </div>
+        </section>
+    </main>
+</body>
+</html>

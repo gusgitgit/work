@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="ko" data-theme="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Intel - HVAC & ESG BM</title>
+    <script>
+        tailwind = { config: {
+            darkMode: 'class',
+            theme: { extend: { colors: { bg: '#090d16', surface: '#0f172a', surface_card: '#131d33', surface_border: '#1e293b', text_main: '#f8fafc', text_muted: '#94a3b8', primary: '#38bdf8', intel: '#0068B5' }, fontFamily: { sans: ['Pretendard', '-apple-system', 'sans-serif'] } } }
+        } }
+    </script>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <style>
+        body { background-color: #090d16; color: #f8fafc; font-family: 'Pretendard', sans-serif; line-height: 1.6; }
+        .hero-title { background: linear-gradient(135deg, #ffffff 0%, #cbd5e1 50%, #0068B5 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+        .glass-card { background: #131d33; border: 1px solid #1e293b; border-radius: 1rem; padding: 2rem; }
+    </style>
+</head>
+<body class="min-h-screen p-6 md:p-12">
+    <header class="max-w-4xl mx-auto mb-12 flex items-center justify-between">
+        <div>
+            <h1 class="text-3xl font-extrabold hero-title mb-2"><i class="fas fa-microchip text-intel mr-3"></i> Intel (인텔)</h1>
+            <p class="text-text_muted">열회수 칠러 및 Net Positive Water(물 환원) 전략</p>
+        </div>
+        <a href="../index.html" class="px-4 py-2 rounded-lg border border-surface_border hover:bg-surface_card text-text_muted hover:text-text_main transition-colors">
+            <i class="fas fa-arrow-left mr-2"></i> 돌아가기
+        </a>
+    </header>
+
+    <main class="max-w-4xl mx-auto space-y-8">
+        <section class="glass-card">
+            <h2 class="text-2xl font-bold mb-6 border-b border-surface_border pb-4">1. Fab 34 열회수 칠러 (Heat Recovery Chillers)</h2>
+            <div class="space-y-4 text-text_muted">
+                <p><strong class="text-text_main">공정 폐열의 재활용:</strong> 아일랜드 Leixlip에 위치한 Fab 34 등 최신 인텔 팹에서는 냉각탑으로 버려지던 고온의 공정 폐열을 회수하는 특수 칠러를 가동하고 있습니다.</p>
+                <p><strong class="text-text_main">천연가스 의존도 탈피:</strong> 회수된 열은 초순수(UPW) 예열 및 건물 난방에 사용되며, 화석연료(가스 보일러) 사용을 극적으로 줄이고 전기 구동식 산업용 히트펌프(Heat Pump) 생태계로 전환하여 Scope 1 배출을 크게 낮추고 있습니다.</p>
+            </div>
+        </section>
+
+        <section class="glass-card">
+            <h2 class="text-2xl font-bold mb-6 border-b border-surface_border pb-4">2. Net Positive Water (2030 목표)</h2>
+            <div class="space-y-4 text-text_muted">
+                <p><strong class="text-text_main">운영 내 절감:</strong> 최첨단 수처리 시설을 팹 내부에 구축하여, 냉각탑과 스크러버(Scrubber)에 투입되는 담수(Freshwater) 사용량을 대폭 줄였습니다. (약 102억 갤런 자체 절감)</p>
+                <p><strong class="text-text_main">유역 복원(Watershed Restoration):</strong> 기업이 사용한 물의 100% 이상을 지역 사회와 자연 유역에 다시 환원(Restore)하는 외부 프로젝트 펀딩을 진행 중이며, 2030년까지 완벽한 Net Positive Water를 달성할 계획입니다.</p>
+            </div>
+        </section>
+    </main>
+</body>
+</html>

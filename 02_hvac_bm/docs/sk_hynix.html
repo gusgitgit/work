@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="ko" data-theme="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SK Hynix - HVAC & ESG BM</title>
+    <script>
+        tailwind = { config: {
+            darkMode: 'class',
+            theme: { extend: { colors: { bg: '#090d16', surface: '#0f172a', surface_card: '#131d33', surface_border: '#1e293b', text_main: '#f8fafc', text_muted: '#94a3b8', primary: '#38bdf8', sk: '#EA002C' }, fontFamily: { sans: ['Pretendard', '-apple-system', 'sans-serif'] } } }
+        } }
+    </script>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <style>
+        body { background-color: #090d16; color: #f8fafc; font-family: 'Pretendard', sans-serif; line-height: 1.6; }
+        .hero-title { background: linear-gradient(135deg, #ffffff 0%, #cbd5e1 50%, #EA002C 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+        .glass-card { background: #131d33; border: 1px solid #1e293b; border-radius: 1rem; padding: 2rem; }
+    </style>
+</head>
+<body class="min-h-screen p-6 md:p-12">
+    <header class="max-w-4xl mx-auto mb-12 flex items-center justify-between">
+        <div>
+            <h1 class="text-3xl font-extrabold hero-title mb-2"><i class="fas fa-microchip text-sk mr-3"></i> SK Hynix (SK하이닉스)</h1>
+            <p class="text-text_muted">Net Zero 및 고효율 공조/유틸리티 최적화 전략</p>
+        </div>
+        <a href="../index.html" class="px-4 py-2 rounded-lg border border-surface_border hover:bg-surface_card text-text_muted hover:text-text_main transition-colors">
+            <i class="fas fa-arrow-left mr-2"></i> 돌아가기
+        </a>
+    </header>
+
+    <main class="max-w-4xl mx-auto space-y-8">
+        <section class="glass-card">
+            <h2 class="text-2xl font-bold mb-6 border-b border-surface_border pb-4">1. 고효율 HVAC 및 폐열 회수</h2>
+            <div class="space-y-4 text-text_muted">
+                <p><strong class="text-text_main">공조 시스템 최적화:</strong> 2024/2025 지속가능경영보고서에 따르면, SK하이닉스는 이천 및 청주 팹을 비롯하여 데이터센터 인프라 전반에 고효율 냉각 기술과 HVAC 시스템을 도입하고 있습니다.</p>
+                <p><strong class="text-text_main">폐열 회수(Heat Recovery):</strong> 냉각 공정에서 버려지는 폐열을 포집하여 재활용하는 시스템 개선을 적극 검토 및 도입 중이며, 이를 통해 반도체 생산에 필수적인 전력 수요를 크게 감축하고 있습니다.</p>
+            </div>
+        </section>
+
+        <section class="glass-card">
+            <h2 class="text-2xl font-bold mb-6 border-b border-surface_border pb-4">2. SHE 모니터링 및 에너지 감사</h2>
+            <div class="space-y-4 text-text_muted">
+                <p><strong class="text-text_main">데이터 기반 모니터링:</strong> 사내 SHE (Safety, Health, and Environment) 시스템을 통해 사업장 전체의 에너지 및 수자원 사용량을 엄격히 모니터링합니다.</p>
+                <p><strong class="text-text_main">용인 반도체 클러스터:</strong> 향후 구축될 용인 클러스터에서도 최첨단 에너지 절감형 유틸리티 설계가 기본 BM으로 편입될 예정입니다.</p>
+            </div>
+        </section>
+    </main>
+</body>
+</html>

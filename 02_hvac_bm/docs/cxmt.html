@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="ko" data-theme="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CXMT - HVAC & ESG BM</title>
+    <script>
+        tailwind = { config: {
+            darkMode: 'class',
+            theme: { extend: { colors: { bg: '#090d16', surface: '#0f172a', surface_card: '#131d33', surface_border: '#1e293b', text_main: '#f8fafc', text_muted: '#94a3b8', primary: '#38bdf8', cxmt: '#E63946' }, fontFamily: { sans: ['Pretendard', '-apple-system', 'sans-serif'] } } }
+        } }
+    </script>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <style>
+        body { background-color: #090d16; color: #f8fafc; font-family: 'Pretendard', sans-serif; line-height: 1.6; }
+        .hero-title { background: linear-gradient(135deg, #ffffff 0%, #cbd5e1 50%, #E63946 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+        .glass-card { background: #131d33; border: 1px solid #1e293b; border-radius: 1rem; padding: 2rem; }
+    </style>
+</head>
+<body class="min-h-screen p-6 md:p-12">
+    <header class="max-w-4xl mx-auto mb-12 flex items-center justify-between">
+        <div>
+            <h1 class="text-3xl font-extrabold hero-title mb-2"><i class="fas fa-microchip text-cxmt mr-3"></i> CXMT (창신메모리)</h1>
+            <p class="text-text_muted">고밀도 DRAM 팹의 유틸리티 및 클린룸 제어 전략</p>
+        </div>
+        <a href="../index.html" class="px-4 py-2 rounded-lg border border-surface_border hover:bg-surface_card text-text_muted hover:text-text_main transition-colors">
+            <i class="fas fa-arrow-left mr-2"></i> 돌아가기
+        </a>
+    </header>
+
+    <main class="max-w-4xl mx-auto space-y-8">
+        <section class="glass-card">
+            <h2 class="text-2xl font-bold mb-6 border-b border-surface_border pb-4">1. 에너지 인프라 최적화</h2>
+            <div class="space-y-4 text-text_muted">
+                <p><strong class="text-text_main">스마트 제어 시스템:</strong> 센서 기반의 고효율 LED 조명 및 자동화 제어 시스템을 공조 라인에 배치하여 불필요한 전력 소모를 차단하고 있습니다.</p>
+                <p><strong class="text-text_main">자체 재생에너지:</strong> 공장 지붕 등 부지를 활용한 태양광(PV) 발전 설비를 적극 도입하여, 급격한 Capa(생산능력) 확장에 따른 탄소 배출량을 상쇄하려 노력하고 있습니다.</p>
+            </div>
+        </section>
+
+        <section class="glass-card">
+            <h2 class="text-2xl font-bold mb-6 border-b border-surface_border pb-4">2. 수처리 및 클린룸 수자원 관리</h2>
+            <div class="space-y-4 text-text_muted">
+                <p><strong class="text-text_main">고집적 DRAM 냉각:</strong> 메모리 집적도가 높아지면서 팹 내부의 열 부하(Thermal Load)가 급증함에 따라, 수랭식(Liquid Cooling) 장비 확대 및 수처리 고도화를 통한 냉각수 공급의 안정성을 꾀하고 있습니다.</p>
+                <p><strong class="text-text_main">엄격한 폐수 배출 통제:</strong> IPO 준비 및 국제 사회의 환경 기준 요구에 부응하여, 폐수 및 배기가스 처리 장비를 최신화하고 배출량을 엄격히 통제하고 있습니다.</p>
+            </div>
+        </section>
+    </main>
+</body>
+</html>

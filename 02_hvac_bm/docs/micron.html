@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="ko" data-theme="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Micron - HVAC & ESG BM</title>
+    <script>
+        tailwind = { config: {
+            darkMode: 'class',
+            theme: { extend: { colors: { bg: '#090d16', surface: '#0f172a', surface_card: '#131d33', surface_border: '#1e293b', text_main: '#f8fafc', text_muted: '#94a3b8', primary: '#38bdf8', micron: '#007BB6' }, fontFamily: { sans: ['Pretendard', '-apple-system', 'sans-serif'] } } }
+        } }
+    </script>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <style>
+        body { background-color: #090d16; color: #f8fafc; font-family: 'Pretendard', sans-serif; line-height: 1.6; }
+        .hero-title { background: linear-gradient(135deg, #ffffff 0%, #cbd5e1 50%, #007BB6 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+        .glass-card { background: #131d33; border: 1px solid #1e293b; border-radius: 1rem; padding: 2rem; }
+    </style>
+</head>
+<body class="min-h-screen p-6 md:p-12">
+    <header class="max-w-4xl mx-auto mb-12 flex items-center justify-between">
+        <div>
+            <h1 class="text-3xl font-extrabold hero-title mb-2"><i class="fas fa-microchip text-micron mr-3"></i> Micron (마이크론)</h1>
+            <p class="text-text_muted">초순수(UPW) 및 냉각탑 보충수 재이용과 RE100 달성 전략</p>
+        </div>
+        <a href="../index.html" class="px-4 py-2 rounded-lg border border-surface_border hover:bg-surface_card text-text_muted hover:text-text_main transition-colors">
+            <i class="fas fa-arrow-left mr-2"></i> 돌아가기
+        </a>
+    </header>
+
+    <main class="max-w-4xl mx-auto space-y-8">
+        <section class="glass-card">
+            <h2 class="text-2xl font-bold mb-6 border-b border-surface_border pb-4">1. 수자원 재활용 (Water Reclamation)</h2>
+            <div class="space-y-4 text-text_muted">
+                <p><strong class="text-text_main">냉각탑 보충수 재활용:</strong> Micron은 반도체 제조 공정뿐만 아니라, 공장 유틸리티 시설(냉각탑, 보일러 메이크업 워터)에서 사용되는 막대한 물을 재생수(Reclaimed water)로 대체하고 있습니다.</p>
+                <p><strong class="text-text_main">75% 재이용 목표:</strong> 2024년 기준 66%의 수자원 재사용/재활용률을 달성했으며, 2030년까지 75%에 도달하는 것을 전사적 목표로 삼고 있습니다. 신규 팹 설계 초기부터 이러한 수자원 절감 아키텍처를 도입하고 있습니다.</p>
+            </div>
+        </section>
+
+        <section class="glass-card">
+            <h2 class="text-2xl font-bold mb-6 border-b border-surface_border pb-4">2. 친환경 냉방 및 Scope 1 삭감</h2>
+            <div class="space-y-4 text-text_muted">
+                <p><strong class="text-text_main">신냉매 및 냉각 혁신:</strong> 불소화 온실가스(F-Gas) 및 열전달 유체(Heat transfer fluids) 사용을 줄이고, 친환경 냉방 기술로 전환하기 위한 연구를 진행 중입니다.</p>
+                <p><strong class="text-text_main">RE100 조기 달성:</strong> 미국 내 운영 시설에 대해 2025년 말까지 100% 재생 에너지 전력을 확보하고, 2030년까지 Scope 1 온실가스를 42% 감축하는 공격적인 탄소 중립 BM을 실천하고 있습니다.</p>
+            </div>
+        </section>
+    </main>
+</body>
+</html>

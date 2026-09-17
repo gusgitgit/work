@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="ko" data-theme="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Samsung Electronics - HVAC & ESG BM</title>
+    <script>
+        tailwind = { config: {
+            darkMode: 'class',
+            theme: { extend: { colors: { bg: '#090d16', surface: '#0f172a', surface_card: '#131d33', surface_border: '#1e293b', text_main: '#f8fafc', text_muted: '#94a3b8', primary: '#38bdf8', samsung: '#1428A0' }, fontFamily: { sans: ['Pretendard', '-apple-system', 'sans-serif'] } } }
+        } }
+    </script>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <style>
+        body { background-color: #090d16; color: #f8fafc; font-family: 'Pretendard', sans-serif; line-height: 1.6; }
+        .hero-title { background: linear-gradient(135deg, #ffffff 0%, #cbd5e1 50%, #1428A0 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+        .glass-card { background: #131d33; border: 1px solid #1e293b; border-radius: 1rem; padding: 2rem; }
+    </style>
+</head>
+<body class="min-h-screen p-6 md:p-12">
+    <header class="max-w-4xl mx-auto mb-12 flex items-center justify-between">
+        <div>
+            <h1 class="text-3xl font-extrabold hero-title mb-2"><i class="fas fa-microchip text-samsung mr-3"></i> Samsung Electronics (삼성전자)</h1>
+            <p class="text-text_muted">반도체(DS) 부문 HVAC 및 ESG 비즈니스 모델 분석</p>
+        </div>
+        <a href="../index.html" class="px-4 py-2 rounded-lg border border-surface_border hover:bg-surface_card text-text_muted hover:text-text_main transition-colors">
+            <i class="fas fa-arrow-left mr-2"></i> 돌아가기
+        </a>
+    </header>
+
+    <main class="max-w-4xl mx-auto space-y-8">
+        <section class="glass-card">
+            <h2 class="text-2xl font-bold mb-6 border-b border-surface_border pb-4">1. 칠러 폐열 회수 (Waste Heat Recovery)</h2>
+            <div class="space-y-4 text-text_muted">
+                <p><strong class="text-text_main">개요:</strong> 삼성전자 반도체(DS) 부문은 냉동기(Chiller)에서 발생하는 고온의 냉각수 폐열을 회수하여 재활용하는 시스템을 도입했습니다.</p>
+                <p><strong class="text-text_main">효과:</strong> 폐열 회수를 통해 냉각탑 팬(Fan)의 부하를 줄이고, 회수된 열에너지를 초순수(UPW) 가열 및 기타 공정에 재사용하여 막대한 천연가스(LNG) 및 전력 소모를 절감하고 있습니다.</p>
+            </div>
+        </section>
+
+        <section class="glass-card">
+            <h2 class="text-2xl font-bold mb-6 border-b border-surface_border pb-4">2. 냉각탑 용수 절감 및 Water Positive</h2>
+            <div class="space-y-4 text-text_muted">
+                <p><strong class="text-text_main">메이크업 워터 최적화:</strong> 반도체 팹 냉각탑에서 증발하는 수자원을 보충하기 위해 정수된 폐수를 메이크업 워터(Makeup water)로 재활용(Reuse)하고 있습니다.</p>
+                <p><strong class="text-text_main">동절기 수자원 낭비 방지:</strong> 냉각탑 동파 방지를 위해 배출되던 물을 최소화하고자 냉각탑 단열 보강 및 예방적 수질 제어(Predictive Quality Control) 시스템을 도입했습니다.</p>
+                <p><strong class="text-text_main">AWS 인증:</strong> 2026년까지 1억 1천만 톤의 수자원 재이용을 목표로 하며, 글로벌 제조 사업장으로 AWS(국제수자원관리동맹) 인증을 확대하고 있습니다.</p>
+            </div>
+        </section>
+    </main>
+</body>
+</html>

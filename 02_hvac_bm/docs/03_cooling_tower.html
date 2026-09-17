@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="ko" data-theme="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>냉각탑 수자원 절감 기술 - HVAC BM</title>
+    <script>
+        tailwind = { config: {
+            darkMode: 'class',
+            theme: { extend: { colors: { bg: '#090d16', surface: '#0f172a', surface_card: '#131d33', surface_border: '#1e293b', text_main: '#f8fafc', text_muted: '#94a3b8', primary: '#38bdf8', accent: '#3b82f6' }, fontFamily: { sans: ['Pretendard', '-apple-system', 'sans-serif'] } } }
+        } }
+    </script>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <style>
+        body { background-color: #090d16; color: #f8fafc; font-family: 'Pretendard', sans-serif; line-height: 1.6; }
+        .hero-title { background: linear-gradient(135deg, #ffffff 0%, #cbd5e1 50%, #3b82f6 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+        .glass-card { background: #131d33; border: 1px solid #1e293b; border-radius: 1rem; padding: 2rem; margin-bottom: 2rem; }
+    </style>
+</head>
+<body class="min-h-screen p-6 md:p-12">
+    <header class="max-w-4xl mx-auto mb-12 flex items-center justify-between">
+        <div>
+            <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-accent/20 text-accent border border-accent/30 text-xs font-semibold mb-4">Tech Pillar 3</div>
+            <h1 class="text-3xl font-extrabold hero-title mb-2">냉각탑 수자원 절감 및 통제</h1>
+            <p class="text-text_muted">증발수 포집, 블로우다운 제어, 재생수 투입을 통한 반도체 공장의 Zero Water Footprint 달성</p>
+        </div>
+        <a href="../index.html" class="px-4 py-2 rounded-lg border border-surface_border hover:bg-surface_card text-text_muted hover:text-text_main transition-colors shrink-0">
+            <i class="fas fa-arrow-left mr-2"></i> 대시보드
+        </a>
+    </header>
+
+    <main class="max-w-4xl mx-auto space-y-8">
+        <!-- Engineering Analysis -->
+        <section class="glass-card">
+            <h2 class="text-2xl font-bold mb-6 border-b border-surface_border pb-4"><i class="fas fa-microscope text-primary mr-2"></i> 심층 엔지니어링 분석</h2>
+            
+            <div class="space-y-6 text-text_muted">
+                <div>
+                    <h3 class="text-xl font-semibold text-text_main mb-2">1. 개방형 냉각탑의 수자원 손실 메커니즘</h3>
+                    <p>반도체 팹 냉동기의 막대한 열을 대기로 방출하는 개방형 냉각탑(Cooling Tower)은 필연적으로 3가지 수분 손실을 겪습니다. <strong>① 증발 손실(Evaporation Loss)</strong>: 열을 뺏으며 증발하는 물. <strong>② 비산 손실(Drift Loss)</strong>: 팬 바람에 날아가는 미세 물방울. <strong>③ 블로우다운(Bleed-off/Blowdown)</strong>: 증발로 인해 농축된 불순물(스케일)을 배출하기 위해 강제로 버리는 물입니다. 이 세 가지 손실을 보충하기 위해 엄청난 양의 메이크업 워터(Makeup water)가 소모됩니다.</p>
+                </div>
+                
+                <div>
+                    <h3 class="text-xl font-semibold text-text_main mb-2">2. 첨단 수자원 절감 하드웨어 (증발수 포집 기술)</h3>
+                    <p>최근에는 백연(Plume) 형태로 증발해 사라지는 수증기를 다시 액화시켜 회수하는 장치들이 연구되고 있습니다. 열전소자(Thermoelectric)를 부착해 이슬점을 낮추거나, 액체 제습제(Liquid Desiccant) 멤브레인을 냉각탑 상단에 설치하여 배기 수증기를 물리적으로 포집하는 최전선 엔지니어링이 시도되고 있습니다.</p>
+                </div>
+
+                <div>
+                    <h3 class="text-xl font-semibold text-text_main mb-2">3. 수처리 및 농축 배수(Blowdown) 최적화</h3>
+                    <p>스케일과 박테리아(레지오넬라 등) 번식을 막기 위한 수처리 장치를 고도화하면, 냉각탑 물의 농축 배수 한계선(Cycle of Concentration)을 높일 수 있습니다. 물을 덜 버려도 되므로 블로우다운 손실이 줄어들며, 반도체 공장 하수처리장(WWT)을 거친 재생수(Reclaimed water)를 투입하기 용이해집니다.</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Industry Implementation -->
+        <section class="glass-card border-t-4 border-t-accent">
+            <h2 class="text-2xl font-bold mb-6 border-b border-surface_border pb-4"><i class="fas fa-building text-accent mr-2"></i> 글로벌 반도체 기업별 도입 동향</h2>
+            
+            <div class="space-y-6">
+                <!-- Micron -->
+                <div class="bg-surface/50 p-5 rounded-lg border border-surface_border hover:border-accent/50 transition-colors">
+                    <h3 class="text-lg font-bold text-text_main mb-2 flex items-center"><span class="w-2 h-2 rounded-full bg-[#007BB6] mr-2"></span> Micron: 재생수 98% 사용 신화</h3>
+                    <p class="text-text_muted">세계경제포럼(WEF) 지정 '등대 공장'인 마이크론 싱가포르 팹은 지역 상수도 의존을 없애기 위해 사용 수자원의 98%를 하수 재생수(NEWater)와 해수 담수화 시설, 빗물 포집으로 충당합니다. 고도의 멤브레인 필터와 이온 수지를 거친 재생수만이 거대한 냉각탑망을 순환하고 있습니다.</p>
+                </div>
+
+                <!-- TSMC & Intel -->
+                <div class="bg-surface/50 p-5 rounded-lg border border-surface_border hover:border-accent/50 transition-colors">
+                    <h3 class="text-lg font-bold text-text_main mb-2 flex items-center"><span class="w-2 h-2 rounded-full bg-[#CC0000] mr-2"></span> TSMC / <span class="w-2 h-2 rounded-full bg-[#0068B5] mx-2"></span> Intel: Zero Liquid Discharge 및 유역 복원</h3>
+                    <p class="text-text_muted">TSMC는 대만 남부와 애리조나 신규 팹에 대규모 재생수 플랜트(IRWP)를 구축하여 버려지는 폐수를 냉각탑과 스크러버에 전량 투입하는 '무방류(Zero Liquid Discharge)' 팹을 실현하고 있습니다. 인텔은 팹 내부의 물리적 낭비를 막는 것을 넘어, 소비한 물보다 더 많은 담수를 지역 생태계 유역(Watershed)에 되돌려주는 'Net Positive Water (2030)' 프로젝트를 적극 가동 중입니다.</p>
+                </div>
+
+                <!-- Samsung & SK -->
+                <div class="bg-surface/50 p-5 rounded-lg border border-surface_border hover:border-accent/50 transition-colors">
+                    <h3 class="text-lg font-bold text-text_main mb-2 flex items-center"><span class="w-2 h-2 rounded-full bg-[#1428A0] mr-2"></span> Samsung / <span class="w-2 h-2 rounded-full bg-[#EA002C] mx-2"></span> SK Hynix: AI 수질 통제 및 초과 절감</h3>
+                    <p class="text-text_muted">SK하이닉스는 국내에서만 매일 17만 톤의 물을 재활용하며 CDP 최고 등급을 유지 중입니다. 삼성전자는 겨울철 동파 방지를 위해 무의미하게 버려지던 동파 방지수(Bleed-off)를 막기 위해 냉각탑 단열 보강 및 인공지능 기반 예방적 수질 제어(Predictive Quality Control) 시스템을 도입해 수백만 톤을 아끼고 있습니다.</p>
+                </div>
+            </div>
+        </section>
+    </main>
+</body>
+</html>

@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="ko" data-theme="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>고효율 칠러(Chiller) 및 폐열 회수 - HVAC BM</title>
+    <script>
+        tailwind = { config: {
+            darkMode: 'class',
+            theme: { extend: { colors: { bg: '#090d16', surface: '#0f172a', surface_card: '#131d33', surface_border: '#1e293b', text_main: '#f8fafc', text_muted: '#94a3b8', primary: '#38bdf8', accent: '#f59e0b' }, fontFamily: { sans: ['Pretendard', '-apple-system', 'sans-serif'] } } }
+        } }
+    </script>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <style>
+        body { background-color: #090d16; color: #f8fafc; font-family: 'Pretendard', sans-serif; line-height: 1.6; }
+        .hero-title { background: linear-gradient(135deg, #ffffff 0%, #cbd5e1 50%, #f59e0b 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+        .glass-card { background: #131d33; border: 1px solid #1e293b; border-radius: 1rem; padding: 2rem; margin-bottom: 2rem; }
+    </style>
+</head>
+<body class="min-h-screen p-6 md:p-12">
+    <header class="max-w-4xl mx-auto mb-12 flex items-center justify-between">
+        <div>
+            <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-accent/20 text-accent border border-accent/30 text-xs font-semibold mb-4">Tech Pillar 2</div>
+            <h1 class="text-3xl font-extrabold hero-title mb-2">고효율 칠러(Chiller) 및 폐열 회수</h1>
+            <p class="text-text_muted">AI 기반 냉동기 최적화 및 Scope 1 탄소 삭감을 위한 히트펌프(Heat Pump) 생태계 전환</p>
+        </div>
+        <a href="../index.html" class="px-4 py-2 rounded-lg border border-surface_border hover:bg-surface_card text-text_muted hover:text-text_main transition-colors shrink-0">
+            <i class="fas fa-arrow-left mr-2"></i> 대시보드
+        </a>
+    </header>
+
+    <main class="max-w-4xl mx-auto space-y-8">
+        <!-- Engineering Analysis -->
+        <section class="glass-card">
+            <h2 class="text-2xl font-bold mb-6 border-b border-surface_border pb-4"><i class="fas fa-microscope text-primary mr-2"></i> 심층 엔지니어링 분석</h2>
+            
+            <div class="space-y-6 text-text_muted">
+                <div>
+                    <h3 class="text-xl font-semibold text-text_main mb-2">1. 칠러 시스템의 병목과 AI 최적화</h3>
+                    <p>반도체 라인의 냉수를 책임지는 원심식 냉동기(Centrifugal Chiller)는 고정된 설정값(Set-point)으로 운영될 경우, 부분 부하(Part-load) 상황에서 극심한 효율 저하를 겪습니다. 최근에는 칠러 내부의 압축기, 냉각수 펌프, 냉각탑 팬의 변수를 머신러닝(ML) 알고리즘으로 통합 제어하여, 실시간 외기 온도와 공정 부하에 맞춰 COP(성적계수)를 극대화하는 솔루션이 도입되고 있습니다.</p>
+                </div>
+                
+                <div>
+                    <h3 class="text-xl font-semibold text-text_main mb-2">2. 폐열 회수 칠러 (Heat Recovery Chillers)</h3>
+                    <p>전통적인 칠러는 응축기(Condenser)를 통해 막대한 열기를 냉각탑으로 버립니다. 반면, 폐열 회수 칠러는 이 응축열을 버리지 않고 포집하여 50~60℃ 이상의 온수를 생산합니다. 생산된 온수는 클린룸의 난방(Reheating coil)이나 반도체 세정에 필수적인 초순수(UPW) 예열에 사용됩니다.</p>
+                </div>
+
+                <div>
+                    <h3 class="text-xl font-semibold text-text_main mb-2">3. 가스 보일러의 퇴출과 산업용 히트펌프</h3>
+                    <p>기존 팹들은 온수를 만들기 위해 천연가스(LNG) 보일러를 가동하여 다량의 온실가스(Scope 1)를 직접 배출했습니다. 폐열 회수 칠러와 거대한 산업용 히트펌프(Heat Pump)를 직렬로 연결하면, 가스 연소 없이 오직 전력만으로 고온수를 생산할 수 있어 탄소 중립(Net Zero) 공장 설계의 핵심 축으로 평가받습니다.</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Industry Implementation -->
+        <section class="glass-card border-t-4 border-t-accent">
+            <h2 class="text-2xl font-bold mb-6 border-b border-surface_border pb-4"><i class="fas fa-building text-accent mr-2"></i> 글로벌 반도체 기업별 도입 동향</h2>
+            
+            <div class="space-y-6">
+                <!-- TSMC -->
+                <div class="bg-surface/50 p-5 rounded-lg border border-surface_border hover:border-accent/50 transition-colors">
+                    <h3 class="text-lg font-bold text-text_main mb-2 flex items-center"><span class="w-2 h-2 rounded-full bg-[#CC0000] mr-2"></span> TSMC: 인공지능(AI) 신경망 칠러 제어</h3>
+                    <p class="text-text_muted">TSMC는 수만 톤 규모의 클린룸 칠러 시스템에 딥러닝 알고리즘을 도입했습니다. 기상 데이터와 팹 내부 데이터를 실시간으로 학습하여 칠러 압축기 밸브와 스마트 펌프를 유기적으로 제어함으로써, 시스템 에너지 효율을 10%~19%까지 끌어올렸으며 이는 세계 최고 수준의 제어 기술로 평가받습니다.</p>
+                </div>
+
+                <!-- Intel -->
+                <div class="bg-surface/50 p-5 rounded-lg border border-surface_border hover:border-accent/50 transition-colors">
+                    <h3 class="text-lg font-bold text-text_main mb-2 flex items-center"><span class="w-2 h-2 rounded-full bg-[#0068B5] mr-2"></span> Intel: 천연가스 의존도를 부순 Fab 34</h3>
+                    <p class="text-text_muted">아일랜드 Leixlip에 위치한 인텔의 Fab 34는 초대형 열회수 칠러(Heat Recovery Chiller)를 가동 중입니다. 팹에서 발생하는 고열을 포집하여 막대한 양의 초순수를 예열하고, 가스 보일러 사용을 원천 차단했습니다. 인텔은 이 폐열을 인근 도시의 지역 난방(District Heating)망에 공급하는 프로젝트까지 추진 중입니다.</p>
+                </div>
+
+                <!-- Samsung & SK -->
+                <div class="bg-surface/50 p-5 rounded-lg border border-surface_border hover:border-accent/50 transition-colors">
+                    <h3 class="text-lg font-bold text-text_main mb-2 flex items-center"><span class="w-2 h-2 rounded-full bg-[#1428A0] mr-2"></span> Samsung / <span class="w-2 h-2 rounded-full bg-[#EA002C] mx-2"></span> SK Hynix: 탈탄소 공정 가열 생태계</h3>
+                    <p class="text-text_muted">양사 모두 칠러 폐열을 적극 활용하여 LNG 보일러 가동률을 낮추고 있습니다. 특히 삼성전자는 최근 글로벌 공조기업 FläktGroup과 손잡고, AI 데이터센터용 신형 칠러 생태계(CDU 등) 장비 라인을 신설하며 사내 공정 최적화를 넘어 B2B 시장의 에너지 절감 비즈니스 모델로 영역을 확장했습니다.</p>
+                </div>
+            </div>
+        </section>
+    </main>
+</body>
+</html>

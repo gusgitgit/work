@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="ko" data-theme="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>IHX (Internal Heat Exchanger) 열역학 이론 - Knowledge Base</title>
+    <script>
+        tailwind = { config: {
+            darkMode: 'class',
+            theme: { extend: { colors: { bg: '#090d16', surface: '#0f172a', surface_card: '#131d33', surface_border: '#1e293b', text_main: '#f8fafc', text_muted: '#94a3b8', primary: '#38bdf8', accent: '#8b5cf6', ihx: '#818cf8' }, fontFamily: { sans: ['Pretendard', '-apple-system', 'sans-serif'] } } }
+        } }
+    </script>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <style>
+        body { background-color: #090d16; color: #f8fafc; font-family: 'Pretendard', sans-serif; line-height: 1.6; }
+        .hero-title { background: linear-gradient(135deg, #ffffff 0%, #cbd5e1 50%, #818cf8 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+        .glass-card { background: #131d33; border: 1px solid #1e293b; border-radius: 1rem; padding: 2rem; margin-bottom: 2rem; }
+        .math { font-family: 'Cambria Math', 'Times New Roman', serif; font-style: italic; color: #38bdf8; }
+    </style>
+</head>
+<body class="min-h-screen p-6 md:p-12">
+    <header class="max-w-4xl mx-auto mb-12 flex items-center justify-between">
+        <div>
+            <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-ihx/20 text-ihx border border-ihx/30 text-xs font-semibold mb-4"><i class="fas fa-book-open"></i> 이론 및 원리</div>
+            <h1 class="text-3xl font-extrabold hero-title mb-2">내부열교환기(IHX) 심층 열역학 이론</h1>
+            <p class="text-text_muted">냉매 사이클 내 효율 극대화를 위한 열교환 메커니즘과 유체역학적 해석</p>
+        </div>
+        <div class="flex gap-4">
+            <a href="../index.html" class="px-4 py-2 rounded-lg bg-ihx/10 text-ihx border border-ihx/30 hover:bg-ihx/20 transition-colors shrink-0">
+                <i class="fas fa-chart-line mr-2"></i> 시뮬레이터 실행
+            </a>
+            <a href="../../index.html" class="px-4 py-2 rounded-lg border border-surface_border hover:bg-surface_card text-text_muted hover:text-text_main transition-colors shrink-0">
+                <i class="fas fa-home mr-2"></i> 홈
+            </a>
+        </div>
+    </header>
+
+    <main class="max-w-4xl mx-auto space-y-8">
+        <!-- Section 1: Introduction to IHX -->
+        <section class="glass-card">
+            <h2 class="text-2xl font-bold mb-6 border-b border-surface_border pb-4"><i class="fas fa-sync text-ihx mr-2"></i> 1. IHX의 정의와 목적</h2>
+            <div class="space-y-4 text-text_muted">
+                <p>내부열교환기(Internal Heat Exchanger, IHX)는 냉동 사이클에서 <strong>응축기를 통과한 고온/고압의 액냉매</strong>와 <strong>증발기를 통과한 저온/저압의 기체 냉매</strong>를 서로 열교환시키는 장치입니다.</p>
+                <ul class="list-disc list-inside space-y-2 ml-4">
+                    <li><strong class="text-text_main">과냉각(Subcooling) 증대:</strong> 팽창밸브로 들어가는 액냉매의 온도를 낮춰 팽창 후의 플래시 가스(Flash gas) 발생을 줄이고, 증발기의 잠열 흡수 능력을 극대화합니다.</li>
+                    <li><strong class="text-text_main">과열도(Superheating) 확보:</strong> 압축기로 들어가는 기체 냉매의 온도를 높여 압축기 내 액압축(Liquid slugging) 현상을 방지합니다.</li>
+                </ul>
+            </div>
+        </section>
+
+        <!-- Section 2: Thermodynamic Equations -->
+        <section class="glass-card border-t-4 border-t-primary">
+            <h2 class="text-2xl font-bold mb-6 border-b border-surface_border pb-4"><i class="fas fa-calculator text-primary mr-2"></i> 2. 열역학적 효율 지표 (COP)</h2>
+            <div class="space-y-4 text-text_muted">
+                <p>IHX 적용 시 시스템의 성적계수(COP) 변화는 유체의 물성(주로 비열, <span class="math">C<sub>p</sub></span>)에 강하게 의존합니다.</p>
+                
+                <div class="bg-surface p-4 rounded border border-surface_border font-mono text-sm">
+                    <p class="mb-2"><span class="text-accent">Q<sub>evap</sub></span> = m_dot * (h_1 - h_4)  // 증발기 흡수 열량</p>
+                    <p class="mb-2"><span class="text-accent">W<sub>comp</sub></span> = m_dot * (h_2 - h_1)  // 압축기 일량</p>
+                    <p><span class="text-accent">COP</span> = Q<sub>evap</sub> / W<sub>comp</sub></p>
+                </div>
+
+                <p>IHX는 <span class="math">Q<sub>evap</sub></span>를 증가시키지만, 동시에 압축기 흡입 온도가 높아져 비체적이 증가하므로 <span class="math">W<sub>comp</sub></span> 역시 증가시킵니다. 따라서 이 두 요소의 증가율에 따라 최종 COP의 상승 여부가 결정됩니다.</p>
+            </div>
+        </section>
+
+        <!-- Section 3: Refrigerant Dependency -->
+        <section class="glass-card">
+            <h2 class="text-2xl font-bold mb-6 border-b border-surface_border pb-4"><i class="fas fa-flask text-ihx mr-2"></i> 3. 냉매 종류에 따른 IHX 효과</h2>
+            
+            <div class="space-y-6 text-text_muted">
+                <div>
+                    <h3 class="text-xl font-semibold text-text_main mb-2">자연냉매 (CO2 - R744)</h3>
+                    <p>초임계 사이클(Transcritical cycle)로 운전되는 CO2 시스템에서 IHX는 필수적입니다. 가스쿨러 출구 온도가 임계점(31.1°C) 이상일 경우 등엔탈피 팽창 시 건도가 매우 높아지므로, IHX를 통한 극단적인 과냉각이 COP를 최대 20% 이상 끌어올릴 수 있습니다.</p>
+                </div>
+                
+                <div>
+                    <h3 class="text-xl font-semibold text-text_main mb-2">HFC 및 HFO 계열 (R134a, R1234yf)</h3>
+                    <p>액체 비열이 크고 기체 비열이 작은 냉매일수록 IHX의 효율 상승 폭이 큽니다. R1234yf는 R134a에 비해 잠열이 작아 증발기 성능 저하가 우려되나, IHX를 부착하면 이를 성공적으로 상쇄할 수 있어 차세대 자동차 에어컨(MAC) 및 산업용 칠러의 표준으로 자리잡았습니다.</p>
+                </div>
+                
+                <div>
+                    <h3 class="text-xl font-semibold text-text_main mb-2">전통적인 냉매 (R22, R410A)</h3>
+                    <p>압축기 토출 온도가 태생적으로 높은 R22, R32 기반 혼합냉매(R410A 등)에서는 IHX 사용 시 압축기 과열 및 윤활유 열화 문제가 발생할 수 있어 사용이 제한되거나 엄격한 제어(액분사 등)와 병행해야 합니다.</p>
+                </div>
+            </div>
+        </section>
+        
+        <!-- Section 4: Design Considerations -->
+        <section class="glass-card border-t-4 border-t-accent">
+            <h2 class="text-2xl font-bold mb-6 border-b border-surface_border pb-4"><i class="fas fa-cogs text-accent mr-2"></i> 4. 설계 및 유동 최적화 (마이크로채널)</h2>
+            <div class="space-y-4 text-text_muted">
+                <p>최근의 IHX 설계는 이중관(Coaxial) 형태를 넘어 압력 강하(Pressure Drop)를 최소화하기 위해 <strong>마이크로채널(Microchannel)</strong> 또는 인쇄회로 기판형 열교환기(PCHE) 기술을 접목하고 있습니다.</p>
+                <p>저압 가스관에서의 마찰 손실(dP)은 압축기 흡입 압력을 저하시켜 체적효율을 급감시키므로, IHX 설계 시 열전달률(UA) 극대화보다 <strong>저압부 압력 강하 억제</strong>가 전체 시스템 효율(System COP) 관점에서 훨씬 더 중요한 설계 인자로 작용합니다.</p>
+            </div>
+        </section>
+    </main>
+</body>
+</html>

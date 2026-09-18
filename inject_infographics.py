@@ -1,5 +1,4 @@
 import os
-import re
 
 css_to_add = """
     <style>
@@ -44,16 +43,24 @@ def inject_diagram(file_path, diagram_html, insert_after_text):
     with open(file_path, 'r', encoding='utf-8') as f:
         content = f.read()
     
+    modified = False
+    
     # inject CSS
-    content = content.replace('</head>', css_to_add)
+    if ".infographic {" not in content:
+        content = content.replace('</head>', css_to_add)
+        modified = True
     
     # inject Diagram
-    # We find the section and insert the diagram after it
-    if insert_after_text in content:
+    if insert_after_text in content and "div class=\"infographic" not in content:
         content = content.replace(insert_after_text, insert_after_text + '\n' + diagram_html)
+        modified = True
     
-    with open(file_path, 'w', encoding='utf-8') as f:
-        f.write(content)
+    if modified:
+        with open(file_path, 'w', encoding='utf-8') as f:
+            f.write(content)
+        print(f"Injected into {file_path}")
+    else:
+        print(f"Already injected or insertion point not found for {file_path}")
 
 base_dir = '02_hvac_bm/docs'
 
@@ -96,7 +103,7 @@ mau_html = """
           </div>
         </div>
 """
-inject_diagram(f'{base_dir}/01_mau_oac.html', mau_html, '<h3 class="text-xl font-semibold text-text_main mb-2">1. 외조기(MAU) 온습도 제어의 핵심</h3>')
+inject_diagram(f'{base_dir}/01_mau_oac.html', mau_html, '<h3 class="text-xl font-semibold text-text_main mb-2">1. MAU (Make-up Air Unit)의 역할과 병목</h3>')
 
 
 # 2. Chiller Diagram
@@ -141,7 +148,7 @@ chiller_html = """
           </div>
         </div>
 """
-inject_diagram(f'{base_dir}/02_chiller.html', chiller_html, '<h3 class="text-xl font-semibold text-text_main mb-2">2. 폐열 회수(Heat Recovery) 및 탄소 중립</h3>')
+inject_diagram(f'{base_dir}/02_chiller.html', chiller_html, '<h3 class="text-xl font-semibold text-text_main mb-2">2. 폐열 회수 칠러 (Heat Recovery Chillers)</h3>')
 
 # 3. Cooling Tower Diagram
 tower_html = """
@@ -172,41 +179,4 @@ tower_html = """
           </div>
         </div>
 """
-inject_diagram(f'{base_dir}/03_cooling_tower.html', tower_html, '<h3 class="text-xl font-semibold text-text_main mb-2">2. 하이브리드 냉각탑 및 모드 전환</h3>')
-
-# 4. Refrigerants (Immersion Cooling) Diagram
-refrigerants_html = """
-        <!-- Immersion Cooling Graphic -->
-        <div class="infographic">
-          <div class="ig-node node-hot-2">
-            <i class="fa-solid fa-microchip"></i>
-            <span>High-TDP Chip</span>
-            <div class="ig-desc">AI GPU (>1000W)</div>
-          </div>
-          
-          <div class="ig-arrow">
-            <span>3D Vapor Chamber</span>
-            <i class="fa-solid fa-arrow-right"></i>
-          </div>
-          
-          <div class="ig-node node-purify">
-            <i class="fa-solid fa-water"></i>
-            <span>비전도성 유전체 액체</span>
-            <div class="ig-desc">Dielectric Fluid</div>
-          </div>
-          
-          <div class="ig-arrow">
-            <span>기화 잠열 흡수</span>
-            <i class="fa-solid fa-fire-flame-curved"></i>
-          </div>
-          
-          <div class="ig-node node-cold-2">
-            <i class="fa-solid fa-cloud-arrow-up"></i>
-            <span>2상(Two-Phase) 액침 냉각</span>
-            <div class="ig-desc">기포 발생 및 열 방출</div>
-          </div>
-        </div>
-"""
-inject_diagram(f'{base_dir}/04_refrigerants.html', refrigerants_html, '<h3 class="text-xl font-semibold text-text_main mb-2">3. 액침 냉각 (Immersion Cooling) 및 액체 냉각 (Liquid Cooling)</h3>')
-
-print("All infographics injected successfully!")
+inject_diagram(f'{base_dir}/03_cooling_tower.html', tower_html, '<h3 class="text-xl font-semibold text-text_main mb-2">2. 첨단 수자원 절감 하드웨어 (증발수 포집 기술)</h3>')

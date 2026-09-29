@@ -152,18 +152,18 @@
 <body>
   <div class="container">
     
-    <div class="top-nav" style="justify-content: flex-start; padding: 1rem 0; border: none; margin-bottom: 0;">
-      <a href="../index.html" style="display: inline-flex; align-items: center; gap: 0.5rem; padding: 0.5rem 1rem; border-radius: 999px; background: rgba(56, 189, 248, 0.1); color: #38bdf8; text-decoration: none; font-weight: 600; border: 1px solid rgba(56,189,248,0.3); transition: all 0.2s;">
-        <i class="fa-solid fa-arrow-left"></i> 중앙 대시보드로 돌아가기
-      </a>
-    </div>
+    
 
     <!-- VIEW 1: LD-DOAS -->
     <div id="view-ld-doas" class="main-view active">
-      <header>
-        <div class="badge-hero"><i class="fa-solid fa-flask"></i> Liquid Desiccant DOAS Research Archive</div>
-        <h1>CrecoPLUS 5100C ([EMIM][DEP]) DOAS Literature Portal</h1>
-        <p class="hero-desc">기존 냉각감습 외조기에서 이온성 액체를 활용한 차세대 액체식 제습 외조기(LD-DOAS)로의 패러다임 전환을 위한 연구 포털입니다.</p>
+      <header class="max-w-5xl mx-auto mb-12 text-center">
+        <a href="../index.html" class="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-blue-900/30 text-primary border border-blue-500/30 text-sm font-semibold mb-6 hover:bg-blue-900/50 transition-colors" style="text-decoration:none;"><i class="fas fa-arrow-left"></i> 중앙 지식베이스</a>
+        <br>
+        <div class="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-purple-900/30 text-purple-400 border border-purple-500/30 text-sm font-semibold mb-4">
+            <i class="fa-solid fa-flask"></i> Literature Portal
+        </div>
+        <h1 class="text-4xl md:text-5xl font-extrabold hero-title mb-4">Advanced Cooling & DOAS Archive</h1>
+        <p class="text-text_muted text-lg max-w-2xl mx-auto">액체제습(LD-DOAS), 첨단 냉각기술(액침냉각 등), AI 제어 관련 논문 및 특허 데이터베이스입니다.</p>
       </header>
       
       <!-- FIXED: 3 Tabs properly included here -->
@@ -961,7 +961,7 @@
       document.getElementById('modalJournal').textContent = p.journal;
       document.getElementById('modalBluf').textContent = p.bluf;
       document.getElementById('modalBibtex').textContent = p.bibtex;
-      document.getElementById('modalNoteLink').href = 'https://github.com/gusgitgit/research_paper/blob/main/' + p.file_url;
+      document.getElementById('modalNoteLink').href = 'https://github.com/gusgitgit/work/blob/main/' + p.file_url;
       document.getElementById('modalDoiLink').href = p.doi_url;
       modalOverlay.classList.add('active');
     }

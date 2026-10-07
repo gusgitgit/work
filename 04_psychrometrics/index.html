@@ -38,59 +38,30 @@
             background: #131d33; border: 1px solid #1e293b; border-radius: 1rem; 
             padding: 1.25rem; box-shadow: 0 10px 30px -10px rgba(0,0,0,0.5); 
         }
-        @media (min-width: 640px) { .glass-card { padding: 2rem; } }
+        @media (min-width: 640px) { .glass-card { padding: 2.5rem; } }
         
-        .result-box { 
-            background: #0f172a; border: 1px solid #1e293b; border-radius: 0.75rem; 
-            padding: 1rem; display: flex; flex-direction: column; align-items: flex-start; gap: 0.25rem; 
-            transition: border-color 0.2s;
+        .prop-card { display: flex; flex-direction: column; gap: 0.35rem; }
+        
+        .input-field { 
+            background: #0f172a; border: 1px solid #1e293b; color: #f8fafc; 
+            padding: 1rem 3.5rem 1rem 1rem; border-radius: 0.75rem; outline: none; 
+            transition: all 0.2s; font-family: 'JetBrains Mono', monospace; 
+            font-size: 1.25rem; font-weight: 800; text-align: right; width: 100%;
         }
-        @media (min-width: 640px) {
-            .result-box { padding: 1.25rem; flex-direction: row; align-items: center; justify-content: space-between; gap: 0; }
-        }
+        .input-field:focus { border-color: #f43f5e; background: rgba(244, 63, 94, 0.05); box-shadow: 0 0 0 3px rgba(244, 63, 94, 0.1); }
+        .input-field:hover:not(:focus) { border-color: #38bdf8; }
+        
+        .unit-label { font-size: 0.95rem; font-weight: 600; color: #64748b; }
 
-        .result-box.input-active { border-color: rgba(244, 63, 94, 0.4); background: rgba(244, 63, 94, 0.02); }
-        .result-box .label { font-size: 0.9rem; color: #94a3b8; font-weight: 600; display: flex; align-items: center; gap: 6px; }
-        .result-box .value { font-size: 1.5rem; font-weight: 800; color: #38bdf8; font-family: 'JetBrains Mono', monospace; }
-        .result-box .unit { font-size: 1rem; color: #64748b; font-weight: 500; margin-left: 0.25rem; }
-        
-        /* Editable Input Styling */
-        .editable-value {
-            background: transparent;
-            border: none;
-            border-bottom: 2px dashed #f43f5e;
-            color: #f8fafc;
-            font-size: 1.5rem;
-            font-weight: 800;
-            font-family: 'JetBrains Mono', monospace;
-            width: 120px;
-            text-align: right;
-            outline: none;
-            transition: all 0.2s;
-            padding: 0 4px;
-            border-radius: 4px 4px 0 0;
-        }
-        .editable-value:focus {
-            border-bottom-color: #38bdf8;
-            background: rgba(56, 189, 248, 0.1);
-        }
-        
         /* Chrome, Safari, Edge, Opera */
         input::-webkit-outer-spin-button,
-        input::-webkit-inner-spin-button {
-          -webkit-appearance: none;
-          margin: 0;
-        }
+        input::-webkit-inner-spin-button { -webkit-appearance: none; margin: 0; }
         /* Firefox */
-        input[type=number] {
-          -moz-appearance: textfield;
-        }
+        input[type=number] { -moz-appearance: textfield; }
 
-        .mode-btn { background: #0f172a; border: 1px solid #1e293b; color: #94a3b8; padding: 0.6rem 1rem; border-radius: 0.5rem; cursor: pointer; font-weight: 600; transition: all 0.2s; font-size: 0.9rem;}
-        @media (min-width: 640px) { .mode-btn { padding: 0.5rem 1rem; font-size: 1rem; } }
-        .mode-btn.active { background: rgba(244, 63, 94, 0.15); color: #f43f5e; border-color: #f43f5e; }
-        
-        .error-state .value { color: #ef4444 !important; }
+        .error-state .input-field { color: #ef4444 !important; border-color: rgba(239, 68, 68, 0.5); }
+        .err-msg { display: none; color: #ef4444; font-size: 0.85rem; font-weight: 600; margin-top: 0.5rem; text-align: center; }
+        .error-state + .err-msg { display: block; }
     </style>
 </head>
 <body class="min-h-screen p-4 sm:p-6 md:p-12">
@@ -101,97 +72,118 @@
         <div class="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-psy/10 text-psy border border-psy/30 text-sm font-semibold mb-4">
             <i class="fa-solid fa-temperature-half"></i> Psychrometrics
         </div>
-        <h1 class="text-3xl md:text-5xl font-extrabold hero-title mb-4">Interactive Psychrometric Chart</h1>
-        <p class="text-text_muted text-base sm:text-lg max-w-2xl mx-auto px-2">SAREK PsyChart 방식의 실시간 습공기 상태량 계산기입니다. 값을 변경하면 즉시 나머지 상태량이 계산됩니다.</p>
+        <h1 class="text-3xl md:text-5xl font-extrabold hero-title mb-4">Omni-directional Psychrometric Chart</h1>
+        <p class="text-text_muted text-base sm:text-lg max-w-2xl mx-auto px-2">건구온도를 기준으로 <strong>어떤 상태량이든 자유롭게 수정</strong>하면 나머지 모든 값이 즉시 연동되어 실시간 계산됩니다.</p>
     </header>
 
-    <main class="max-w-4xl mx-auto">
-        
-        <div class="glass-card">
-            
-            <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-6 sm:mb-8 border-b border-surface_border pb-6 gap-4">
-                <h2 class="text-xl sm:text-2xl font-bold text-text_main m-0"><i class="fa-solid fa-list-check text-psy mr-2"></i> Psychrometric Properties</h2>
-                <div class="flex gap-2 w-full sm:w-auto">
-                    <button class="mode-btn active flex-1 sm:flex-none" data-mode="rh" onclick="setMode('rh')">건구 + 상대습도</button>
-                    <button class="mode-btn flex-1 sm:flex-none" data-mode="hr" onclick="setMode('hr')">건구 + 절대습도</button>
+    <main class="max-w-3xl mx-auto">
+        <div class="glass-card relative">
+            <div id="properties-grid">
+                
+                <!-- Pressure (Full width) -->
+                <div class="prop-card mb-6 pb-6 border-b border-surface_border">
+                    <label class="text-sm font-semibold text-text_muted flex items-center gap-2">
+                        <i class="fa-solid fa-gauge-high text-sky-400 w-4 text-center"></i> 대기압 (Atmospheric Pressure)
+                    </label>
+                    <div class="relative w-full md:w-1/2">
+                        <input type="number" id="in-press" value="101325" step="100" oninput="calculate('press')" class="input-field text-sky-400" />
+                        <span class="absolute right-4 top-1/2 -translate-y-1/2 unit-label font-mono">Pa</span>
+                    </div>
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-x-6 gap-y-6">
+                    
+                    <!-- Dry Bulb -->
+                    <div class="prop-card">
+                        <label class="text-sm font-semibold text-text_muted flex items-center gap-2">
+                            <i class="fa-solid fa-temperature-empty text-orange-400 w-4 text-center"></i> 건구온도 (Dry Bulb)
+                        </label>
+                        <div class="relative">
+                            <input type="number" id="in-tdb" value="25.0" step="0.1" oninput="calculate('tdb')" class="input-field text-orange-400" />
+                            <span class="absolute right-4 top-1/2 -translate-y-1/2 unit-label font-mono">°C</span>
+                        </div>
+                    </div>
+                    
+                    <!-- Relative Humidity -->
+                    <div class="prop-card">
+                        <label class="text-sm font-semibold text-text_muted flex items-center gap-2">
+                            <i class="fa-solid fa-droplet text-rose-400 w-4 text-center"></i> 상대습도 (Rel. Humidity)
+                        </label>
+                        <div class="relative">
+                            <input type="number" id="in-rh" value="50.0" step="0.1" oninput="calculate('rh')" class="input-field text-rose-400" />
+                            <span class="absolute right-4 top-1/2 -translate-y-1/2 unit-label font-mono">%</span>
+                        </div>
+                    </div>
+
+                    <!-- Humidity Ratio -->
+                    <div class="prop-card">
+                        <label class="text-sm font-semibold text-text_muted flex items-center gap-2">
+                            <i class="fa-solid fa-glass-water text-emerald-400 w-4 text-center"></i> 절대습도 (Hum. Ratio)
+                        </label>
+                        <div class="relative">
+                            <input type="number" id="in-hr" value="9.88" step="0.1" oninput="calculate('hr')" class="input-field text-emerald-400" />
+                            <span class="absolute right-4 top-1/2 -translate-y-1/2 unit-label font-mono">g/kg</span>
+                        </div>
+                    </div>
+
+                    <!-- Enthalpy -->
+                    <div class="prop-card">
+                        <label class="text-sm font-semibold text-text_muted flex items-center gap-2">
+                            <i class="fa-solid fa-bolt text-purple-400 w-4 text-center"></i> 엔탈피 (Enthalpy)
+                        </label>
+                        <div class="relative">
+                            <input type="number" id="in-enth" value="50.22" step="0.1" oninput="calculate('enth')" class="input-field text-purple-400" />
+                            <span class="absolute right-4 top-1/2 -translate-y-1/2 unit-label font-mono">kJ/kg</span>
+                        </div>
+                    </div>
+
+                    <!-- Wet Bulb -->
+                    <div class="prop-card">
+                        <label class="text-sm font-semibold text-text_muted flex items-center gap-2">
+                            <i class="fa-solid fa-temperature-arrow-down text-blue-400 w-4 text-center"></i> 습구온도 (Wet Bulb)
+                        </label>
+                        <div class="relative">
+                            <input type="number" id="in-twb" value="17.82" step="0.1" oninput="calculate('twb')" class="input-field text-blue-400" />
+                            <span class="absolute right-4 top-1/2 -translate-y-1/2 unit-label font-mono">°C</span>
+                        </div>
+                    </div>
+
+                    <!-- Dew Point -->
+                    <div class="prop-card">
+                        <label class="text-sm font-semibold text-text_muted flex items-center gap-2">
+                            <i class="fa-solid fa-snowflake text-cyan-400 w-4 text-center"></i> 노점온도 (Dew Point)
+                        </label>
+                        <div class="relative">
+                            <input type="number" id="in-tdp" value="13.82" step="0.1" oninput="calculate('tdp')" class="input-field text-cyan-400" />
+                            <span class="absolute right-4 top-1/2 -translate-y-1/2 unit-label font-mono">°C</span>
+                        </div>
+                    </div>
+                    
+                    <!-- Specific Volume -->
+                    <div class="prop-card">
+                        <label class="text-sm font-semibold text-text_muted flex items-center gap-2">
+                            <i class="fa-solid fa-cube text-slate-400 w-4 text-center"></i> 비체적 (Spec. Volume)
+                        </label>
+                        <div class="relative">
+                            <input type="number" id="in-vol" value="0.8583" step="0.0001" oninput="calculate('vol')" class="input-field text-slate-400" />
+                            <span class="absolute right-4 top-1/2 -translate-y-1/2 unit-label font-mono">m³/kg</span>
+                        </div>
+                    </div>
+
+                    <!-- Vapor Pressure -->
+                    <div class="prop-card">
+                        <label class="text-sm font-semibold text-text_muted flex items-center gap-2">
+                            <i class="fa-solid fa-cloud text-gray-400 w-4 text-center"></i> 수증기압 (Vapor Press.)
+                        </label>
+                        <div class="relative">
+                            <input type="number" id="in-vp" value="1583" step="10" oninput="calculate('vp')" class="input-field text-gray-400" />
+                            <span class="absolute right-4 top-1/2 -translate-y-1/2 unit-label font-mono">Pa</span>
+                        </div>
+                    </div>
+
                 </div>
             </div>
-            
-            <div class="grid grid-cols-2 gap-3 sm:gap-4" id="properties-grid">
-                
-                <!-- Pressure -->
-                <div class="result-box input-active col-span-2">
-                    <span class="label"><i class="fa-solid fa-gauge-high text-sky-400"></i> Atmospheric Pressure (대기압)</span>
-                    <div>
-                        <input type="number" id="in-press" value="101325" step="100" oninput="calculate()" class="editable-value" />
-                        <span class="unit">Pa</span>
-                    </div>
-                </div>
-
-                <!-- Dry Bulb -->
-                <div class="result-box input-active col-span-2 sm:col-span-1">
-                    <span class="label"><i class="fa-solid fa-temperature-empty text-orange-400"></i> Dry Bulb (건구온도)</span>
-                    <div>
-                        <input type="number" id="in-tdb" value="25.0" step="0.1" oninput="calculate()" class="editable-value" />
-                        <span class="unit">°C</span>
-                    </div>
-                </div>
-                
-                <!-- Relative Humidity -->
-                <div class="result-box col-span-2 sm:col-span-1" id="box-rh">
-                    <span class="label"><i class="fa-solid fa-droplet text-rose-400"></i> Rel. Humidity (RH)</span>
-                    <div>
-                        <input type="number" id="in-rh" value="50.0" step="0.1" min="0" max="100" oninput="calculate()" class="editable-value" />
-                        <span class="value" id="out-rh" style="display: none; color: #f43f5e;">-</span>
-                        <span class="unit">%</span>
-                    </div>
-                </div>
-
-                <!-- Humidity Ratio -->
-                <div class="result-box col-span-2 sm:col-span-1" id="box-hr">
-                    <span class="label"><i class="fa-solid fa-glass-water text-emerald-400"></i> Hum. Ratio (절대습도)</span>
-                    <div>
-                        <input type="number" id="in-hr" value="10.0" step="0.1" oninput="calculate()" class="editable-value" style="display: none;" />
-                        <span class="value" id="out-hr" style="color: #10b981;">-</span>
-                        <span class="unit">g/kg</span>
-                    </div>
-                </div>
-
-                <!-- Enthalpy -->
-                <div class="result-box col-span-2 sm:col-span-1">
-                    <span class="label"><i class="fa-solid fa-bolt text-purple-400"></i> Enthalpy (엔탈피)</span>
-                    <div><span class="value" id="out-enth" style="color: #8b5cf6;">-</span><span class="unit">kJ/kg</span></div>
-                </div>
-
-                <!-- Wet Bulb -->
-                <div class="result-box col-span-2 sm:col-span-1">
-                    <span class="label"><i class="fa-solid fa-temperature-arrow-down text-blue-400"></i> Wet Bulb (습구온도)</span>
-                    <div><span class="value" id="out-twb">-</span><span class="unit">°C</span></div>
-                </div>
-
-                <!-- Dew Point -->
-                <div class="result-box col-span-2 sm:col-span-1">
-                    <span class="label"><i class="fa-solid fa-snowflake text-cyan-400"></i> Dew Point (노점온도)</span>
-                    <div><span class="value" id="out-tdp">-</span><span class="unit">°C</span></div>
-                </div>
-                
-                <!-- Specific Volume -->
-                <div class="result-box col-span-2 sm:col-span-1">
-                    <span class="label"><i class="fa-solid fa-cube text-slate-400"></i> Spec. Volume (비체적)</span>
-                    <div><span class="value" id="out-vol">-</span><span class="unit">m³/kg</span></div>
-                </div>
-
-                <!-- Vapor Pressure -->
-                <div class="result-box col-span-2 sm:col-span-1">
-                    <span class="label"><i class="fa-solid fa-cloud text-gray-400"></i> Vapor Press. (수증기압)</span>
-                    <div><span class="value" id="out-vp">-</span><span class="unit">Pa</span></div>
-                </div>
-            </div>
-            
-            <div class="mt-6 sm:mt-8 p-4 rounded-lg bg-blue-900/20 border border-blue-500/30 text-xs sm:text-sm text-blue-200">
-                <i class="fa-solid fa-circle-info mr-2"></i>
-                <strong>Notice:</strong> 점선으로 밑줄 친 항목(<span style="border-bottom: 2px dashed #f43f5e; padding-bottom: 2px;">수치</span>)을 수정하면 즉시 전체 상태량이 재계산됩니다.
-            </div>
+            <div class="err-msg"><i class="fa-solid fa-triangle-exclamation"></i> 입력값이 유효한 습공기선도 범위를 벗어났습니다.</div>
         </div>
     </main>
 
@@ -202,38 +194,16 @@
             console.error("Psychrolib failed to load from CDN.");
         }
 
-        let currentMode = 'rh';
+        // Default secondary constraint parameter is RH
+        let currentSecondary = 'rh';
 
-        function setMode(mode) {
-            currentMode = mode;
-            document.querySelectorAll('.mode-btn').forEach(btn => btn.classList.remove('active'));
-            document.querySelector(`.mode-btn[data-mode="${mode}"]`).classList.add('active');
-            
-            if(mode === 'rh') {
-                document.getElementById('in-rh').style.display = 'inline-block';
-                document.getElementById('out-rh').style.display = 'none';
-                document.getElementById('box-rh').classList.add('input-active');
-                
-                document.getElementById('in-hr').style.display = 'none';
-                document.getElementById('out-hr').style.display = 'inline-block';
-                document.getElementById('box-hr').classList.remove('input-active');
-            } else {
-                document.getElementById('in-rh').style.display = 'none';
-                document.getElementById('out-rh').style.display = 'inline-block';
-                document.getElementById('box-rh').classList.remove('input-active');
-                
-                document.getElementById('in-hr').style.display = 'inline-block';
-                document.getElementById('out-hr').style.display = 'none';
-                document.getElementById('box-hr').classList.add('input-active');
-            }
-            calculate();
-        }
-
-        function calculate() {
+        function calculate(source = null) {
             const grid = document.getElementById('properties-grid');
-            if(typeof psychrolib === 'undefined') {
-                setErrorState("라이브러리 로드 실패");
-                return;
+            if(typeof psychrolib === 'undefined') return;
+
+            // If the user modified a property other than Tdb or Pressure, it becomes the new constraint
+            if (source && source !== 'tdb' && source !== 'press') {
+                currentSecondary = source;
             }
 
             try {
@@ -243,64 +213,85 @@
                 if(!tdbStr || !pressStr) throw new Error("Empty input");
 
                 const tdb = parseFloat(tdbStr);
-                const pressure = parseFloat(pressStr);
+                const press = parseFloat(pressStr);
                 
-                let hr, rh, twb, tdp, enth, vol, vp;
+                let hr;
+                const secStr = document.getElementById(`in-${currentSecondary}`).value;
+                if(!secStr) throw new Error("Empty input");
+                const val = parseFloat(secStr);
 
-                if (currentMode === 'rh') {
-                    const rhStr = document.getElementById('in-rh').value;
-                    if(!rhStr) throw new Error("Empty input");
-                    rh = parseFloat(rhStr) / 100.0;
-                    if(rh < 0.0 || rh > 1.0) throw new Error("Invalid RH");
-                    hr = psychrolib.GetHumRatioFromRelHum(tdb, rh, pressure);
-                } else {
-                    const hrStr = document.getElementById('in-hr').value;
-                    if(!hrStr) throw new Error("Empty input");
-                    hr = parseFloat(hrStr) / 1000.0;
-                    if(hr < 0.0) throw new Error("Invalid HR");
-                    rh = psychrolib.GetRelHumFromHumRatio(tdb, hr, pressure);
+                switch (currentSecondary) {
+                    case 'rh':
+                        if(val < 0.0 || val > 100.0) throw new Error("Invalid RH");
+                        hr = psychrolib.GetHumRatioFromRelHum(tdb, val / 100.0, press);
+                        break;
+                    case 'hr':
+                        if(val < 0.0) throw new Error("Invalid HR");
+                        hr = val / 1000.0;
+                        break;
+                    case 'enth':
+                        // hr = (Enthalpy_J - 1006 * tdb) / (2501000 + 1860 * tdb)
+                        hr = (val * 1000.0 - 1006.0 * tdb) / (2501000.0 + 1860.0 * tdb);
+                        break;
+                    case 'twb':
+                        hr = psychrolib.GetHumRatioFromTWetBulb(tdb, val, press);
+                        break;
+                    case 'tdp':
+                        hr = psychrolib.GetHumRatioFromTDewPoint(val, press);
+                        break;
+                    case 'vol':
+                        // hr = ((vol * press) / (287.042 * (tdb + 273.15)) - 1) / 1.607858
+                        let term = (val * press) / (287.042 * (tdb + 273.15));
+                        hr = (term - 1.0) / 1.607858;
+                        break;
+                    case 'vp':
+                        hr = psychrolib.GetHumRatioFromVapPres(val, press);
+                        break;
                 }
 
-                // Calculate the rest
-                twb = psychrolib.GetTWetBulbFromHumRatio(tdb, hr, pressure);
-                tdp = psychrolib.GetTDewPointFromHumRatio(tdb, hr, pressure);
-                enth = psychrolib.GetMoistAirEnthalpy(tdb, hr) / 1000.0;
-                vol = psychrolib.GetMoistAirVolume(tdb, hr, pressure);
-                vp = psychrolib.GetVapPresFromHumRatio(hr, pressure);
+                if (hr < 0 || isNaN(hr)) throw new Error("Invalid State");
 
-                // Update UI normally
+                // Calculate all remaining properties
+                const res_rh = psychrolib.GetRelHumFromHumRatio(tdb, hr, press) * 100.0;
+                const res_hr = hr * 1000.0;
+                const res_enth = psychrolib.GetMoistAirEnthalpy(tdb, hr) / 1000.0;
+                const res_twb = psychrolib.GetTWetBulbFromHumRatio(tdb, hr, press);
+                const res_tdp = psychrolib.GetTDewPointFromHumRatio(tdb, hr, press);
+                const res_vol = psychrolib.GetMoistAirVolume(tdb, hr, press);
+                const res_vp = psychrolib.GetVapPresFromHumRatio(hr, press);
+                
+                if (res_rh > 100.001) throw new Error("Supersaturated");
+
+                // Helper to update fields without interfering with user's typing
+                const update = (id, computedValue, decimals) => {
+                    // Do not overwrite the field currently being typed into (source)
+                    // If source is null (on initial load), update everything
+                    if (source !== id) {
+                        document.getElementById(`in-${id}`).value = computedValue.toFixed(decimals);
+                    }
+                };
+
+                // Remove error state
                 grid.classList.remove('error-state');
-                if(currentMode === 'hr') {
-                    document.getElementById('out-rh').innerText = (rh * 100).toFixed(2);
-                } else {
-                    document.getElementById('out-hr').innerText = (hr * 1000).toFixed(2);
-                }
-                
-                document.getElementById('out-enth').innerText = enth.toFixed(2);
-                document.getElementById('out-twb').innerText = twb.toFixed(2);
-                document.getElementById('out-tdp').innerText = tdp.toFixed(2);
-                document.getElementById('out-vol').innerText = vol.toFixed(4);
-                document.getElementById('out-vp').innerText = vp.toFixed(0);
+
+                // Update fields
+                update('rh', res_rh, 2);
+                update('hr', res_hr, 2);
+                update('enth', res_enth, 2);
+                update('twb', res_twb, 2);
+                update('tdp', res_tdp, 2);
+                update('vol', res_vol, 4);
+                update('vp', res_vp, 0);
 
             } catch(e) {
-                setErrorState();
+                // Show error state (turns text red and displays error message)
+                grid.classList.add('error-state');
             }
         }
 
-        function setErrorState() {
-            document.getElementById('properties-grid').classList.add('error-state');
-            document.getElementById('out-rh').innerText = "ERR";
-            document.getElementById('out-hr').innerText = "ERR";
-            document.getElementById('out-enth').innerText = "ERR";
-            document.getElementById('out-twb').innerText = "ERR";
-            document.getElementById('out-tdp').innerText = "ERR";
-            document.getElementById('out-vol').innerText = "ERR";
-            document.getElementById('out-vp').innerText = "ERR";
-        }
-
-        // Auto-calculate on load
+        // Initialize calculations on first load
         window.onload = function() {
-            setMode('rh');
+            calculate();
         };
     </script>
 </body>

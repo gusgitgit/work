@@ -1,55 +1,9 @@
-<!DOCTYPE html>
-<html lang="ko" data-theme="dark">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Work Knowledge Base</title>
-    <script>
-        tailwind = { config: {
-            darkMode: 'class',
-            theme: {
-                extend: {
-                    colors: {
-                        bg: '#090d16',
-                        surface: '#0f172a',
-                        surface_card: '#131d33',
-                        surface_border: '#1e293b',
-                        text_main: '#f8fafc',
-                        text_muted: '#94a3b8',
-                        primary: '#38bdf8',
-                        accent: '#34d399',
-                        ihx: '#818cf8',
-                        hvac: '#10b981',
-                        research: '#c084fc'
-                    },
-                    fontFamily: {
-                        sans: ['Pretendard', '-apple-system', 'sans-serif'],
-                    }
-                }
-            }
-        } }
-    </script>
-    <script src="https://cdn.tailwindcss.com"></script>
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
-    <style>
-        body { background-color: #090d16; color: #f8fafc; font-family: 'Pretendard', sans-serif; line-height: 1.6; }
-        .hero-title { background: linear-gradient(135deg, #ffffff 0%, #cbd5e1 50%, #38bdf8 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
-        .glass-card { background: #131d33; border: 1px solid #1e293b; border-radius: 1rem; padding: 1.5rem; transition: all 0.3s ease; }
-        .glass-card:hover { transform: translateY(-5px); border-color: #38bdf8; box-shadow: 0 10px 30px -10px rgba(56,189,248,0.2); }
-    </style>
-</head>
-<body class="min-h-screen p-6 md:p-12">
+import re
 
-    <!-- Header -->
-    <header class="max-w-6xl mx-auto mb-16 text-center">
-        <div class="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-blue-900/30 text-primary border border-blue-500/30 text-sm font-semibold mb-6">
-            <i class="fas fa-database"></i> Centralized Repository
-        </div>
-        <h1 class="text-4xl md:text-5xl font-extrabold hero-title mb-4">Work Knowledge Base</h1>
-        <p class="text-text_muted text-lg max-w-2xl mx-auto">업무 관련 R&D 자료, 비즈니스 모델(BM), 기술 문서를 통합 관리하는 중앙 대시보드입니다.</p>
-    </header>
+with open('index.html', 'r', encoding='utf-8') as f:
+    content = f.read()
 
-    
+new_main = """
     <!-- Main Content -->
     <main class="max-w-6xl mx-auto grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 pb-20">
         
@@ -114,6 +68,10 @@
         </a>
 
     </main>
+"""
 
-</body>
-</html>
+content = re.sub(r'<!-- Main Content -->\s*<main.*?</main>', new_main, content, flags=re.DOTALL)
+
+with open('index.html', 'w', encoding='utf-8') as f:
+    f.write(content)
+print("Updated index.html to make cards clickable.")

@@ -63,6 +63,7 @@
         .err-msg { display: none; color: #ef4444; font-size: 0.85rem; font-weight: 600; margin-top: 0.5rem; text-align: center; }
         .error-state + .err-msg { display: block; }
     </style>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 </head>
 <body class="min-h-screen p-4 sm:p-6 md:p-12">
 
@@ -185,6 +186,15 @@
             </div>
             <div class="err-msg"><i class="fa-solid fa-triangle-exclamation"></i> 입력값이 유효한 습공기선도 범위를 벗어났습니다.</div>
         </div>
+
+        <!-- Psychrometric Chart Visualizer -->
+        <div class="glass-card mt-6">
+            <h2 class="text-xl sm:text-2xl font-bold text-text_main mb-4 border-b border-surface_border pb-4"><i class="fa-solid fa-chart-line text-primary mr-2"></i> Psychrometric Chart</h2>
+            <div class="w-full bg-slate-900 rounded-lg p-2 sm:p-4 border border-surface_border" style="position: relative; height: 50vh; min-height: 400px;">
+                <canvas id="psyChart"></canvas>
+            </div>
+        </div>
+
     </main>
 
     <script>
@@ -192,6 +202,134 @@
             psychrolib.SetUnitSystem(psychrolib.SI);
         } else {
             console.error("Psychrolib failed to load from CDN.");
+        }
+
+        
+        let chartInstance = null;
+        let lastDrawnPress = 0;
+
+        function getRhCurve(rh, press) {
+            let data = [];
+            for(let t = 0; t <= 50; t += 1) {
+                try {
+                    let hr = psychrolib.GetHumRatioFromRelHum(t, rh, press) * 1000.0;
+                    data.push({x: t, y: hr});
+                } catch(e) {}
+            }
+            return data;
+        }
+
+        function getTwbLine(twb, press) {
+            let data = [];
+            for(let t = twb; t <= 50; t += 2) {
+                try {
+                    let hr = psychrolib.GetHumRatioFromTWetBulb(t, twb, press) * 1000.0;
+                    if(hr >= 0) data.push({x: t, y: hr});
+                } catch(e) {}
+            }
+            return data;
+        }
+
+        function initChart(press) {
+            const ctx = document.getElementById('psyChart').getContext('2d');
+            const datasets = [];
+            
+            datasets.push({
+                label: 'Current State',
+                data: [{x: 25, y: 9.88}],
+                backgroundColor: '#f43f5e',
+                borderColor: '#ffffff',
+                borderWidth: 2,
+                pointRadius: 6,
+                pointHoverRadius: 8,
+                showLine: false,
+                order: 0
+            });
+
+            datasets.push({
+                label: '100% RH',
+                data: getRhCurve(1.0, press),
+                borderColor: 'rgba(56, 189, 248, 0.8)',
+                borderWidth: 2,
+                showLine: true,
+                pointRadius: 0,
+                fill: false,
+                tension: 0.4,
+                order: 1
+            });
+
+            [0.8, 0.6, 0.4, 0.2].forEach(rh => {
+                datasets.push({
+                    label: `${rh*100}% RH`,
+                    data: getRhCurve(rh, press),
+                    borderColor: 'rgba(56, 189, 248, 0.3)',
+                    borderWidth: 1,
+                    borderDash: [5, 5],
+                    showLine: true,
+                    pointRadius: 0,
+                    fill: false,
+                    tension: 0.4,
+                    order: 2
+                });
+            });
+
+            [5, 10, 15, 20, 25, 30, 35].forEach(twb => {
+                datasets.push({
+                    label: `Twb ${twb}°C`,
+                    data: getTwbLine(twb, press),
+                    borderColor: 'rgba(16, 185, 129, 0.2)',
+                    borderWidth: 1,
+                    showLine: true,
+                    pointRadius: 0,
+                    fill: false,
+                    order: 3
+                });
+            });
+
+            chartInstance = new Chart(ctx, {
+                type: 'scatter',
+                data: { datasets: datasets },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    animation: { duration: 200 },
+                    scales: {
+                        x: {
+                            type: 'linear', position: 'bottom', min: 0, max: 50,
+                            title: { display: true, text: 'Dry Bulb Temperature (°C)', color: '#94a3b8' },
+                            grid: { color: 'rgba(30, 41, 59, 0.5)' }, ticks: { color: '#94a3b8' }
+                        },
+                        y: {
+                            type: 'linear', position: 'right', min: 0, max: 30,
+                            title: { display: true, text: 'Humidity Ratio (g/kg)', color: '#94a3b8' },
+                            grid: { color: 'rgba(30, 41, 59, 0.5)' }, ticks: { color: '#94a3b8' }
+                        }
+                    },
+                    plugins: {
+                        legend: { display: false },
+                        tooltip: {
+                            callbacks: {
+                                label: function(context) {
+                                    if(context.datasetIndex === 0) return `Tdb: ${context.parsed.x.toFixed(1)}°C, HR: ${context.parsed.y.toFixed(1)}g/kg`;
+                                    return context.dataset.label;
+                                }
+                            }
+                        }
+                    }
+                }
+            });
+            lastDrawnPress = press;
+        }
+
+        function updateChart(tdb, hr, press) {
+            if (!chartInstance) {
+                initChart(press);
+            } else if (Math.abs(press - lastDrawnPress) > 10) {
+                chartInstance.destroy();
+                initChart(press);
+            }
+            chartInstance.data.datasets[0].data = [{x: tdb, y: hr}];
+            chartInstance.update('none'); // Update without full animation for responsiveness
         }
 
         // Default secondary constraint parameter is RH
@@ -282,6 +420,8 @@
                 update('tdp', res_tdp, 2);
                 update('vol', res_vol, 4);
                 update('vp', res_vp, 0);
+                
+                updateChart(tdb, res_hr, press);
 
             } catch(e) {
                 // Show error state (turns text red and displays error message)

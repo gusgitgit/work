@@ -44,7 +44,7 @@
         
         .input-field { 
             background: #0f172a; border: 1px solid #1e293b; color: #f8fafc; 
-            padding: 1rem 3.5rem 1rem 1rem; border-radius: 0.75rem; outline: none; 
+            padding: 1rem 4.5rem 1rem 1rem; border-radius: 0.75rem; outline: none; 
             transition: all 0.2s; font-family: 'JetBrains Mono', monospace; 
             font-size: 1.25rem; font-weight: 800; text-align: right; width: 100%;
         }
@@ -60,6 +60,7 @@
         input[type=number] { -moz-appearance: textfield; }
 
         .error-state .input-field { color: #ef4444 !important; border-color: rgba(239, 68, 68, 0.5); }
+        .error-state #out-enth-kcal { color: #ef4444 !important; opacity: 1 !important; }
         .err-msg { display: none; color: #ef4444; font-size: 0.85rem; font-weight: 600; margin-top: 0.5rem; text-align: center; }
         .error-state + .err-msg { display: block; }
     </style>
@@ -133,8 +134,11 @@
                             <i class="fa-solid fa-bolt text-purple-400 w-4 text-center"></i> 엔탈피 (Enthalpy)
                         </label>
                         <div class="relative">
-                            <input type="number" id="in-enth" value="50.22" step="0.1" oninput="calculate('enth')" class="input-field text-purple-400" />
-                            <span class="absolute right-4 top-1/2 -translate-y-1/2 unit-label font-mono">kJ/kg</span>
+                            <input type="number" id="in-enth" value="50.22" step="0.1" oninput="calculate('enth')" class="input-field text-purple-400" style="padding-right: 5.5rem;" />
+                            <div class="absolute right-3 top-1/2 -translate-y-1/2 flex flex-col items-end pointer-events-none">
+                                <span class="unit-label font-mono">kJ/kg</span>
+                                <span id="out-enth-kcal" class="text-[0.65rem] font-mono text-purple-400/70 mt-0.5">12.00 kcal/kg</span>
+                            </div>
                         </div>
                     </div>
 
@@ -310,7 +314,7 @@
                         tooltip: {
                             callbacks: {
                                 label: function(context) {
-                                    if(context.datasetIndex === 0) return `Tdb: ${context.parsed.x.toFixed(1)}°C, HR: ${context.parsed.y.toFixed(1)}g/kg`;
+                                    if(context.datasetIndex === 0) return `Tdb: ${context.parsed.x.toFixed(1)} °C, HR: ${context.parsed.y.toFixed(1)} g/kg`;
                                     return context.dataset.label;
                                 }
                             }
@@ -416,6 +420,7 @@
                 update('rh', res_rh, 2);
                 update('hr', res_hr, 2);
                 update('enth', res_enth, 2);
+                document.getElementById('out-enth-kcal').innerText = (res_enth / 4.184).toFixed(2) + ' kcal/kg';
                 update('twb', res_twb, 2);
                 update('tdp', res_tdp, 2);
                 update('vol', res_vol, 4);

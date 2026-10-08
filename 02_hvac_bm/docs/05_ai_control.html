@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="ko" data-theme="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>HVAC BM - AI & Predictive Control</title>
+    
+    <script>
+        tailwind = { config: {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    colors: {
+                        bg: '#090d16',
+                        surface: '#0f172a',
+                        surface_card: '#131d33',
+                        surface_border: '#1e293b',
+                        text_main: '#f8fafc',
+                        text_muted: '#94a3b8',
+                        accent: '#c084fc', /* Purple accent for AI */
+                        danger: '#f43f5e',
+                        success: '#10b981'
+                    },
+                    fontFamily: { sans: ['Pretendard', '-apple-system', 'sans-serif'] }
+                }
+            }
+        } }
+    </script>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    
+    <style>
+        body { background-color: #090d16; color: #f8fafc; font-family: 'Pretendard', sans-serif; line-height: 1.6; }
+        .hero-title { background: linear-gradient(135deg, #ffffff 0%, #cbd5e1 50%, #c084fc 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+        .glass-card { background: #131d33; border: 1px solid #1e293b; border-radius: 1rem; padding: 2rem; }
+        
+        .timeline { position: relative; max-width: 1200px; margin: 0 auto; }
+        .timeline::after { content: ''; position: absolute; width: 2px; background: var(--surface-border); top: 0; bottom: 0; left: 50%; margin-left: -1px; }
+        .timeline-item { padding: 10px 40px; position: relative; background: inherit; width: 50%; }
+        .timeline-item::after { content: ''; position: absolute; width: 16px; height: 16px; right: -8px; background: #090d16; border: 4px solid #c084fc; top: 15px; border-radius: 50%; z-index: 1; }
+        .left { left: 0; }
+        .right { left: 50%; }
+        .right::after { left: -8px; }
+        .content { padding: 1.5rem; background: #0f172a; border: 1px solid #1e293b; border-radius: 0.75rem; }
+        @media screen and (max-width: 768px) {
+            .timeline::after { left: 31px; }
+            .timeline-item { width: 100%; padding-left: 70px; padding-right: 25px; }
+            .timeline-item::after { left: 23px; }
+            .right { left: 0%; }
+        }
+
+        .stat-box { background: rgba(192, 132, 252, 0.1); border: 1px solid rgba(192, 132, 252, 0.3); border-radius: 0.75rem; padding: 1.5rem; text-align: center; }
+        .stat-value { font-size: 2.5rem; font-weight: 800; color: #c084fc; font-family: 'JetBrains Mono', monospace; line-height: 1.1; margin-bottom: 0.5rem; }
+        .stat-label { font-size: 0.9rem; color: #94a3b8; font-weight: 600; }
+    </style>
+</head>
+<body class="min-h-screen p-6 md:p-12">
+
+    <!-- Header & Breadcrumb -->
+    <header class="max-w-5xl mx-auto mb-12">
+        <div class="flex items-center gap-4 mb-8">
+            <a href="../../index.html" class="inline-flex items-center justify-center w-10 h-10 rounded-full bg-surface_border text-text_muted hover:text-text_main hover:bg-surface_card transition-colors" title="Back to Central Dashboard">
+                <i class="fas fa-home"></i>
+            </a>
+            <i class="fas fa-chevron-right text-text_muted text-sm"></i>
+            <a href="../index.html" class="inline-flex items-center justify-center px-4 h-10 rounded-full bg-surface_border text-text_muted hover:text-text_main hover:bg-surface_card transition-colors text-sm font-semibold" title="Back to HVAC BM Dashboard">
+                HVAC Tech Pillars
+            </a>
+            <i class="fas fa-chevron-right text-text_muted text-sm"></i>
+            <span class="inline-flex items-center px-4 h-10 rounded-full bg-accent/10 text-accent text-sm font-semibold">
+                AI & Predictive Control
+            </span>
+        </div>
+        
+        <div class="text-center">
+            <div class="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-accent/10 text-accent border border-accent/30 text-sm font-semibold mb-4">
+                <i class="fas fa-brain"></i> Tech Pillar 05
+            </div>
+            <h1 class="text-4xl md:text-5xl font-extrabold hero-title mb-4">AI & Predictive Control</h1>
+            <p class="text-text_muted text-lg max-w-2xl mx-auto">머신러닝 기반 예지보전, 디지털 트윈을 활용한 공조 최적화, 그리고 Cloud-Edge 하이브리드 제어 기술 동향 분석.</p>
+        </div>
+    </header>
+
+    <main class="max-w-5xl mx-auto space-y-8">
+        
+        <!-- BLUF -->
+        <section class="glass-card border-l-4 !border-l-accent bg-gradient-to-br from-surface_card to-surface">
+            <h2 class="text-xl font-bold text-text_main mb-4 flex items-center gap-2"><i class="fas fa-bolt text-accent"></i> 핵심 요약 (BLUF)</h2>
+            <p class="text-text_muted mb-4 leading-relaxed">
+                반도체 공정 미세화(EUV 도입 등)로 열부하가 극심해지면서, 기존의 수동형 PID 제어 방식은 한계에 도달했습니다. 
+                최근 <strong>TSMC, 삼성전자 등 글로벌 파운드리와 델타전자 등 유틸리티 장비사</strong>는 생산 관리 시스템(MES)의 웨이퍼 투입 일정과 연동하여 공조 장비(MAU, FFU, Chiller)를 <strong>미리 냉각/가동시키는 '예측형(Predictive)' AI 제어</strong>로 전환하고 있습니다. 이를 통해 15~20%의 추가적인 에너지 절감이 입증되고 있습니다.
+            </p>
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mt-6">
+                <div class="stat-box">
+                    <div class="stat-value">18<span class="text-xl">%</span></div>
+                    <div class="stat-label">칠러 전력소모 절감<br>(DRL 최적화 적용 시)</div>
+                </div>
+                <div class="stat-box">
+                    <div class="stat-value">< 1<span class="text-xl">yr</span></div>
+                    <div class="stat-label">초기 투자 회수 기간<br>(Payback Period)</div>
+                </div>
+                <div class="stat-box">
+                    <div class="stat-value">Cloud<span class="text-xl">-Edge</span></div>
+                    <div class="stat-label">실시간 지연 방지를 위한<br>분산형 AI 아키텍처 도입</div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Technology Deep Dive -->
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+            <div class="glass-card">
+                <h3 class="text-2xl font-bold text-text_main mb-6 border-b border-surface_border pb-4"><i class="fas fa-microchip text-accent mr-2"></i> 핵심 기술 트렌드</h3>
+                
+                <div class="space-y-6">
+                    <div>
+                        <h4 class="text-lg font-bold text-text_main flex items-center gap-2 mb-2">1. Deep Reinforcement Learning (DRL) 기반 제어</h4>
+                        <p class="text-text_muted text-sm leading-relaxed">
+                            강화학습(Deep Q-Network 등)을 활용하여 공장 내 수만 개의 센서 데이터를 바탕으로 최적의 냉수 공급 온도와 펌프 유량을 스스로 학습합니다. 피크 전력을 피하고 심야 전력을 활용해 냉수를 미리 생산(Thermal Storage)하는 스케줄링을 AI가 담당합니다.
+                        </p>
+                    </div>
+                    
+                    <div>
+                        <h4 class="text-lg font-bold text-text_main flex items-center gap-2 mb-2">2. Cloud-Edge Collaborative Architecture</h4>
+                        <p class="text-text_muted text-sm leading-relaxed">
+                            클린룸 환경의 온습도 스파이크는 웨이퍼 불량에 치명적이므로 통신 지연(Latency)이 없어야 합니다. <strong>가벼운 반응형 로직은 장비 단의 Edge AI에서 즉각 처리</strong>하고, <strong>복잡한 열부하 예측과 칠러 시퀀스 최적화는 중앙 Cloud AI</strong>에서 계산하여 Edge로 지령을 내리는 하이브리드 특허가 급증하고 있습니다.
+                        </p>
+                    </div>
+                    
+                    <div>
+                        <h4 class="text-lg font-bold text-text_main flex items-center gap-2 mb-2">3. MES(생산관리시스템) - OT(공조설비) 연동</h4>
+                        <p class="text-text_muted text-sm leading-relaxed">
+                            기존 공조시스템이 온도가 오른 뒤에 냉각을 시작(후행 제어)했다면, 차세대 AI 시스템은 MES로부터 <strong>'10분 뒤 A구역에 EUV 장비 가동 및 웨이퍼 랏(Lot) 투입'</strong>이라는 정보를 미리 받아 FFU와 냉각 코일 밸브를 선제적으로 개방(선행 제어)합니다.
+                        </p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="glass-card">
+                <h3 class="text-2xl font-bold text-text_main mb-6 border-b border-surface_border pb-4"><i class="fas fa-building text-accent mr-2"></i> 글로벌 기업 동향 (BM)</h3>
+                
+                <div class="space-y-4">
+                    <div class="p-4 bg-surface rounded-lg border border-surface_border">
+                        <div class="flex justify-between items-start mb-2">
+                            <h4 class="font-bold text-text_main text-lg">TSMC & Delta Electronics</h4>
+                            <span class="px-2 py-1 bg-warning/20 text-yellow-500 text-xs rounded-md font-bold">선도 / 특허 다수</span>
+                        </div>
+                        <p class="text-text_muted text-sm">최근 미국 특허(US20240184423A1) 등을 통해 Cloud-Edge 기반의 클린룸 HVAC 동기화 시스템을 구축. 에너지 절감과 더불어 수율(Yield) 향상을 위한 0.05°C 단위의 정밀 온도 예측 제어 기술 확보.</p>
+                    </div>
+                    
+                    <div class="p-4 bg-surface rounded-lg border border-surface_border">
+                        <div class="flex justify-between items-start mb-2">
+                            <h4 class="font-bold text-text_main text-lg">Johnson Controls (JCI)</h4>
+                            <span class="px-2 py-1 bg-blue-500/20 text-blue-400 text-xs rounded-md font-bold">OpenBlue 플랫폼</span>
+                        </div>
+                        <p class="text-text_muted text-sm">빌딩 자동화 솔루션 OpenBlue를 반도체 팹에 적용. 디지털 트윈(Digital Twin)을 구성하여 공조 기류(CFD)와 열해석을 실시간으로 대체하는 대리 모델(Surrogate Model) 도입 가속화.</p>
+                    </div>
+
+                    <div class="p-4 bg-surface rounded-lg border border-surface_border">
+                        <div class="flex justify-between items-start mb-2">
+                            <h4 class="font-bold text-text_main text-lg">Schneider Electric</h4>
+                            <span class="px-2 py-1 bg-green-500/20 text-green-400 text-xs rounded-md font-bold">EcoStruxure</span>
+                        </div>
+                        <p class="text-text_muted text-sm">에너지 관리와 자동화 IT/OT의 융합을 강조하며, 인버터(VFD)와 센서 네트워크를 결합한 ML 기반 고장 예지보전(Predictive Maintenance) 시장 점유율 확대 중.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </main>
+
+</body>
+</html>

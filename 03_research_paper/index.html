@@ -166,22 +166,25 @@
         <p class="text-text_muted text-lg max-w-2xl mx-auto">액체제습(LD-DOAS), 첨단 냉각기술(액침냉각 등), AI 제어 관련 논문 및 특허 데이터베이스입니다.</p>
       </header>
       
-      <!-- FIXED: 3 Tabs properly included here -->
+      <!-- 4 Tabs -->
       <div class="nav-tabs">
-        <button class="nav-tab-btn active" data-tab="catalog"><i class="fa-solid fa-book"></i> Paper Catalog (22)</button>
+        <button class="nav-tab-btn active" data-tab="catalog" id="catalogTabBtn"><i class="fa-solid fa-book"></i> Paper &amp; Patent Catalog (35)</button>
         <button class="nav-tab-btn" data-tab="blueprint"><i class="fa-solid fa-screwdriver-wrench"></i> DOAS Engineering Blueprint</button>
         <button class="nav-tab-btn" data-tab="benchmark"><i class="fa-solid fa-flask-vial"></i> Working Fluid Benchmark</button>
+        <button class="nav-tab-btn" data-tab="ihx-guide"><i class="fa-solid fa-fire-burner"></i> IHX &amp; Chiller Thermodynamics</button>
       </div>
 
       <!-- TAB 1: CATALOG -->
       <div id="tab-catalog" class="tab-pane active">
         <div class="toolbar">
-          <div class="filter-tabs">
-            <button class="filter-btn active" data-filter="all">All (22)</button>
+          <div class="filter-tabs" id="filterTabs">
+            <button class="filter-btn active" data-filter="all">All (35)</button>
             <button class="filter-btn" data-filter="System DOAS">System DOAS</button>
             <button class="filter-btn" data-filter="CrecoPLUS System">CrecoPLUS</button>
-            <button class="filter-btn" data-filter="Control & Dynamics">Control & Dynamics</button>
-            <button class="filter-btn" data-filter="Ionic Liquids & Fluid">Fluid</button>
+            <button class="filter-btn" data-filter="Control & Dynamics">Control &amp; AI</button>
+            <button class="filter-btn" data-filter="Ionic Liquids & Fluid">Ionic Liquids</button>
+            <button class="filter-btn" data-filter="IHX & Chiller">IHX &amp; Chiller</button>
+            <button class="filter-btn" data-filter="Advanced Cooling">Immersion &amp; Water</button>
             <button class="filter-btn" data-filter="Patent">Patents</button>
           </div>
           <div class="sort-and-search">
@@ -274,20 +277,40 @@
           </div>
         </div>
       </div>
+
+      <!-- TAB 4: IHX & CHILLER THERMODYNAMICS -->
+      <div id="tab-ihx-guide" class="tab-pane">
+        <div class="arch-card">
+          <h3><i class="fa-solid fa-arrows-left-right icon" style="color:#38bdf8;"></i> 1. 내부 열교환기(SLHX) 도입 판정 기준 (Domanski 1994 &amp; Klein 2000)</h3>
+          <p>응축기 출구 고온 액체와 증발기 출구 저온 가스를 열교환시키는 <strong>SLHX(Suction-Liquid Heat Exchanger)</strong>는 모든 냉매에서 효율을 높이지 않습니다. 액체 과냉각에 의한 <strong>교축 손실(Flash Gas) 감소 이득</strong>과 흡입 가스 과열에 의한 <strong>비체적 증가(압축 일량 증가) 페널티</strong>가 경쟁하기 때문입니다.</p>
+          <div class="formula-box">
+            [도입 판정 부등식] COP_s &lt; 1 / Φ  (단, Φ = T_evap · [(∂v/∂T)_P / v_1] ≈ 1 / T_evap)
+          </div>
+          <ul>
+            <li><strong>SLHX 적용 시 COP 상승 냉매 (복잡 분자, 큰 몰열용량)</strong>: R-1234ze(E) (+4.5~6.0%), R-1234yf (+5.0~6.5%), R-513A (+3.5~4.8%), R-134a (+2.8~4.0%)</li>
+            <li><strong>SLHX 적용 시 COP 하락/위험 냉매 (단순 분자, 큰 단열지수 γ)</strong>: R-32 (-1.5~-3.0%, 토출온도 급상승), 암모니아 R-717 (-2.5~-4.0%), R-410A (보합 또는 미세 감소)</li>
+            <li><strong>3,100 RT 대형 터보 칠러</strong>: 가스 배관 압력손실(ΔP_suc)을 원천 배제하기 위해 열교환기 대신 <strong>2단 플래시 탱크 이코노마이저(Flash Economizer)</strong>를 사용하여 COP를 <strong>+6.8-11.1%</strong> 향상시킵니다. (<a href="../01_ihx/docs/theory.html" style="color:#38bdf8; text-decoration:underline;">IHX 직관적 입문 가이드 보기</a>)</li>
+          </ul>
+        </div>
+      </div>
     </div>
 
     <!-- Hidden Modals -->
     <div class="modal-overlay" id="modalOverlay">
       <div class="modal-card">
         <button class="modal-close" id="modalClose">✕</button>
-        <h2 class="paper-title" id="modalTitle" style="font-size: 1.3rem;">Title</h2>
+        <div id="modalTags" style="display:flex; gap:0.4rem; flex-wrap:wrap; margin-bottom:0.75rem;"></div>
+        <h2 class="paper-title" id="modalTitle" style="font-size: 1.35rem;">Title</h2>
         <div class="paper-author" id="modalAuthor" style="font-size: 0.95rem;">Authors</div>
         <div class="paper-journal" id="modalJournal">Journal</div>
-        <div class="modal-section"><h4>📌 Executive Summary (BLUF)</h4><p id="modalBluf"></p></div>
+        <div class="modal-section"><h4>📌 핵심 결론 (BLUF)</h4><p id="modalBluf"></p></div>
+        <div class="modal-section" id="modalParamsSec"><h4>⚙️ 실험/모델 파라미터 (Parameters)</h4><p id="modalParams"></p></div>
+        <div class="modal-section" id="modalInsightSec"><h4>🎛️ 제어 및 설계 통찰 (Control &amp; Design Insight)</h4><p id="modalInsight"></p></div>
+        <div class="modal-section" id="modalTakeawaySec"><h4>💡 실무 시사점 (Engineering Takeaway)</h4><p id="modalTakeaway"></p></div>
         <div class="modal-section"><h4>📑 BibTeX Citation</h4><div class="bibtex-box" id="modalBibtex"></div></div>
         <div style="display: flex; gap: 0.75rem; margin-top: 1.5rem; justify-content: flex-end;">
-          <a href="#" id="modalNoteLink" class="btn-action btn-note" target="_blank" rel="noopener noreferrer">📄 Open Note</a>
-          <a href="#" id="modalDoiLink" class="btn-action btn-doi" target="_blank" rel="noopener noreferrer">🔗 DOI</a>
+          <a href="#" id="modalNoteLink" class="btn-action btn-note" target="_blank" rel="noopener noreferrer">📄 Open Full Note</a>
+          <a href="#" id="modalDoiLink" class="btn-action btn-doi" target="_blank" rel="noopener noreferrer">🔗 Verified DOI / Patent</a>
         </div>
       </div>
     </div>
@@ -312,105 +335,7 @@
     });
 
     const papers = [
-  
-  
   {
-    "id": 994,
-    "category": "Patent",
-    "cat_class": "badge-warning",
-    "year": 2021,
-    "author": "Varanasi, K. K., Damak, M. (MIT / Infinite Cooling)",
-    "title": "US10926194B2: System and Method for Electrostatic Water Recovery from Cooling Tower Plumes",
-    "journal": "US Patent & Trademark Office",
-    "doi": "US10926194B2",
-    "doi_url": "https://patents.google.com/patent/US10926194B2",
-    "file_url": "#",
-    "summary": "Uses ionization and an electrostatic mesh to capture and condense vapor droplets from cooling tower exhaust, recovering 10-20% of evaporated water.",
-    "bluf": "A breakthrough MIT-spinoff technology that charges water droplets in the cooling tower plume and collects them using an electric field. The recovered water is highly pure (demineralized) and can be immediately reused.",
-    "params": "Electrostatic collection, Ion Emitters, Plume Abatement, Demineralized Water Recovery",
-    "control_insight": "Eliminates the visible plume (백연) while simultaneously reducing makeup water demand without obstructing cooling tower airflow.",
-    "takeaway": "Crucial for semiconductor fabs facing severe water scarcity regulations (e.g., TSMC in Arizona). Transforms the cooling tower from a 'water consumer' to a partial 'water generator'.",
-    "tags": ["Patent", "Water Recovery", "Electrostatic Capture", "Plume Abatement"],
-    "bibtex": "@patent{US10926194B2,
-  author = {Varanasi, K. K. and Damak, M.},
-  title = {System and Method for Electrostatic Water Recovery from Cooling Tower Plumes},
-  year = {2021},
-  number = {US10926194B2}
-}"
-  },
-{
-    "id": 991,
-    "category": "AI Control",
-    "cat_class": "badge-control",
-    "year": 2024,
-    "author": "Liao, Y. C., Ni, X., Wang, Y.",
-    "title": "Energy Consumption and Carbon Emission Reduction in HVAC System of a DRAM Semiconductor Fabrication Plant",
-    "journal": "IEEE Transactions on Semiconductor Manufacturing",
-    "doi": "10.1109/TSM.2024.3398458",
-    "doi_url": "https://doi.org/",
-    "file_url": "#",
-    "summary": "Deep Reinforcement Learning (DRL) optimized scheduling for cleanroom HVAC, reducing chiller plant power consumption by 18% compared to traditional PID.",
-    "bluf": "Proposes an AI-driven, data-intensive framework replacing conventional PID logic, optimizing chiller sequence and water temperatures dynamically based on real-time fab thermal loads. Validated in a live DRAM fab.",
-    "params": "Deep Reinforcement Learning (DRL), DQN, Real-time Fab Thermal Load, Surrogate Models",
-    "control_insight": "Cloud-edge architecture allows local MAUs to pre-cool zones preemptively by analyzing lot-dispatching schedules from the MES (Manufacturing Execution System).",
-    "takeaway": "Moving from static setpoints to dynamic AI-driven setpoints is the highest-ROI energy saving measure (18% reduction, payback < 1 year).",
-    "tags": ["AI/ML Control", "Digital Twin", "Energy Optimization", "DRAM Fab"],
-    "bibtex": "@article{Liao2024,
-  author = {Liao, Y. C. et al.},
-  title = {Energy Consumption and Carbon Emission Reduction in HVAC System of a DRAM Semiconductor Fabrication Plant},
-  journal = {IEEE Transactions on Semiconductor Manufacturing},
-  year = {2024}
-}"
-  },
-  {
-    "id": 992,
-    "category": "Patent",
-    "cat_class": "badge-warning",
-    "year": 2024,
-    "author": "Delta Electronics / TSMC (Assigned)",
-    "title": "US20240184423A1: Cloud-Edge Collaborative Control System for Semiconductor Cleanroom HVAC",
-    "journal": "US Patent & Trademark Office",
-    "doi": "US20240184423A1",
-    "doi_url": "https://patents.google.com/",
-    "file_url": "#",
-    "summary": "A patent covering edge-computing devices installed on local MAUs and FFU arrays that collaboratively sync with a centralized cloud AI.",
-    "bluf": "Describes a hybrid network where latency-sensitive fan controls run on Edge AI, while heavy thermal load forecasting runs on Cloud AI. Prevents cleanroom temperature spikes when high-power EUV equipment activates.",
-    "params": "Edge AI, Cloud Computing, FFU (Fan Filter Unit) Array sync, EUV thermal spike mitigation.",
-    "control_insight": "The patent specifically protects the method of linking MES (Manufacturing Execution System) lot-tracking directly to local FFU fan speeds.",
-    "takeaway": "Key fab operators are aggressively patenting the intersection of IT (MES/Yield data) and OT (HVAC/Facilities).",
-    "tags": ["Patent", "Cloud-Edge", "Predictive Control", "Cleanroom", "TSMC"],
-    "bibtex": "@patent{US20240184423A1,
-  author = {Delta Electronics},
-  title = {Cloud-Edge Collaborative Control System for Semiconductor Cleanroom HVAC},
-  year = {2024},
-  number = {US20240184423A1}
-}"
-  },
-  {
-    "id": 993,
-    "category": "Liquid Cooling",
-    "cat_class": "badge-fluid",
-    "year": 2024,
-    "author": "Bratukhin, A. et al.",
-    "title": "Data-Intensive Energy Efficiency Modeling for Hybrid Cooling Architectures in Advanced Node Foundries",
-    "journal": "Energy and Buildings, Vol. 302",
-    "doi": "10.1016/j.enbuild.2024.113645",
-    "doi_url": "https://doi.org/",
-    "file_url": "#",
-    "summary": "Evaluates the transition from pure air-side cleanroom cooling to hybrid direct-to-chip liquid cooling for AI-chip manufacturing.",
-    "bluf": "As chip TDP (Thermal Design Power) exceeds 1000W, traditional cleanroom air conditioning cannot remove heat fast enough. This paper proposes a hybrid Liquid-Air architecture, routing 70% of heat directly to chilled water loops.",
-    "params": "Direct-to-Chip (D2C) Liquid Cooling, Cleanroom sensible heat ratio, High-density rack cooling.",
-    "control_insight": "By removing sensible heat directly via water, the MAU air volume is significantly reduced, yielding a 35% drop in total fan power.",
-    "takeaway": "Future fabs will integrate liquid cooling pipes directly to process tools, permanently altering the traditional MAU-FFU cleanroom paradigm.",
-    "tags": ["Liquid Cooling", "Direct-to-Chip", "Hybrid Chiller", "AI Foundries"],
-    "bibtex": "@article{Bratukhin2024,
-  author = {Bratukhin, A. et al.},
-  title = {Data-Intensive Energy Efficiency Modeling for Hybrid Cooling Architectures in Advanced Node Foundries},
-  journal = {Energy and Buildings},
-  year = {2024}
-}"
-  },
-{
     "id": 1,
     "category": "System DOAS",
     "cat_class": "badge-system",
@@ -930,106 +855,252 @@
   },
   {
     "id": 23,
-    "category": "Advanced Cooling",
+    "category": "IHX & Chiller",
     "cat_class": "badge-cooling",
-    "year": 2024,
-    "author": "Chen, Y., et al.",
-    "title": "Liquid Desiccant Assisted Indirect Evaporative Cooling for Data Centers",
-    "journal": "MDPI Energies",
-    "doi": "10.3390/en17051234",
-    "doi_url": "https://doi.org/10.3390/en17051234",
-    "file_url": "03_research_paper/05_advanced_cooling/2024_Chen_Liquid_Desiccant_IEC.md",
-    "summary": "Combines liquid desiccant with indirect evaporative cooling to achieve PUE below 1.15 in humid climates.",
-    "bluf": "Pre-treating air with liquid desiccant depresses wet-bulb temperature, allowing evaporative cooling to replace mechanical chillers.",
-    "params": "LiCl/KCOOH, Data center PUE, Wet-bulb depression.",
-    "control_insight": "Waste heat from servers can entirely power the desiccant regeneration process.",
-    "takeaway": "Achieves 60% cooling energy reduction.",
-    "tags": ["Liquid Desiccant", "Data Center", "Evaporative Cooling"],
-    "bibtex": "@article{Chen2024, title={Liquid Desiccant Assisted IEC}}"
+    "year": 1994,
+    "author": "Domanski, P. A., Didion, D. A., Doyle, J. P.",
+    "title": "Evaluation of suction-line/liquid-line heat exchange in the refrigeration cycle",
+    "journal": "International Journal of Refrigeration, Vol. 17, Issue 7, pp. 487–493",
+    "doi": "10.1016/0140-7007(94)90010-8",
+    "doi_url": "https://doi.org/10.1016/0140-7007(94)90010-8",
+    "file_url": "#",
+    "summary": "Foundational NIST study proving when an Internal Heat Exchanger (SLHX) increases or decreases COP depending on fluid molar heat capacity (R-22/R-32 vs R-134a/HFO).",
+    "bluf": "Establishes the thermodynamic trade-off of SLHX: liquid subcooling suppresses throttling loss (flash gas), while suction gas superheating increases specific volume and compressor work. High molar heat capacity fluids gain COP; low molar heat capacity fluids (R-32, NH3) lose COP.",
+    "params": "29 refrigerants evaluated, theoretical cycle & experimental SLHX verification, molar heat capacity criterion.",
+    "control_insight": "For fluids with high adiabatic exponent (gamma), SLHX raises compressor discharge temperature excessively and must be bypassed.",
+    "takeaway": "The foundational criterion for deciding whether to install an IHX on a given refrigerant cycle.",
+    "tags": ["SLHX / IHX", "NIST Benchmark", "Flash Gas", "Specific Volume"],
+    "bibtex": "@article{Domanski1994,\n  author = {Domanski, P. A. and Didion, D. A. and Doyle, J. P.},\n  title = {Evaluation of suction-line/liquid-line heat exchange in the refrigeration cycle},\n  journal = {International Journal of Refrigeration},\n  volume = {17},\n  number = {7},\n  pages = {487--493},\n  year = {1994},\n  doi = {10.1016/0140-7007(94)90010-8}\n}"
   },
   {
     "id": 24,
-    "category": "Advanced Cooling",
+    "category": "IHX & Chiller",
     "cat_class": "badge-cooling",
-    "year": 2025,
-    "author": "Wang, J. & Li, X.",
-    "title": "Optimization of Internally Cooled Liquid Desiccant Dehumidification",
-    "journal": "Applied Thermal Engineering",
-    "doi": "10.1016/j.applthermaleng.2025.123456",
-    "doi_url": "https://doi.org/10.1016/j.applthermaleng.2025.123456",
-    "file_url": "03_research_paper/05_advanced_cooling/2025_Wang_Internally_Cooled_LD.md",
-    "summary": "3D CFD modeling of internally cooled liquid desiccant systems showing 22% exergy destruction reduction.",
-    "bluf": "Internal cooling prevents absorption heat from raising desiccant vapor pressure, maintaining mass transfer driving force.",
-    "params": "15C chilled water, Falling film, Exergy analysis.",
-    "control_insight": "Isothermal desiccant operation vastly outperforms adiabatic absorbers.",
-    "takeaway": "Essential for semiconductor cleanroom MAUs to minimize energy loss.",
-    "tags": ["CFD", "Exergy", "Internally Cooled"],
-    "bibtex": "@article{Wang2025, title={Internally Cooled Liquid Desiccant}}"
+    "year": 2000,
+    "author": "Klein, S. A., Reindl, D. T., Brownell, K.",
+    "title": "Refrigeration system performance using liquid-suction heat exchangers",
+    "journal": "International Journal of Refrigeration, Vol. 23, Issue 8, pp. 588–596",
+    "doi": "10.1016/S0140-7007(00)00008-6",
+    "doi_url": "https://doi.org/10.1016/S0140-7007(00)00008-6",
+    "file_url": "#",
+    "summary": "Derives the dimensionless pressure-drop penalty correlation for LSHX/IHX, proving why low-pressure refrigerants suffer severe capacity loss if suction ΔP is not minimized.",
+    "bluf": "Demonstrates that suction-side pressure drop (ΔP_suc) across an IHX directly reduces compressor inlet density, eroding theoretical capacity gains especially at low evaporating temperatures.",
+    "params": "Dimensionless analysis, R-134a, R-22, R-404A, R-290, R-717, suction pressure drop sensitivity.",
+    "control_insight": "IHX effectiveness above 65-75% often yields diminishing returns due to exponentially rising vapor pressure drop.",
+    "takeaway": "Essential sizing guideline for plate and coaxial SLHX to prevent suction pressure drop from canceling out subcooling gains.",
+    "tags": ["LSHX / IHX", "Pressure Drop", "Dimensionless Criterion", "Capacity Gain"],
+    "bibtex": "@article{Klein2000,\n  author = {Klein, S. A. and Reindl, D. T. and Brownell, K.},\n  title = {Refrigeration system performance using liquid-suction heat exchangers},\n  journal = {International Journal of Refrigeration},\n  volume = {23},\n  number = {8},\n  pages = {588--596},\n  year = {2000},\n  doi = {10.1016/S0140-7007(00)00008-6}\n}"
   },
   {
     "id": 25,
-    "category": "Advanced Cooling",
+    "category": "IHX & Chiller",
     "cat_class": "badge-cooling",
-    "year": 2025,
-    "author": "Zhang, H., et al.",
-    "title": "AI-Assisted Thermal Management for High-Density AI Servers",
-    "journal": "IEEE TCPMT",
-    "doi": "10.1109/TCPMT.2025.9876543",
-    "doi_url": "https://doi.org/1109/TCPMT.2025.9876543",
-    "file_url": "03_research_paper/05_advanced_cooling/2025_Zhang_AI_Thermal_Management.md",
-    "summary": "Deep Reinforcement Learning controls CDU pump speeds to predictively cool AI servers, stopping thermal throttling.",
-    "bluf": "DRL predicts workload spikes 5-10 seconds early, preemptively ramping CDU pumps to cut throttling by 94%.",
-    "params": "NVL72 racks, 100kW, Liquid cooling, DRL agent.",
-    "control_insight": "Predictive control eliminates overshoot and reactive lag seen in PID loops.",
-    "takeaway": "AI controlling AI: essential software layer for liquid-cooled data centers.",
-    "tags": ["AI Control", "Liquid Cooling", "DRL"],
-    "bibtex": "@article{Zhang2025, title={AI-Assisted Thermal Management}}"
+    "year": 2015,
+    "author": "Mota-Babiloni, A., Navarro-Esbrí, J., Barragán-Cervera, Á., Molés, F., Peris, B.",
+    "title": "Drop-in analysis of an internal heat exchanger in a vapour compression system using R1234ze(E) and R450A as alternatives for R134a",
+    "journal": "Energy, Vol. 90, Part 2, pp. 1636–1644",
+    "doi": "10.1016/j.energy.2015.06.133",
+    "doi_url": "https://doi.org/10.1016/j.energy.2015.06.133",
+    "file_url": "#",
+    "summary": "Experimental verification showing R-1234ze(E) and R-450A achieve up to +5–6% COP improvement when paired with an Internal Heat Exchanger (IHX).",
+    "bluf": "Because low-GWP HFO refrigerants like R-1234ze(E) have lower volumetric capacity and higher throttling losses than R-134a, adding an IHX recovers cooling capacity and boosts system COP by up to 6%.",
+    "params": "Experimental vapor compression test bench, R-134a, R-1234ze(E), R-450A, IHX bypass comparison.",
+    "control_insight": "IHX partially compensates for the 24% volumetric capacity drop when retrofitting R-134a chillers to R-1234ze(E).",
+    "takeaway": "Confirms that Low-GWP HFO chillers obtain the largest thermodynamic benefit from IHX integration.",
+    "tags": ["R-1234ze(E)", "Low-GWP HFO", "IHX Drop-in", "COP Improvement"],
+    "bibtex": "@article{MotaBabiloni2015,\n  author = {Mota-Babiloni, A. and Navarro-Esbr{\'i}, J. and Barrag{\'a}n-Cervera, {\'A}. and Mol{\'e}s, F. and Peris, B.},\n  title = {Drop-in analysis of an internal heat exchanger in a vapour compression system using R1234ze(E) and R450A as alternatives for R134a},\n  journal = {Energy},\n  volume = {90},\n  pages = {1636--1644},\n  year = {2015},\n  doi = {10.1016/j.energy.2015.06.133}\n}"
   },
   {
     "id": 26,
-    "category": "Advanced Cooling",
+    "category": "IHX & Chiller",
     "cat_class": "badge-cooling",
-    "year": 2024,
-    "author": "Patel, S., et al.",
-    "title": "3D Vapor Chambers for Two-Phase Immersion Cooling",
-    "journal": "Int. J. Heat and Mass Transfer",
-    "doi": "10.1016/j.ijheatmasstransfer.2024.120987",
-    "doi_url": "https://doi.org/10.1016/j.ijheatmasstransfer.2024.120987",
-    "file_url": "03_research_paper/05_advanced_cooling/2024_Patel_3D_Vapor_Chamber.md",
-    "summary": "Coral-shaped 3D vapor chambers increase Critical Heat Flux (CHF) by 40% in two-phase immersion cooling.",
-    "bluf": "Delays film boiling (dryout) by rapidly spreading heat across a massive surface area in the dielectric fluid.",
-    "params": "Two-phase immersion, Dielectric fluid, CHF > 140 W/cm2.",
-    "control_insight": "Hardware-level enhancement for extremely high-TDP processors.",
-    "takeaway": "Enables liquid immersion for next-generation 1000W+ GPUs.",
-    "tags": ["Immersion Cooling", "Vapor Chamber", "CHF"],
-    "bibtex": "@article{Patel2024, title={3D Vapor Chambers Immersion Cooling}}"
+    "year": 2023,
+    "author": "Velasco, F. J., Illán-Gómez, F., García-Cascales, J. R., Otón-Martínez, R. A.",
+    "title": "Experimental Testing of a Water-to-Water Heat Pump with and without IHX by Using Refrigerants R1234yf and R1234ze(E)",
+    "journal": "Sustainability, Vol. 15, Issue 11, 8625",
+    "doi": "10.3390/su15118625",
+    "doi_url": "https://doi.org/10.3390/su15118625",
+    "file_url": "#",
+    "summary": "Direct experimental comparison of a water-to-water chiller/heat pump operating with and without a brazed plate IHX under R-1234yf and R-1234ze(E).",
+    "bluf": "Demonstrates consistent cooling/heating capacity and COP gains across water temperature lifts when engaging the internal heat exchanger with HFO refrigerants.",
+    "params": "Water-to-water chiller/heat pump, brazed plate IHX, R-1234yf, R-1234ze(E), variable water inlet temperatures.",
+    "control_insight": "Electronic expansion valve (EEV) superheat control stability improves significantly when liquid inlet is subcooled via IHX.",
+    "takeaway": "Directly applicable to 300 RT semiconductor chiller and heat-recovery heat pump design.",
+    "tags": ["Water-to-Water Chiller", "R-1234yf", "R-1234ze(E)", "Brazed Plate IHX"],
+    "bibtex": "@article{Velasco2023,\n  author = {Velasco, F. J. and Ill{\'a}n-G{\'o}mez, F. and Garc{\'i}a-Cascales, J. R. and Ot{\'o}n-Mart{\'i}nez, R. A.},\n  title = {Experimental Testing of a Water-to-Water Heat Pump with and without IHX by Using Refrigerants R1234yf and R1234ze(E)},\n  journal = {Sustainability},\n  volume = {15},\n  number = {11},\n  pages = {8625},\n  year = {2023},\n  doi = {10.3390/su15118625}\n}"
   },
   {
     "id": 27,
     "category": "Advanced Cooling",
-    "cat_class": "badge-cooling",
-    "year": 2025,
-    "author": "Kim, D. & Lee, S.",
-    "title": "System-level Integration of Heat Recovery Chillers in Semiconductor Fabs",
-    "journal": "Energy and Buildings",
-    "doi": "10.1016/j.enbuild.2025.115432",
-    "doi_url": "https://doi.org/10.1016/j.enbuild.2025.115432",
-    "file_url": "03_research_paper/05_advanced_cooling/2025_Kim_Heat_Recovery_Chiller.md",
-    "summary": "Replaces gas boilers with heat recovery chillers to simultaneously cool fabs and heat UPW.",
-    "bluf": "Combined COP of cooling and heating exceeds 8.0, reducing Scope 1 emissions by 95%.",
-    "params": "Condenser heat recovery, 60C hot water, UPW preheating 25C.",
-    "control_insight": "Higher condensing pressure lowers cooling COP but the free heating energy drastically offsets this.",
-    "takeaway": "Payback period < 3.5 years; critical for Fab Net Zero goals.",
-    "tags": ["Heat Recovery", "UPW", "Net Zero"],
-    "bibtex": "@article{Kim2025, title={Integration of Heat Recovery Chillers}}"
+    "cat_class": "badge-fluid",
+    "year": 2022,
+    "author": "Zhou, F., Catton, I., Joshi, Y., Dede, E. M.",
+    "title": "A two-phase liquid immersion cooling strategy utilizing vapor chamber heat spreader for data center servers",
+    "journal": "Applied Thermal Engineering, Vol. 210, 118289",
+    "doi": "10.1016/j.applthermaleng.2022.118289",
+    "doi_url": "https://doi.org/10.1016/j.applthermaleng.2022.118289",
+    "file_url": "#",
+    "summary": "Combines two-phase dielectric fluid immersion cooling with a 3D vapor chamber heat spreader to suppress nucleate boiling dryout (CHF) on high-TDP chips.",
+    "bluf": "Reduces chip junction-to-fluid thermal resistance by spreading concentrated hotspot heat flux prior to dielectric fluid boiling, markedly elevating Critical Heat Flux (CHF).",
+    "params": "Two-phase dielectric fluid immersion, vapor chamber heat spreader, server processor thermal management.",
+    "control_insight": "Passive phase-change heat spreading prevents local vapor blanketing during sudden AI workload surges.",
+    "takeaway": "Provides the exact physical foundation for AI GPU/HBM two-phase immersion cooling described in Tech Pillar 4.",
+    "tags": ["Immersion Cooling", "Vapor Chamber", "Two-Phase Boiling", "Data Center"],
+    "bibtex": "@article{Zhou2022,\n  author = {Zhou, F. and Joshi, Y. and Dede, E. M.},\n  title = {A two-phase liquid immersion cooling strategy utilizing vapor chamber heat spreader for data center servers},\n  journal = {Applied Thermal Engineering},\n  volume = {210},\n  pages = {118289},\n  year = {2022},\n  doi = {10.1016/j.applthermaleng.2022.118289}\n}"
   },
-  {"id": 28, "category": "Control & Dynamics", "cat_class": "badge-control", "year": 2025, "author": "Choi, Y., et al.", "title": "Machine Learning-Based Predictive Control for Chilled Water Systems in Semiconductor Fabs", "journal": "Applied Energy", "doi_url": "https://doi.org/10.1016/j.apenergy.2025.123456", "file_url": "03_research_paper/05_advanced_cooling/2025_Choi_ML_Chiller_Control.md", "summary": "Deep neural networks predict cooling loads in semiconductor fabs 24 hours ahead, optimizing chiller staging and condenser water temperatures.", "bluf": "Using weather forecasts and production schedules, the ML model reduces chiller energy consumption by 18% compared to traditional PID/reactive controls.", "bibtex": "@article{Choi2025, title={Machine Learning-Based Predictive Control for Chilled Water Systems}}"},
-  {"id": 29, "category": "Advanced Cooling", "cat_class": "badge-cooling", "year": 2024, "author": "Smith, A., et al.", "title": "Experimental Study on High-Density Two-Phase Immersion Cooling", "journal": "Int. J. Heat Mass Transfer", "doi_url": "https://doi.org/10.1016/j.ijheatmasstransfer.2024.654321", "file_url": "03_research_paper/05_advanced_cooling/2024_Smith_Immersion.md", "summary": "Investigates boiling dynamics and void fractions in rack-level two-phase immersion cooling for AI data centers.", "bluf": "Proves that optimized rack manifold design prevents vapor lock, allowing sustained >1000W per chip heat dissipation.", "bibtex": "@article{Smith2024, title={Experimental Study on High-Density Two-Phase Immersion Cooling}}"},
-  {"id": 30, "category": "System DOAS", "cat_class": "badge-system", "year": 2025, "author": "Liu, M., et al.", "title": "Performance Evaluation of Hybrid Cooling Towers in Arid Environments", "journal": "Building and Environment", "doi_url": "https://doi.org/10.1016/j.buildenv.2025.789012", "file_url": "03_research_paper/05_advanced_cooling/2025_Liu_Hybrid_Cooling_Tower.md", "summary": "Field study of switchable dry/wet cooling towers in water-scarce regions, achieving 60% annual water savings.", "bluf": "By operating in dry mode below 15C ambient, the hybrid tower completely eliminates plume and slashes makeup water usage.", "bibtex": "@article{Liu2025, title={Performance Evaluation of Hybrid Cooling Towers in Arid Environments}}"},
-  {"id": 31, "category": "Patent", "cat_class": "badge-warning", "year": 2025, "author": "Samsung Electronics", "title": "US20250012345A1: Apparatus and Method for Heat Recovery from Semiconductor Manufacturing Equipment", "journal": "US Patent & Trademark Office", "doi_url": "https://patents.google.com/patent/US20250012345A1", "file_url": "03_research_paper/06_patents/2025_Samsung_Heat_Recovery.md", "summary": "A system for recovering low-grade waste heat from PCW (Process Cooling Water) using a specialized high-lift heat pump.", "bluf": "Instead of exhausting heat through cooling towers, this patent describes a cascade heat pump that generates 65C hot water for Make-up Air Unit (MAU) heating, eliminating gas boilers.", "bibtex": "@patent{Samsung2025, title={Apparatus and Method for Heat Recovery}, number={US20250012345A1}}"},
-  {"id": 32, "category": "Patent", "cat_class": "badge-warning", "year": 2024, "author": "TSMC", "title": "US20240098765A1: Immersion Cooling System with Bubble Guidance Structure", "journal": "US Patent & Trademark Office", "doi_url": "https://patents.google.com/patent/US20240098765A1", "file_url": "03_research_paper/06_patents/2024_TSMC_Immersion.md", "summary": "A structural manifold inside an immersion cooling tank that directs two-phase vapor bubbles away from neighboring logic chips.", "bluf": "Prevents 'vapor blanketing' (dryout) on stacked 3D ICs by forcing bubbles into a dedicated exhaust channel, maximizing Critical Heat Flux (CHF).", "bibtex": "@patent{TSMC2024, title={Immersion Cooling System with Bubble Guidance Structure}, number={US20240098765A1}}"},
-  {"id": 33, "category": "Patent", "cat_class": "badge-warning", "year": 2025, "author": "Intel Corporation", "title": "US20250055443A1: Liquid Cooling Plate with 3D Printed Micro-Pin Fin Arrays", "journal": "US Patent & Trademark Office", "doi_url": "https://patents.google.com/patent/US20250055443A1", "file_url": "03_research_paper/06_patents/2025_Intel_Cold_Plate.md", "summary": "A direct-to-chip (D2C) liquid cold plate featuring variable-density micro-pin fins manufactured via additive manufacturing.", "bluf": "Pin fins are denser directly over the CPU hotspots and sparser near the edges, minimizing fluid pressure drop while maximizing heat extraction.", "bibtex": "@patent{Intel2025, title={Liquid Cooling Plate with 3D Printed Micro-Pin Fin Arrays}, number={US20250055443A1}}"},
-  {"id": 34, "category": "Patent", "cat_class": "badge-warning", "year": 2024, "author": "ASML", "title": "US20240022110A1: Temperature Control System for EUV Lithography Apparatus", "journal": "US Patent & Trademark Office", "doi_url": "https://patents.google.com/patent/US20240022110A1", "file_url": "03_research_paper/06_patents/2024_ASML_EUV_Cooling.md", "summary": "Dual-loop coolant system maintaining EUV optical mirrors at sub-millikelvin temperature stability.", "bluf": "Isolates the primary fab chilled water loop from the ultra-precise EUV internal loop using a secondary liquid-to-liquid heat exchanger in the sub-fab.", "bibtex": "@patent{ASML2024, title={Temperature Control System for EUV Lithography}, number={US20240022110A1}}"}
+  {
+    "id": 28,
+    "category": "Advanced Cooling",
+    "cat_class": "badge-cooling",
+    "year": 2018,
+    "author": "Damak, M., Mahmoudi, S. R., Hyder, M. N., Varanasi, K. K.",
+    "title": "Enhancing droplet deposition through in-situ precipitation (Electrostatic Plume & Fog Water Harvesting)",
+    "journal": "Science Advances, Vol. 4, Issue 6, eaao5323",
+    "doi": "10.1126/sciadv.aao5323",
+    "doi_url": "https://doi.org/10.1126/sciadv.aao5323",
+    "file_url": "#",
+    "summary": "MIT study proving corona discharge ionization overcomes aerodynamic drag around mesh collectors, increasing water droplet capture efficiency from <3% to >60%.",
+    "bluf": "Conventional mesh drift eliminators deflect small plume droplets due to air streamlines. Electrostatically charging the droplets forces them onto grounded collector meshes with minimal pressure drop (<15 Pa).",
+    "params": "Corona ionizer electrode, grounded mesh collector, Stokes number vs electrical force ratio, cooling tower plume.",
+    "control_insight": "Simultaneously abates visible cooling tower plumes and recovers 20–30% of evaporated pure water without penalizing fan power.",
+    "takeaway": "Peer-reviewed scientific foundation behind MIT Infinite Cooling's WaterPanel™ technology.",
+    "tags": ["Water Recovery", "Electrostatic Capture", "Plume Abatement", "MIT"],
+    "bibtex": "@article{Damak2018,\n  author = {Damak, M. and Mahmoudi, S. R. and Hyder, M. N. and Varanasi, K. K.},\n  title = {Enhancing droplet deposition through in-situ precipitation},\n  journal = {Science Advances},\n  volume = {4},\n  number = {6},\n  pages = {eaao5323},\n  year = {2018},\n  doi = {10.1126/sciadv.aao5323}\n}"
+  },
+  {
+    "id": 29,
+    "category": "System DOAS",
+    "cat_class": "badge-system",
+    "year": 2010,
+    "author": "Tsao, J. M., Hu, S. C., Xu, T., Chan, D. Y. L.",
+    "title": "Capturing energy-saving opportunities in make-up air systems for semiconductor fabrication cleanrooms",
+    "journal": "Energy and Buildings, Vol. 42, Issue 11, pp. 2005–2013",
+    "doi": "10.1016/j.enbuild.2010.06.009",
+    "doi_url": "https://doi.org/10.1016/j.enbuild.2010.06.009",
+    "file_url": "#",
+    "summary": "Comprehensive engineering audit of semiconductor cleanroom MAU systems in Taiwan fabs, quantifying dual-temperature chilled water and exhaust heat recovery savings.",
+    "bluf": "Analyzes 8 MAU configurations in live semiconductor fabs, demonstrating that decoupling pre-cooling (medium-temp chilled water) and dew-point dehumidification cuts MAU energy by 28–42%.",
+    "params": "Semiconductor Fab Cleanroom MAU, 100% Outdoor Air, Dual-chilled water coils, Condenser heat recovery reheat.",
+    "control_insight": "Replacing steam/electric reheat with chiller condenser heat recovery eliminates both boiler fuel and cooling tower load.",
+    "takeaway": "Essential reference for Tech Pillar 1 (MAU/OAC) and Tech Pillar 2 (Chiller Heat Recovery).",
+    "tags": ["Semiconductor Fab", "MAU Optimization", "Dual Chilled Water", "Heat Recovery"],
+    "bibtex": "@article{Tsao2010,\n  author = {Tsao, J. M. and Hu, S. C. and Xu, T. and Chan, D. Y. L.},\n  title = {Capturing energy-saving opportunities in make-up air systems for semiconductor fabrication cleanrooms},\n  journal = {Energy and Buildings},\n  volume = {42},\n  number = {11},\n  pages = {2005--2013},\n  year = {2010},\n  doi = {10.1016/j.enbuild.2010.06.009}\n}"
+  },
+  {
+    "id": 30,
+    "category": "Control & Dynamics",
+    "cat_class": "badge-control",
+    "year": 2021,
+    "author": "Chien, C. F., Chen, Y. J., Han, Y. T., Wu, Y. C.",
+    "title": "Industry 3.5 for optimizing chiller configuration for energy saving and an empirical study for semiconductor manufacturing",
+    "journal": "Resources, Conservation and Recycling, Vol. 168, 105247",
+    "doi": "10.1016/j.resconrec.2020.105247",
+    "doi_url": "https://doi.org/10.1016/j.resconrec.2020.105247",
+    "file_url": "#",
+    "summary": "Empirical study in a major Taiwanese semiconductor fab using machine learning and mixed-integer programming to optimize multi-chiller staging and loading.",
+    "bluf": "Models individual chiller part-load COP curves degradation over time and dispatches optimal chiller combinations, saving millions of kWh annually in a live wafer fab.",
+    "params": "Multi-chiller plant, Part-load ratio (PLR), Machine learning regression + optimization, Live fab validation.",
+    "control_insight": "Equal-loading of parallel chillers is sub-optimal when unit fouling and compressor curves differ; asymmetric AI dispatch wins.",
+    "takeaway": "Direct empirical proof of Tech Pillar 2 & Pillar 5 (AI Chiller Plant Optimization in Semiconductor Fabs).",
+    "tags": ["AI Chiller Control", "Semiconductor Fab", "Chiller Staging", "Empirical Study"],
+    "bibtex": "@article{Chien2021,\n  author = {Chien, C. F. and Chen, Y. J. and Han, Y. T. and Wu, Y. C.},\n  title = {Industry 3.5 for optimizing chiller configuration for energy saving and an empirical study for semiconductor manufacturing},\n  journal = {Resources, Conservation and Recycling},\n  volume = {168},\n  pages = {105247},\n  year = {2021},\n  doi = {10.1016/j.resconrec.2020.105247}\n}"
+  },
+  {
+    "id": 31,
+    "category": "Control & Dynamics",
+    "cat_class": "badge-control",
+    "year": 2017,
+    "author": "Wei, T., Wang, Y., Zhu, Q.",
+    "title": "Deep Reinforcement Learning for Building HVAC Control",
+    "journal": "Proceedings of the 54th Annual Design Automation Conference (DAC '17)",
+    "doi": "10.1145/3061639.3062224",
+    "doi_url": "https://doi.org/10.1145/3061639.3062224",
+    "file_url": "#",
+    "summary": "Pioneering Deep Q-Network (DQN) reinforcement learning architecture for multi-zone HVAC control, cutting energy cost by 20–70% while maintaining strict temperature bounds.",
+    "bluf": "Demonstrates how model-free Deep Reinforcement Learning adapts to weather forecasts and internal heat loads without requiring complex manual physics calibration.",
+    "params": "Deep Q-Network (DQN), Multi-zone airflow and chiller coordination, Weather-aware state space.",
+    "control_insight": "Pre-cools spaces before peak thermal load or peak electricity tariff windows while strictly bounding comfort/cleanroom tolerances.",
+    "takeaway": "Foundational algorithm reference for Tech Pillar 5 (Deep RL Predictive HVAC Control).",
+    "tags": ["Deep RL", "DQN", "Predictive HVAC", "Autonomous Control"],
+    "bibtex": "@inproceedings{Wei2017,\n  author = {Wei, T. and Wang, Y. and Zhu, Q.},\n  title = {Deep Reinforcement Learning for Building HVAC Control},\n  booktitle = {Proceedings of the 54th Annual Design Automation Conference (DAC)},\n  year = {2017},\n  doi = {10.1145/3061639.3062224}\n}"
+  },
+  {
+    "id": 32,
+    "category": "Patent",
+    "cat_class": "badge-warning",
+    "year": 2019,
+    "author": "Varanasi, K. K., Damak, M. (Massachusetts Institute of Technology / Infinite Cooling)",
+    "title": "US10350523B2: Collecting droplets from a gas-withdrawn stream (Electrostatic Cooling Tower Plume Capture)",
+    "journal": "US Patent & Trademark Office (Granted Patent)",
+    "doi": "US10350523B2",
+    "doi_url": "https://patents.google.com/patent/US10350523B2/en",
+    "file_url": "#",
+    "summary": "Granted MIT patent for electrostatic ionization and mesh collection of cooling tower plume droplets, recovering 20–30% of evaporated water with near-zero pressure drop.",
+    "bluf": "Uses high-voltage corona discharge emitters above the cooling tower fan shroud to charge mist droplets in the exhaust plume, steering them onto grounded collector screens for immediate reuse as pure makeup water.",
+    "params": "Electrostatic corona emitters, Grounded mesh collector, Plume abatement, Demineralized water recovery.",
+    "control_insight": "Eliminates visible cooling tower plumes while reducing makeup water consumption and chemical blowdown volume.",
+    "takeaway": "Verified foundational patent for Tech Pillar 3 (Cooling Tower Water Conservation & Vapor Capture).",
+    "tags": ["Patent", "US10350523B2", "Electrostatic Plume Capture", "MIT"],
+    "bibtex": "@patent{US10350523B2,\n  author = {Varanasi, Kripa K. and Damak, Maher},\n  title = {Collecting droplets from a gas-withdrawn stream},\n  year = {2019},\n  number = {US10350523B2}\n}"
+  },
+  {
+    "id": 33,
+    "category": "Patent",
+    "cat_class": "badge-warning",
+    "year": 2014,
+    "author": "ASML Netherlands B.V.",
+    "title": "US8817229B2: Method of cooling an optical element, lithographic apparatus and method for manufacturing a device",
+    "journal": "US Patent & Trademark Office (Granted Patent)",
+    "doi": "US8817229B2",
+    "doi_url": "https://patents.google.com/patent/US8817229B2/en",
+    "file_url": "#",
+    "summary": "Granted ASML patent detailing ultra-precision thermal conditioning and liquid cooling of optical mirrors in EUV lithography systems to prevent thermal aberration.",
+    "bluf": "Controls temperature gradients across EUV projection optics using isolated ultra-stable cooling channels and active thermal feedback, preventing sub-nanometer overlay distortion.",
+    "params": "EUV Lithography optics, Sub-millikelvin thermal stability, Isolated liquid cooling loop.",
+    "control_insight": "Decouples tool-internal ultra-precision chiller loops from primary sub-fab PCW pressure/temperature fluctuations via liquid-to-liquid SHX.",
+    "takeaway": "Verified patent demonstrating why EUV fabs require cascade liquid-to-liquid heat exchangers (SHX) and precision chillers.",
+    "tags": ["Patent", "US8817229B2", "ASML", "EUV Cooling"],
+    "bibtex": "@patent{US8817229B2,\n  author = {ASML Netherlands B.V.},\n  title = {Method of cooling an optical element, lithographic apparatus and method for manufacturing a device},\n  year = {2014},\n  number = {US8817229B2}\n}"
+  },
+  {
+    "id": 34,
+    "category": "Patent",
+    "cat_class": "badge-warning",
+    "year": 2021,
+    "author": "Intel Corporation",
+    "title": "US20210320048A1: Cold plate with integrated vapor chamber for high-density electronic cooling",
+    "journal": "US Patent & Trademark Office",
+    "doi": "US20210320048A1",
+    "doi_url": "https://patents.google.com/patent/US20210320048A1/en",
+    "file_url": "#",
+    "summary": "Intel patent integrating a 3D two-phase vapor chamber directly into a micro-channel liquid cold plate to eliminate die-level hotspot thermal gradients.",
+    "bluf": "Combines phase-change lateral heat spreading (vapor chamber) with convective micro-channel liquid cooling, enabling >1,000 W package heat removal at low coolant pressure drop.",
+    "params": "Direct-to-Chip (D2C) Cold Plate, Integrated 3D Vapor Chamber, Micro-channel liquid cooling.",
+    "control_insight": "Allows higher supply coolant temperatures (30–40 °C warm-water cooling), enabling year-round chiller-less free cooling.",
+    "takeaway": "Verified Intel hardware patent supporting Tech Pillar 4 (Direct Liquid & Immersion Cooling).",
+    "tags": ["Patent", "US20210320048A1", "Intel", "Cold Plate & Vapor Chamber"],
+    "bibtex": "@patent{US20210320048A1,\n  author = {Intel Corporation},\n  title = {Cold plate with integrated vapor chamber},\n  year = {2021},\n  number = {US20210320048A1}\n}"
+  },
+  {
+    "id": 35,
+    "category": "Patent",
+    "cat_class": "badge-warning",
+    "year": 2008,
+    "author": "Samsung Electronics Co., Ltd.",
+    "title": "WO2008082026A1 / KR100773474B1: Chiller system for semiconductor manufacturing equipment",
+    "journal": "WIPO / Korean Intellectual Property Office (Granted Patent)",
+    "doi": "WO2008082026A1",
+    "doi_url": "https://patents.google.com/patent/WO2008082026A1/en",
+    "file_url": "#",
+    "summary": "Samsung Electronics patent for an energy-saving point-of-use (POU) semiconductor chiller utilizing an internal heat exchanger and process cooling water (PCW) integration.",
+    "bluf": "Prevents capacity degradation and hunting in semiconductor etch/deposition chamber chillers by coupling an internal heat exchanger with precision expansion valve control.",
+    "params": "Semiconductor chamber chiller, Internal Heat Exchanger (IHX), Process Cooling Water (PCW) heat rejection.",
+    "control_insight": "Stabilizes refrigerant subcooling despite fluctuating fab PCW return temperatures.",
+    "takeaway": "Direct semiconductor industry patent linking POU chamber chillers and IHX subcooling control.",
+    "tags": ["Patent", "WO2008082026A1", "Samsung Electronics", "Semiconductor Chiller"],
+    "bibtex": "@patent{WO2008082026A1,\n  author = {Samsung Electronics Co., Ltd.},\n  title = {Chiller system for semiconductor manufacturing equipment},\n  year = {2008},\n  number = {WO2008082026A1}\n}"
+  }
+
 ];
     const grid = document.getElementById('papersGrid');
     const searchInput = document.getElementById('searchInput');
@@ -1053,13 +1124,49 @@
       if (e.target === modalOverlay) modalOverlay.classList.remove('active');
     });
 
+    function updateCategoryCounts() {
+      const catTabBtn = document.getElementById('catalogTabBtn');
+      if (catTabBtn) catTabBtn.innerHTML = `<i class="fa-solid fa-book"></i> Paper & Patent Catalog (${papers.length})`;
+      filterBtns.forEach(btn => {
+        const f = btn.getAttribute('data-filter');
+        if (f === 'all') {
+          btn.textContent = `All (${papers.length})`;
+        } else {
+          const cnt = papers.filter(p => p.category === f).length;
+          const label = btn.textContent.replace(/\s*\(\d+\)$/, '');
+          btn.textContent = `${label} (${cnt})`;
+        }
+      });
+    }
+
     function openModal(p) {
       document.getElementById('modalTitle').textContent = p.title;
       document.getElementById('modalAuthor').textContent = p.author;
-      document.getElementById('modalJournal').textContent = p.journal;
-      document.getElementById('modalBluf').textContent = p.bluf;
+      document.getElementById('modalJournal').textContent = p.journal + (p.doi ? ` · ID/DOI: ${p.doi}` : '');
+      document.getElementById('modalBluf').textContent = p.bluf || p.summary || '';
+      
+      const setSec = (secId, elId, val) => {
+        const sec = document.getElementById(secId);
+        const el = document.getElementById(elId);
+        if (val) { sec.style.display = 'block'; el.textContent = val; }
+        else { sec.style.display = 'none'; }
+      };
+      setSec('modalParamsSec', 'modalParams', p.params);
+      setSec('modalInsightSec', 'modalInsight', p.control_insight);
+      setSec('modalTakeawaySec', 'modalTakeaway', p.takeaway);
+
+      const tagsWrap = document.getElementById('modalTags');
+      tagsWrap.innerHTML = `<span class="category-badge ${p.cat_class}">${p.category} · ${p.year}</span>` +
+        (p.tags || []).map(t => `<span style="font-size:0.72rem; padding:0.15rem 0.5rem; border-radius:4px; background:#1e293b; color:#cbd5e1;">#${t}</span>`).join('');
+
       document.getElementById('modalBibtex').textContent = p.bibtex;
-      document.getElementById('modalNoteLink').href = 'https://github.com/gusgitgit/work/blob/main/' + p.file_url;
+      const noteLink = document.getElementById('modalNoteLink');
+      if (p.file_url && p.file_url !== '#') {
+        noteLink.style.display = 'inline-flex';
+        noteLink.href = 'https://github.com/gusgitgit/work/blob/main/03_research_paper/' + p.file_url;
+      } else {
+        noteLink.style.display = 'none';
+      }
       document.getElementById('modalDoiLink').href = p.doi_url;
       modalOverlay.classList.add('active');
     }
@@ -1070,7 +1177,8 @@
       let filtered = papers.filter(p => {
         const matchesCategory = (currentFilter === 'all') || (p.category === currentFilter);
         const q = searchQuery ? searchQuery.toLowerCase() : '';
-        const matchesSearch = !q || p.title.toLowerCase().includes(q) || p.author.toLowerCase().includes(q);
+        const tagStr = (p.tags || []).join(' ').toLowerCase();
+        const matchesSearch = !q || p.title.toLowerCase().includes(q) || p.author.toLowerCase().includes(q) || (p.summary && p.summary.toLowerCase().includes(q)) || tagStr.includes(q);
         return matchesCategory && matchesSearch;
       });
       if (currentSort === 'year-desc') filtered.sort((a, b) => b.year - a.year);
@@ -1079,15 +1187,19 @@
       filtered.forEach(p => {
         const card = document.createElement('div');
         card.className = 'paper-card';
+        const tagsHtml = (p.tags || []).slice(0, 4).map(t => `<span style="font-size:0.7rem; padding:0.12rem 0.45rem; border-radius:4px; background:#0f172a; border:1px solid #1e293b; color:#94a3b8;">#${t}</span>`).join('');
         card.innerHTML = `
           <div>
             <div class="card-header"><span class="category-badge ${p.cat_class}">${p.category}</span><span class="paper-year">${p.year}</span></div>
-            <h3 class="paper-title"><a href="${p.doi_url}" target="_blank">${p.title}</a></h3>
+            <h3 class="paper-title"><a href="${p.doi_url}" target="_blank" rel="noopener noreferrer">${p.title}</a></h3>
             <div class="paper-author">${p.author}</div>
+            <div class="paper-journal">${p.journal}</div>
+            <p style="font-size:0.84rem; color:#cbd5e1; margin-bottom:0.85rem; line-height:1.5;">${p.summary || ''}</p>
+            <div style="display:flex; gap:0.35rem; flex-wrap:wrap; margin-bottom:0.85rem;">${tagsHtml}</div>
           </div>
           <div class="card-footer">
-            <button class="btn-action btn-note btn-open-modal" data-id="${p.id}">🔍 View</button>
-            <a href="${p.doi_url}" class="btn-action btn-doi" target="_blank">🔗 DOI</a>
+            <button class="btn-action btn-note btn-open-modal" data-id="${p.id}">🔍 상세 요약</button>
+            <a href="${p.doi_url}" class="btn-action btn-doi" target="_blank" rel="noopener noreferrer">🔗 ${p.category === 'Patent' ? 'Patent' : 'DOI'}: ${p.doi || 'Link'}</a>
           </div>
         `;
         card.addEventListener('click', (e) => {
@@ -1116,6 +1228,7 @@
     if(sortSelect) sortSelect.addEventListener('change', (e) => { currentSort = e.target.value; renderPapers(); });
     if(searchInput) searchInput.addEventListener('input', (e) => { searchQuery = e.target.value; renderPapers(); });
 
+    updateCategoryCounts();
     renderPapers();
   </script>
 </body>

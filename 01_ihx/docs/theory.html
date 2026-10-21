@@ -3,98 +3,419 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>IHX (Internal Heat Exchanger) 열역학 이론 - Knowledge Base</title>
+    <title>IHX (내부열교환기) 쉬운 원리 &amp; 열역학 이론 포털 - Knowledge Base</title>
     <script>
         tailwind = { config: {
             darkMode: 'class',
-            theme: { extend: { colors: { bg: '#090d16', surface: '#0f172a', surface_card: '#131d33', surface_border: '#1e293b', text_main: '#f8fafc', text_muted: '#94a3b8', primary: '#38bdf8', accent: '#8b5cf6', ihx: '#818cf8' }, fontFamily: { sans: ['Pretendard', '-apple-system', 'sans-serif'] } } }
+            theme: {
+                extend: {
+                    colors: {
+                        bg: '#090d16',
+                        surface: '#0f172a',
+                        surface_card: '#131d33',
+                        surface_border: '#1e293b',
+                        text_main: '#f8fafc',
+                        text_muted: '#94a3b8',
+                        primary: '#38bdf8',
+                        accent: '#34d399',
+                        warn: '#fbbf24',
+                        danger: '#f87171',
+                        ihx: '#818cf8'
+                    },
+                    fontFamily: {
+                        sans: ['Pretendard', '-apple-system', 'sans-serif'],
+                        mono: ['JetBrains Mono', 'SFMono-Regular', 'Consolas', 'monospace']
+                    }
+                }
+            }
         } }
     </script>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <script>
+        window.MathJax = {
+            tex: { inlineMath: [['\\(','\\)']], displayMath: [['\\[','\\]']] },
+            svg: { fontCache: 'global' }
+        };
+    </script>
+    <script id="MathJax-script" async src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/3.2.2/es5/tex-mml-chtml.js"></script>
     <style>
-        body { background-color: #090d16; color: #f8fafc; font-family: 'Pretendard', sans-serif; line-height: 1.6; }
-        .hero-title { background: linear-gradient(135deg, #ffffff 0%, #cbd5e1 50%, #818cf8 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
-        .glass-card { background: #131d33; border: 1px solid #1e293b; border-radius: 1rem; padding: 2rem; margin-bottom: 2rem; }
-        .math { font-family: 'Cambria Math', 'Times New Roman', serif; font-style: italic; color: #38bdf8; }
+        body {
+            background-color: #090d16;
+            background-image: radial-gradient(900px 400px at 20% 0%, rgba(129, 140, 248, 0.10), transparent 60%);
+            color: #f8fafc;
+            font-family: 'Pretendard', sans-serif;
+            line-height: 1.65;
+        }
+        .hero-title {
+            background: linear-gradient(135deg, #ffffff 0%, #cbd5e1 45%, #818cf8 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        .glass-card {
+            background: #131d33;
+            border: 1px solid #1e293b;
+            border-radius: 1rem;
+            padding: 1.75rem;
+            margin-bottom: 1.75rem;
+            box-shadow: 0 10px 30px -10px rgba(0,0,0,0.45);
+        }
+        .step-badge {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 28px;
+            height: 28px;
+            border-radius: 8px;
+            background: rgba(129, 140, 248, 0.2);
+            border: 1px solid rgba(129, 140, 248, 0.5);
+            color: #818cf8;
+            font-family: 'JetBrains Mono', monospace;
+            font-weight: 700;
+            font-size: 0.85rem;
+        }
+        input[type=range] {
+            width: 100%;
+            accent-color: #818cf8;
+            cursor: pointer;
+        }
     </style>
 </head>
-<body class="min-h-screen p-6 md:p-12">
-    <header class="max-w-4xl mx-auto mb-12 flex items-center justify-between">
+<body class="min-h-screen p-5 sm:p-8 md:p-12">
+
+    <!-- Header -->
+    <header class="max-w-5xl mx-auto mb-10 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <div>
-            <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-ihx/20 text-ihx border border-ihx/30 text-xs font-semibold mb-4"><i class="fas fa-book-open"></i> 이론 및 원리</div>
-            <h1 class="text-3xl font-extrabold hero-title mb-2">내부열교환기(IHX) 심층 열역학 이론</h1>
-            <p class="text-text_muted">냉매 사이클 내 효율 극대화를 위한 열교환 메커니즘과 유체역학적 해석</p>
+            <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-ihx/20 text-ihx border border-ihx/30 text-xs font-semibold mb-3">
+                <i class="fas fa-lightbulb"></i> 직관적 열역학 가이드 &amp; 원천 이론 포털
+            </div>
+            <h1 class="text-2xl sm:text-4xl font-extrabold hero-title mb-2">내부열교환기(IHX) 한눈에 이해하기</h1>
+            <p class="text-text_muted text-sm sm:text-base">복잡한 수식 전에 그림과 비유로 먼저 깨우치는 3대 내부 열교환 아키텍처(SHX · SLHX · Economizer)와 열역학 법칙</p>
         </div>
-        <div class="flex gap-3 shrink-0">
-            <a href="../../index.html" class="px-4 py-2 rounded-full border border-surface_border hover:bg-surface_card text-text_muted hover:text-text_main transition-colors text-sm font-semibold flex items-center gap-2">
-                <i class="fas fa-home"></i> 홈
+        <div class="flex gap-2.5 shrink-0">
+            <a href="../../index.html" class="px-4 py-2 rounded-xl border border-surface_border hover:bg-surface_card text-text_muted hover:text-text_main transition-colors text-xs sm:text-sm font-semibold flex items-center gap-2" style="text-decoration:none;">
+                <i class="fas fa-home"></i> 중앙 대시보드
             </a>
-            <a href="../index.html" class="px-4 py-2 rounded-full bg-ihx/10 text-ihx border border-ihx/30 hover:bg-ihx/20 transition-colors text-sm font-semibold flex items-center gap-2">
-                <i class="fas fa-arrow-left"></i> 상위 메뉴
+            <a href="../index.html" class="px-4 py-2 rounded-xl bg-ihx/15 text-ihx border border-ihx/40 hover:bg-ihx/25 transition-colors text-xs sm:text-sm font-semibold flex items-center gap-2" style="text-decoration:none;">
+                <i class="fas fa-sliders"></i> 상세 시뮬레이터 이동
             </a>
         </div>
     </header>
 
-    <main class="max-w-4xl mx-auto space-y-8">
-        <!-- Section 1: Introduction to IHX -->
-        <section class="glass-card">
-            <h2 class="text-2xl font-bold mb-6 border-b border-surface_border pb-4"><i class="fas fa-sync text-ihx mr-2"></i> 1. IHX의 정의와 목적</h2>
-            <div class="space-y-4 text-text_muted">
-                <p>내부열교환기(Internal Heat Exchanger, IHX)는 냉동 사이클에서 <strong>응축기를 통과한 고온/고압의 액냉매</strong>와 <strong>증발기를 통과한 저온/저압의 기체 냉매</strong>를 서로 열교환시키는 장치입니다.</p>
-                <ul class="list-disc list-inside space-y-2 ml-4">
-                    <li><strong class="text-text_main">과냉각(Subcooling) 증대:</strong> 팽창밸브로 들어가는 액냉매의 온도를 낮춰 팽창 후의 플래시 가스(Flash gas) 발생을 줄이고, 증발기의 잠열 흡수 능력을 극대화합니다.</li>
-                    <li><strong class="text-text_main">과열도(Superheating) 확보:</strong> 압축기로 들어가는 기체 냉매의 온도를 높여 압축기 내 액압축(Liquid slugging) 현상을 방지합니다.</li>
-                </ul>
+    <main class="max-w-5xl mx-auto">
+
+        <!-- 0. BLUF Mental Model -->
+        <section class="glass-card border-l-4 !border-l-ihx bg-gradient-to-br from-surface_card to-surface">
+            <h2 class="text-lg sm:text-xl font-bold text-text_main mb-3 flex items-center gap-2">
+                <i class="fas fa-bolt text-ihx"></i> 30초 핵심 비유: 내부열교환기(IHX)란 무엇인가?
+            </h2>
+            <p class="text-text_muted text-sm sm:text-base leading-relaxed mb-4">
+                겨울철 환기할 때 실내의 따뜻한 나가는 공기로 차가운 들어오는 공기를 데워주는 <strong>'전열교환기'</strong>를 떠올려 보십시오.
+                냉동·공조 시스템 내부에도 똑같이 <strong>"어차피 식혀야 할 뜨거운 유체"</strong>와 <strong>"어차피 데워지거나 버려질 차가운 유체"</strong>가 동시에 흐릅니다.
+                외부 전기나 보일러를 1W도 쓰지 않고, <strong>두 배관을 나란히 붙여 열만 맞바꿔주는 패시브(무동력) 열회수 장치</strong>가 바로 내부열교환기(IHX)입니다.
+            </p>
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mt-4">
+                <div class="bg-surface/90 border border-emerald-500/30 rounded-xl p-4">
+                    <div class="text-xs font-mono text-emerald-400 font-bold mb-1">TYPE 1 · 액체 ⇄ 액체 맞교환</div>
+                    <div class="text-base font-bold text-text_main mb-1">제습기 용액 열교환기 (SHX)</div>
+                    <p class="text-xs text-text_muted leading-relaxed">
+                        제습탑 찬 용액(14°C)과 재생탑 더운 용액(36.5°C)을 맞교환. <strong>양쪽 모두 비열이 같아 부작용 없이 가열·냉각 에너지를 동시에 75% 절감</strong>합니다.
+                    </p>
+                </div>
+                <div class="bg-surface/90 border border-sky-500/30 rounded-xl p-4">
+                    <div class="text-xs font-mono text-sky-400 font-bold mb-1">TYPE 2 · 고압 액체 ⇄ 저압 가스</div>
+                    <div class="text-base font-bold text-text_main mb-1">칠러 흡입관 열교환기 (SLHX)</div>
+                    <p class="text-xs text-text_muted leading-relaxed">
+                        응축기 출구 액체(38°C)를 증발기 출구 가스(6.5°C)로 냉각. <strong>기포(Flash Gas)를 없애 냉방력을 키우지만, 흡입가스가 데워져 압축기 온도가 오르는 양날의 검</strong>입니다.
+                    </p>
+                </div>
+                <div class="bg-surface/90 border border-amber-500/30 rounded-xl p-4">
+                    <div class="text-xs font-mono text-amber-400 font-bold mb-1">TYPE 3 · 2단 중간압 기포 분리</div>
+                    <div class="text-base font-bold text-text_main mb-1">터보 플래시 이코노마이저</div>
+                    <p class="text-xs text-text_muted leading-relaxed">
+                        3,100 RT 대형 터보 칠러 전용. 1단 흡입관은 건드리지 않고(ΔP=0), <strong>중간 탱크에서 발생한 기포만 2단 임펠러로 직분사해 효율을 +7~10% 끌어올립니다.</strong>
+                    </p>
+                </div>
             </div>
         </section>
 
-        <!-- Section 2: Thermodynamic Equations -->
+        <!-- 1. Visual Explanation of Liquid-Vapor Specific Heat Asymmetry -->
+        <section class="glass-card">
+            <div class="flex items-center gap-3 mb-4 border-b border-surface_border pb-4">
+                <span class="step-badge">01</span>
+                <div>
+                    <h2 class="text-xl sm:text-2xl font-bold text-text_main">왜 냉매 IHX(SLHX)에서는 온도 변화가 비대칭일까?</h2>
+                    <p class="text-xs sm:text-sm text-text_muted">열량은 1:1로 똑같이 주고받지만, 액체와 가스의 '비열(열그릇 크기)'이 다르기 때문입니다.</p>
+                </div>
+            </div>
+
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 items-center">
+                <div class="space-y-4 text-sm text-text_muted">
+                    <p>
+                        칠러의 내부열교환기(SLHX)에는 같은 냉매가 <strong>동일한 질량유량(\(\dot{m}\))</strong>으로 고압 액체관과 저압 가스관을 통과합니다.
+                        에너지 보존 법칙에 의해 액체가 잃은 열량(\(\dot{Q}_{IHX}\))과 가스가 얻은 열량은 <strong>단 1 kJ의 오차도 없이 정확히 같습니다.</strong>
+                    </p>
+                    <div class="bg-surface p-4 rounded-xl border border-surface_border text-center">
+                        \[ \dot{Q}_{IHX} = \dot{m} \cdot c_{p,\text{liq}} \cdot \Delta T_{\text{sub}} = \dot{m} \cdot c_{p,\text{vap}} \cdot \Delta T_{\text{sh}} \]
+                    </div>
+                    <p>
+                        그런데 모든 냉매(R134a, R1234ze 등)는 <strong>액체 상태의 비열(\(c_{p,\text{liq}} \approx 1.42\))이 기체 상태의 비열(\(c_{p,\text{vap}} \approx 0.95\))보다 약 1.5배 더 큽니다.</strong>
+                    </p>
+                    <ul class="space-y-2 bg-surface/60 p-4 rounded-xl border border-surface_border">
+                        <li class="flex items-start gap-2">
+                            <span class="text-amber-400 font-bold">●</span>
+                            <span><strong class="text-text_main">고압 액체 (큰 열그릇):</strong> 열을 뺏겨도 온도가 천천히 내려갑니다 (\(\Delta T_{\text{sub}} \approx 10\text{ K}\) 과냉각).</span>
+                        </li>
+                        <li class="flex items-start gap-2">
+                            <span class="text-emerald-400 font-bold">●</span>
+                            <span><strong class="text-text_main">저압 가스 (작은 열그릇):</strong> 똑같은 열을 받아도 온도가 1.5배 더 가파르게 치솟습니다 (\(\Delta T_{\text{sh}} \approx 15\text{ K}\) 과열).</span>
+                        </li>
+                    </ul>
+                </div>
+
+                <!-- Interactive Asymmetry Visualizer -->
+                <div class="bg-surface p-5 rounded-xl border border-surface_border">
+                    <div class="flex justify-between items-center mb-3">
+                        <span class="text-xs font-mono uppercase text-ihx font-bold"><i class="fas fa-scale-unbalanced mr-1"></i> 비열 비대칭 인터랙티브 체험</span>
+                        <span class="text-xs text-text_muted">슬라이더를 움직여 보세요</span>
+                    </div>
+
+                    <div class="mb-4">
+                        <div class="flex justify-between text-xs mb-1">
+                            <span class="text-text_muted">교환 열량 \(q_{IHX}\) (엔탈피 이동량)</span>
+                            <span id="simQVal" class="font-mono font-bold text-ihx">15.0 kJ/kg</span>
+                        </div>
+                        <input type="range" id="simQ" min="3" max="25" step="0.5" value="15" oninput="updateMiniSim()">
+                    </div>
+
+                    <div class="mb-4">
+                        <div class="flex justify-between text-xs mb-1">
+                            <span class="text-text_muted">대상 냉매 선택 (비열비 \(c_{p,l}/c_{p,v}\))</span>
+                            <span id="simFluidRatio" class="font-mono font-bold text-primary">1.48 : 1</span>
+                        </div>
+                        <div class="grid grid-cols-3 gap-2 mt-1.5">
+                            <button type="button" onclick="setMiniFluid('R1234ze', 1.42, 0.96, 1.08)" id="btnF_R1234ze" class="px-2.5 py-1.5 rounded-lg text-xs font-bold border border-ihx bg-ihx/20 text-text_main">R1234ze (HFO)</button>
+                            <button type="button" onclick="setMiniFluid('R134a', 1.45, 0.92, 1.11)" id="btnF_R134a" class="px-2.5 py-1.5 rounded-lg text-xs font-bold border border-surface_border bg-surface_card text-text_muted">R134a (HFC)</button>
+                            <button type="button" onclick="setMiniFluid('R32', 2.05, 1.25, 1.24)" id="btnF_R32" class="px-2.5 py-1.5 rounded-lg text-xs font-bold border border-surface_border bg-surface_card text-text_muted">R32 (고토출)</button>
+                        </div>
+                    </div>
+
+                    <!-- Bars -->
+                    <div class="space-y-3 pt-2 border-t border-surface_border">
+                        <div>
+                            <div class="flex justify-between text-xs mb-1">
+                                <span class="text-amber-400 font-semibold">① 고압 액체 과냉각 획득 (\(\Delta T_{\text{sub}}\))</span>
+                                <span id="simTsub" class="font-mono font-bold text-amber-400">-10.6 K</span>
+                            </div>
+                            <div class="w-full h-3 bg-slate-800 rounded-full overflow-hidden">
+                                <div id="barTsub" class="h-full bg-amber-400 rounded-full transition-all" style="width: 42%;"></div>
+                            </div>
+                        </div>
+                        <div>
+                            <div class="flex justify-between text-xs mb-1">
+                                <span class="text-emerald-400 font-semibold">② 저압 흡입가스 과열도 상승 (\(\Delta T_{\text{sh}}\))</span>
+                                <span id="simTsh" class="font-mono font-bold text-emerald-400">+15.6 K</span>
+                            </div>
+                            <div class="w-full h-3 bg-slate-800 rounded-full overflow-hidden">
+                                <div id="barTsh" class="h-full bg-emerald-400 rounded-full transition-all" style="width: 62%;"></div>
+                            </div>
+                        </div>
+                        <div class="p-3 rounded-lg bg-surface_card border border-surface_border text-xs text-text_muted mt-2" id="simVerdictBox">
+                            <!-- JS populated -->
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 2. Why Flash Gas is Bad & How Subcooling Fixes It -->
+        <section class="glass-card">
+            <div class="flex items-center gap-3 mb-4 border-b border-surface_border pb-4">
+                <span class="step-badge">02</span>
+                <div>
+                    <h2 class="text-xl sm:text-2xl font-bold text-text_main">팽창밸브(EEV) 앞단의 '기포(Flash Gas)'는 왜 위험한가?</h2>
+                    <p class="text-xs sm:text-sm text-text_muted">COP 수치 이상으로 현장에서 IHX를 다는 진짜 이유: 밸브 안정화와 유효 전열면적 확보</p>
+                </div>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div class="bg-red-950/20 border border-red-500/30 rounded-xl p-5">
+                    <div class="flex items-center justify-between mb-3">
+                        <span class="text-sm font-bold text-danger"><i class="fas fa-triangle-exclamation mr-1.5"></i> IHX 미적용 (과냉각 부족: SC 2~3 K)</span>
+                        <span class="text-xs font-mono px-2 py-0.5 rounded bg-red-500/20 text-red-300">건도 x₄ ≈ 0.26</span>
+                    </div>
+                    <p class="text-xs sm:text-sm text-text_muted leading-relaxed mb-3">
+                        응축기에서 막 나온 액체 냉매는 배관 마찰과 필터드라이어를 지나며 압력이 떨어져 <strong>팽창밸브에 들어가기도 전에 이미 보글보글 끓기 시작(Flash Gas)</strong>합니다.
+                    </p>
+                    <ul class="text-xs text-text_muted space-y-1.5 list-disc list-inside">
+                        <li>기포가 팽창밸브 오리피스를 지날 때 유량이 급변하여 <strong>심각한 밸브 헌팅(Hunting)과 소음</strong> 발생</li>
+                        <li>팽창 직후 냉매의 약 26%가 이미 기체(건도 \(x_4 = 0.26\))로 변해, <strong>증발기에서 실제로 일할 수 있는 액체 비율이 74%로 축소</strong></li>
+                    </ul>
+                </div>
+
+                <div class="bg-emerald-950/20 border border-emerald-500/30 rounded-xl p-5">
+                    <div class="flex items-center justify-between mb-3">
+                        <span class="text-sm font-bold text-accent"><i class="fas fa-circle-check mr-1.5"></i> IHX 적용 (심층 과냉각: SC 12~16 K)</span>
+                        <span class="text-xs font-mono px-2 py-0.5 rounded bg-emerald-500/20 text-emerald-300">건도 x₄′ ≈ 0.17</span>
+                    </div>
+                    <p class="text-xs sm:text-sm text-text_muted leading-relaxed mb-3">
+                        IHX가 액체 온도를 38°C에서 27°C 이하로 깊게 식혀주므로, 배관 압력이 다소 떨어져도 절대 끓지 않는 <strong>100% 묵직한 과냉각 액체(Subcooled Liquid)</strong> 상태로 팽창밸브에 진입합니다.
+                    </p>
+                    <ul class="text-xs text-text_muted space-y-1.5 list-disc list-inside">
+                        <li>팽창밸브 전단 기포 0% 달성 ➔ <strong>EEV 정밀 유량 제어 및 헌팅 완전 소멸</strong></li>
+                        <li>팽창 후 기포 비율이 \(x_{4'} \approx 0.17\)로 줄어들어, <strong>증발기 냉동효과(\(q_e\))가 1:1로 +8~12% 직접 증가</strong></li>
+                    </ul>
+                </div>
+            </div>
+        </section>
+
+        <!-- 3. The 1-Second Thermodynamic Screening Formula -->
         <section class="glass-card border-t-4 border-t-primary">
-            <h2 class="text-2xl font-bold mb-6 border-b border-surface_border pb-4"><i class="fas fa-calculator text-primary mr-2"></i> 2. 열역학적 효율 지표 (COP)</h2>
-            <div class="space-y-4 text-text_muted">
-                <p>IHX 적용 시 시스템의 성적계수(COP) 변화는 유체의 물성(주로 비열, <span class="math">C<sub>p</sub></span>)에 강하게 의존합니다.</p>
-                
-                <div class="bg-surface p-4 rounded border border-surface_border font-mono text-sm">
-                    <p class="mb-2"><span class="text-accent">Q<sub>evap</sub></span> = m_dot * (h_1 - h_4)  // 증발기 흡수 열량</p>
-                    <p class="mb-2"><span class="text-accent">W<sub>comp</sub></span> = m_dot * (h_2 - h_1)  // 압축기 일량</p>
-                    <p><span class="text-accent">COP</span> = Q<sub>evap</sub> / W<sub>comp</sub></p>
+            <div class="flex items-center gap-3 mb-4 border-b border-surface_border pb-4">
+                <span class="step-badge">03</span>
+                <div>
+                    <h2 class="text-xl sm:text-2xl font-bold text-text_main">어떤 냉매에 달아야 이득인가? — 1초 무차원 판별식</h2>
+                    <p class="text-xs sm:text-sm text-text_muted">냉방능력 증가분(\(+q_{IHX}\))과 압축일 증가분(\(+q_{IHX}\Phi\))의 줄다리기</p>
+                </div>
+            </div>
+
+            <div class="space-y-4 text-sm text-text_muted">
+                <p>
+                    IHX가 열량 \(q_{IHX}\)를 교환하면 증발기 냉방능력은 정확히 \(+q_{IHX}\)만큼 늘어납니다.
+                    반면, 압축기 흡입가스가 데워져 부피가 팽창하므로 등엔트로피 압축일은 \(\Delta w_s \approx q_{IHX} \cdot \Phi\)만큼 늘어납니다.
+                    여기서 <strong>압축일 증폭 계수 \(\Phi\)</strong>는 오직 압축비(\(P_c/P_e\))와 냉매의 비열비(\(k = c_p/c_v\))만으로 결정됩니다:
+                </p>
+
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div class="bg-surface p-4 rounded-xl border border-surface_border">
+                        <div class="text-xs font-mono text-primary font-bold mb-1">압축일 증폭률 (Work Amplification Factor)</div>
+                        \[ \Phi = \frac{T_{2s}}{T_1} - 1 \approx \left(\frac{P_c}{P_e}\right)^{\frac{k-1}{k}} - 1 \]
+                        <div class="text-xs text-text_muted mt-1">흡입 엔탈피 1 kJ 추가 시 압축일이 몇 kJ 늘어나는지를 나타냄</div>
+                    </div>
+                    <div class="bg-surface p-4 rounded-xl border border-ihx/40">
+                        <div class="text-xs font-mono text-ihx font-bold mb-1">IHX COP 개선 1초 판별 부등식</div>
+                        \[ \mathrm{COP}_s = \frac{q_e}{w_s} < \frac{1}{\Phi} \quad \Longleftrightarrow \quad \text{IHX가 COP 개선!} \]
+                        <div class="text-xs text-text_muted mt-1">기저 등엔트로피 COP가 임계 한계값(\(1/\Phi\))보다 작으면 무조건 이득</div>
+                    </div>
                 </div>
 
-                <p>IHX는 <span class="math">Q<sub>evap</sub></span>를 증가시키지만, 동시에 압축기 흡입 온도가 높아져 비체적이 증가하므로 <span class="math">W<sub>comp</sub></span> 역시 증가시킵니다. 따라서 이 두 요소의 증가율에 따라 최종 COP의 상승 여부가 결정됩니다.</p>
+                <!-- Summary Comparison Table of 3 Architectures -->
+                <div class="overflow-x-auto mt-6">
+                    <table class="w-full text-left border-collapse text-xs sm:text-sm bg-surface rounded-xl overflow-hidden border border-surface_border">
+                        <thead>
+                            <tr class="bg-surface_card text-text_muted border-b border-surface_border">
+                                <th class="p-3">비교 항목</th>
+                                <th class="p-3 text-emerald-400">① 제습기 용액 열교환기 (SHX)</th>
+                                <th class="p-3 text-sky-400">② 중소형 칠러 흡입관 (SLHX)</th>
+                                <th class="p-3 text-amber-400">③ 3,100 RT 2단 터보 이코노마이저</th>
+                            </tr>
+                        </thead>
+                        <tbody class="divide-y divide-surface_border">
+                            <tr>
+                                <td class="p-3 font-semibold text-text_main">적용 설비</td>
+                                <td class="p-3">CrecoPlus 5100C 액체식 제습기</td>
+                                <td class="p-3">스크류 / 스크롤 수냉식 칠러</td>
+                                <td class="p-3">3,100 RT 대형 원심식(터보) 칠러</td>
+                            </tr>
+                            <tr>
+                                <td class="p-3 font-semibold text-text_main">열교환 유체</td>
+                                <td class="p-3">찬 희석액(14°C) ⇄ 더운 농축액(36.5°C)</td>
+                                <td class="p-3">응축 출구 액체 ⇄ 증발 출구 저압 가스</td>
+                                <td class="p-3">1차 팽창 플래시 가스 ➔ 2단 임펠러 직분사</td>
+                            </tr>
+                            <tr>
+                                <td class="p-3 font-semibold text-text_main">1단 흡입 압력손실</td>
+                                <td class="p-3">해당 없음 (액체 펌프 순환)</td>
+                                <td class="p-3 text-amber-300 font-mono">ΔP = 2~5 kPa (10 kPa 초과 시 역효과)</td>
+                                <td class="p-3 text-emerald-400 font-mono">ΔP = 0.0 kPa (1단 흡입관 무저항 직결)</td>
+                            </tr>
+                            <tr>
+                                <td class="p-3 font-semibold text-text_main">에너지 / 용량 효과</td>
+                                <td class="p-3 text-emerald-400 font-bold">가열·냉각 부하 동시 70~75% 절감</td>
+                                <td class="p-3 text-sky-400 font-bold">COP +2~4% · 체적능력(VCC) +6~8%</td>
+                                <td class="p-3 text-amber-400 font-bold">COP +7~11% · 1단 체적능력 +15~19%</td>
+                            </tr>
+                            <tr>
+                                <td class="p-3 font-semibold text-text_main">핵심 제약 조건</td>
+                                <td class="p-3">하절기 39°C 폐열 재생 시 <strong>실내 배기(EA) 스캐빈징</strong> 필수</td>
+                                <td class="p-3">과열도 센서를 반드시 <strong>증발기 직후(IHX 전단)</strong>에 설치</td>
+                                <td class="p-3">플래시 탱크 액면 제어 및 데미스터(액적 분리) 필수</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
             </div>
         </section>
 
-        <!-- Section 3: Refrigerant Dependency -->
+        <!-- 4. Foundational Literature & Patents -->
         <section class="glass-card">
-            <h2 class="text-2xl font-bold mb-6 border-b border-surface_border pb-4"><i class="fas fa-flask text-ihx mr-2"></i> 3. 냉매 종류에 따른 IHX 효과</h2>
-            
-            <div class="space-y-6 text-text_muted">
-                <div>
-                    <h3 class="text-xl font-semibold text-text_main mb-2">자연냉매 (CO2 - R744)</h3>
-                    <p>초임계 사이클(Transcritical cycle)로 운전되는 CO2 시스템에서 IHX는 필수적입니다. 가스쿨러 출구 온도가 임계점(31.1°C) 이상일 경우 등엔탈피 팽창 시 건도가 매우 높아지므로, IHX를 통한 극단적인 과냉각이 COP를 최대 20% 이상 끌어올릴 수 있습니다.</p>
-                </div>
-                
-                <div>
-                    <h3 class="text-xl font-semibold text-text_main mb-2">HFC 및 HFO 계열 (R134a, R1234yf)</h3>
-                    <p>액체 비열이 크고 기체 비열이 작은 냉매일수록 IHX의 효율 상승 폭이 큽니다. R1234yf는 R134a에 비해 잠열이 작아 증발기 성능 저하가 우려되나, IHX를 부착하면 이를 성공적으로 상쇄할 수 있어 차세대 자동차 에어컨(MAC) 및 산업용 칠러의 표준으로 자리잡았습니다.</p>
-                </div>
-                
-                <div>
-                    <h3 class="text-xl font-semibold text-text_main mb-2">전통적인 냉매 (R22, R410A)</h3>
-                    <p>압축기 토출 온도가 태생적으로 높은 R22, R32 기반 혼합냉매(R410A 등)에서는 IHX 사용 시 압축기 과열 및 윤활유 열화 문제가 발생할 수 있어 사용이 제한되거나 엄격한 제어(액분사 등)와 병행해야 합니다.</p>
-                </div>
+            <h2 class="text-xl font-bold text-text_main mb-4 flex items-center gap-2">
+                <i class="fas fa-book-bookmark text-ihx"></i> 검증된 핵심 원천 논문 및 참고문헌
+            </h2>
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-4 text-xs sm:text-sm">
+                <a href="../../03_research_paper/index.html" class="block p-4 rounded-xl bg-surface border border-surface_border hover:border-ihx transition-colors" style="text-decoration:none;">
+                    <div class="font-mono text-xs text-ihx font-bold mb-1">Domanski, Didion &amp; Doyle (1994)</div>
+                    <div class="font-bold text-text_main mb-1">Evaluation of suction-line/liquid-line heat exchange in the refrigeration cycle</div>
+                    <div class="text-xs text-text_muted">Int. J. Refrigeration · DOI: 10.1016/0140-7007(94)90010-8</div>
+                    <p class="text-xs text-text_muted mt-2">냉매 비열비와 잠열 크기에 따라 SLHX의 COP 득실 부호가 결정됨을 최초로 정립한 고전 원천 논문.</p>
+                </a>
+                <a href="../../03_research_paper/index.html" class="block p-4 rounded-xl bg-surface border border-surface_border hover:border-ihx transition-colors" style="text-decoration:none;">
+                    <div class="font-mono text-xs text-ihx font-bold mb-1">Klein, Reindl &amp; Brownell (2000)</div>
+                    <div class="font-bold text-text_main mb-1">Refrigeration system performance using liquid-suction heat exchangers</div>
+                    <div class="text-xs text-text_muted">Int. J. Refrigeration · DOI: 10.1016/S0140-7007(00)00008-6</div>
+                    <p class="text-xs text-text_muted mt-2">흡입관 압력손실(ΔP)이 IHX 열역학적 이득을 잠식하는 정량적 상관관계와 무차원 해석 제시.</p>
+                </a>
+                <a href="../../03_research_paper/index.html" class="block p-4 rounded-xl bg-surface border border-surface_border hover:border-ihx transition-colors" style="text-decoration:none;">
+                    <div class="font-mono text-xs text-ihx font-bold mb-1">Mota-Babiloni et al. (2015)</div>
+                    <div class="font-bold text-text_main mb-1">Drop-in analysis of an internal heat exchanger using R1234ze(E) as alternative for R134a</div>
+                    <div class="text-xs text-text_muted">Energy · DOI: 10.1016/j.energy.2015.06.133</div>
+                    <p class="text-xs text-text_muted mt-2">친환경 HFO 냉매(R1234ze) 드롭인 전환 시 IHX가 용량 결손과 COP를 동시에 회복시킴을 실험 입증.</p>
+                </a>
             </div>
         </section>
-        
-        <!-- Section 4: Design Considerations -->
-        <section class="glass-card border-t-4 border-t-accent">
-            <h2 class="text-2xl font-bold mb-6 border-b border-surface_border pb-4"><i class="fas fa-cogs text-accent mr-2"></i> 4. 설계 및 유동 최적화 (마이크로채널)</h2>
-            <div class="space-y-4 text-text_muted">
-                <p>최근의 IHX 설계는 이중관(Coaxial) 형태를 넘어 압력 강하(Pressure Drop)를 최소화하기 위해 <strong>마이크로채널(Microchannel)</strong> 또는 인쇄회로 기판형 열교환기(PCHE) 기술을 접목하고 있습니다.</p>
-                <p>저압 가스관에서의 마찰 손실(dP)은 압축기 흡입 압력을 저하시켜 체적효율을 급감시키므로, IHX 설계 시 열전달률(UA) 극대화보다 <strong>저압부 압력 강하 억제</strong>가 전체 시스템 효율(System COP) 관점에서 훨씬 더 중요한 설계 인자로 작용합니다.</p>
-            </div>
-        </section>
+
     </main>
+
+    <script>
+        let curFluid = { name: 'R1234ze', cpL: 1.42, cpV: 0.96, k: 1.08 };
+
+        function setMiniFluid(name, cpL, cpV, k) {
+            curFluid = { name, cpL, cpV, k };
+            ['R1234ze', 'R134a', 'R32'].forEach(f => {
+                const btn = document.getElementById('btnF_' + f);
+                if (f === name) {
+                    btn.className = 'px-2.5 py-1.5 rounded-lg text-xs font-bold border border-ihx bg-ihx/20 text-text_main';
+                } else {
+                    btn.className = 'px-2.5 py-1.5 rounded-lg text-xs font-bold border border-surface_border bg-surface_card text-text_muted';
+                }
+            });
+            updateMiniSim();
+        }
+
+        function updateMiniSim() {
+            const q = parseFloat(document.getElementById('simQ').value);
+            document.getElementById('simQVal').textContent = q.toFixed(1) + ' kJ/kg';
+            const ratio = curFluid.cpL / curFluid.cpV;
+            document.getElementById('simFluidRatio').textContent = ratio.toFixed(2) + ' : 1 (' + curFluid.name + ')';
+
+            const dTsub = q / curFluid.cpL;
+            const dTsh = q / curFluid.cpV;
+
+            document.getElementById('simTsub').textContent = '-' + dTsub.toFixed(1) + ' K (액체 냉각)';
+            document.getElementById('simTsh').textContent = '+' + dTsh.toFixed(1) + ' K (가스 가열)';
+
+            document.getElementById('barTsub').style.width = Math.min(100, (dTsub / 28) * 100) + '%';
+            document.getElementById('barTsh').style.width = Math.min(100, (dTsh / 28) * 100) + '%';
+
+            const vbox = document.getElementById('simVerdictBox');
+            if (curFluid.name === 'R32') {
+                vbox.innerHTML = `<strong class="text-danger">🔴 R32 비권고:</strong> 비열비(k=1.24)가 높아 흡입가스가 +${dTsh.toFixed(1)} K 데워지면 압축기 토출온도가 위험 한계(115°C)를 초과하며 압축일이 급증해 COP가 오히려 하락합니다.`;
+            } else {
+                vbox.innerHTML = `<strong class="text-accent">🟢 ${curFluid.name} 적극 권장:</strong> 액체가 <strong>-${dTsub.toFixed(1)} K 과냉각</strong>되어 팽창밸브 기포가 완전히 사라지고, 비열비(k=${curFluid.k})가 낮아 압축일 증가보다 냉방능력 증가가 우세하여 <strong>COP와 체적능력이 동시 상승</strong>합니다.`;
+            }
+        }
+
+        updateMiniSim();
+    </script>
 </body>
 </html>

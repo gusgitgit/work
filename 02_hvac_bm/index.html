@@ -16,11 +16,13 @@
                         surface_border: '#1e293b',
                         text_main: '#f8fafc',
                         text_muted: '#94a3b8',
+                        primary: '#38bdf8',
                         hvac: '#10b981',
                         pillar1: '#10b981',
                         pillar2: '#f59e0b',
                         pillar3: '#3b82f6',
-                        pillar4: '#8b5cf6'
+                        pillar4: '#8b5cf6',
+                        pillar5: '#c084fc'
                     },
                     fontFamily: {
                         sans: ['Pretendard', '-apple-system', 'sans-serif'],
@@ -34,102 +36,205 @@
     <style>
         body { background-color: #090d16; color: #f8fafc; font-family: 'Pretendard', sans-serif; line-height: 1.6; }
         .hero-title { background: linear-gradient(135deg, #ffffff 0%, #cbd5e1 50%, #10b981 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
-        .glass-card { background: #131d33; border: 1px solid #1e293b; border-radius: 1rem; padding: 1.5rem; transition: all 0.3s ease; display: flex; flex-direction: column; justify-content: space-between; min-h: 220px; }
-        .glass-card:hover { transform: translateY(-5px); box-shadow: 0 10px 30px -10px rgba(255,255,255,0.05); }
+        .glass-card { background: #131d33; border: 1px solid #1e293b; border-radius: 1rem; padding: 1.5rem; transition: all 0.3s ease; display: flex; flex-direction: column; justify-content: space-between; min-h: 230px; text-decoration: none; }
+        .glass-card:hover { transform: translateY(-5px); box-shadow: 0 10px 30px -10px rgba(255,255,255,0.06); }
     </style>
 </head>
 <body class="min-h-screen p-6 md:p-12">
     <!-- Header -->
-    <header class="max-w-5xl mx-auto mb-16 text-center">
+    <header class="max-w-5xl mx-auto mb-12 text-center">
         <a href="../index.html" class="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-blue-900/30 text-primary border border-blue-500/30 text-sm font-semibold mb-6 hover:bg-blue-900/50 transition-colors"><i class="fas fa-arrow-left"></i> 중앙 지식베이스</a>
         <h1 class="text-4xl md:text-5xl font-extrabold hero-title mb-4">Semiconductor Fab HVAC & ESG</h1>
-        <p class="text-text_muted text-lg max-w-2xl mx-auto">글로벌 반도체 공장의 핵심 유틸리티(공조, 수자원, 냉동기) 4대 기술 엔지니어링 분석 및 기업별(Samsung, SK, TSMC, Intel, Micron, CXMT) 적용 사례.</p>
+        <p class="text-text_muted text-lg max-w-3xl mx-auto">글로벌 반도체 공장의 핵심 유틸리티(외조기, 칠러/열회수, 수자원/증기포집, 신냉매/액침냉각, AI 예측제어) 5대 기술 엔지니어링 분석 및 6대 파운드리·메모리 기업별 적용 사례.</p>
     </header>
 
-    <!-- Main Grid (2x2) -->
-    <main class="max-w-5xl mx-auto grid grid-cols-1 md:grid-cols-2 gap-6">
-        
-        <!-- Pillar 1 -->
-        <a href="./docs/01_mau_oac.html" class="glass-card group hover:!border-pillar1">
-            <div>
-                <div class="flex items-center justify-between mb-4">
-                    <div class="w-12 h-12 rounded-lg bg-pillar1/10 flex items-center justify-center text-pillar1 text-xl group-hover:scale-110 transition-transform"><i class="fas fa-wind"></i></div>
-                    <i class="fas fa-arrow-right text-text_muted group-hover:text-pillar1 transition-colors"></i>
+    <!-- Section 1: 5 Tech Pillars -->
+    <section class="max-w-5xl mx-auto mb-14">
+        <div class="flex items-center justify-between mb-6 pb-2 border-b border-surface_border">
+            <h2 class="text-xl font-bold text-text_main flex items-center gap-2"><i class="fas fa-layer-group text-hvac"></i> 5대 핵심 기술 필러 (Core Tech Pillars)</h2>
+            <span class="text-xs font-mono text-text_muted">Pillar 01 – 05</span>
+        </div>
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            
+            <!-- Pillar 1 -->
+            <a href="./docs/01_mau_oac.html" class="glass-card group hover:!border-pillar1">
+                <div>
+                    <div class="flex items-center justify-between mb-4">
+                        <div class="flex items-center gap-2">
+                            <div class="w-11 h-11 rounded-lg bg-pillar1/10 flex items-center justify-center text-pillar1 text-xl group-hover:scale-110 transition-transform"><i class="fas fa-wind"></i></div>
+                            <span class="text-xs font-mono font-bold text-pillar1 px-2 py-0.5 rounded bg-pillar1/10">PILLAR 01</span>
+                        </div>
+                        <i class="fas fa-arrow-right text-text_muted group-hover:text-pillar1 transition-colors"></i>
+                    </div>
+                    <h3 class="text-xl font-bold text-text_main mb-2">고효율 외조기 (MAU/OAC)</h3>
+                    <p class="text-text_muted text-sm mb-4">현열/잠열 분리 제어(LD-DOAS), 배기(EA) 활용 저온 재생, 외기 냉수 냉방(Free Cooling), 응축수 100% 포집 기술.</p>
                 </div>
-                <h2 class="text-2xl font-bold text-text_main mb-2">고효율 외조기 (MAU/OAC)</h2>
-                <p class="text-text_muted mb-4">현열/잠열 분리 제어, 외기 냉수 냉방(Free Cooling), 응축수 포집 기술 등 반도체 클린룸 공조기(MAU) 효율 극대화 방안.</p>
-            </div>
-            <div class="flex flex-wrap gap-2">
-                <span class="text-xs font-medium px-2 py-1 rounded bg-surface_border text-text_muted">Free Cooling</span>
-                <span class="text-xs font-medium px-2 py-1 rounded bg-surface_border text-text_muted">VFD</span>
-            </div>
-        </a>
-
-        <!-- Pillar 2 -->
-        <a href="./docs/02_chiller.html" class="glass-card group hover:!border-pillar2">
-            <div>
-                <div class="flex items-center justify-between mb-4">
-                    <div class="w-12 h-12 rounded-lg bg-pillar2/10 flex items-center justify-center text-pillar2 text-xl group-hover:scale-110 transition-transform"><i class="fas fa-snowflake"></i></div>
-                    <i class="fas fa-arrow-right text-text_muted group-hover:text-pillar2 transition-colors"></i>
+                <div class="flex flex-wrap gap-1.5 pt-3 border-t border-surface_border">
+                    <span class="text-xs font-medium px-2 py-0.5 rounded bg-surface_border text-text_muted">LD-DOAS</span>
+                    <span class="text-xs font-medium px-2 py-0.5 rounded bg-surface_border text-text_muted">Free Cooling</span>
+                    <span class="text-xs font-medium px-2 py-0.5 rounded bg-surface_border text-text_muted">응축수 회수</span>
                 </div>
-                <h2 class="text-2xl font-bold text-text_main mb-2">초고효율 칠러 및 폐열 회수</h2>
-                <p class="text-text_muted mb-4">AI/머신러닝 기반 칠러 시스템 제어, 가스 보일러를 대체하는 응축기 폐열 회수(Heat Recovery) 및 거대 히트펌프 기술.</p>
-            </div>
-            <div class="flex flex-wrap gap-2">
-                <span class="text-xs font-medium px-2 py-1 rounded bg-surface_border text-text_muted">AI Chiller</span>
-                <span class="text-xs font-medium px-2 py-1 rounded bg-surface_border text-text_muted">Heat Pump</span>
-            </div>
-        </a>
+            </a>
 
-        <!-- Pillar 3 -->
-        <a href="./docs/03_cooling_tower.html" class="glass-card group hover:!border-pillar3">
-            <div>
-                <div class="flex items-center justify-between mb-4">
-                    <div class="w-12 h-12 rounded-lg bg-pillar3/10 flex items-center justify-center text-pillar3 text-xl group-hover:scale-110 transition-transform"><i class="fas fa-tint"></i></div>
-                    <i class="fas fa-arrow-right text-text_muted group-hover:text-pillar3 transition-colors"></i>
+            <!-- Pillar 2 -->
+            <a href="./docs/02_chiller.html" class="glass-card group hover:!border-pillar2">
+                <div>
+                    <div class="flex items-center justify-between mb-4">
+                        <div class="flex items-center gap-2">
+                            <div class="w-11 h-11 rounded-lg bg-pillar2/10 flex items-center justify-center text-pillar2 text-xl group-hover:scale-110 transition-transform"><i class="fas fa-snowflake"></i></div>
+                            <span class="text-xs font-mono font-bold text-pillar2 px-2 py-0.5 rounded bg-pillar2/10">PILLAR 02</span>
+                        </div>
+                        <i class="fas fa-arrow-right text-text_muted group-hover:text-pillar2 transition-colors"></i>
+                    </div>
+                    <h3 class="text-xl font-bold text-text_main mb-2">초고효율 칠러 및 폐열 회수</h3>
+                    <p class="text-text_muted text-sm mb-4">무급유 자기베어링(Mag-Lev) 원심식 칠러, LNG 보일러를 대체하는 응축기 폐열 회수(Heat Recovery) 및 초순수(UPW) 예열.</p>
                 </div>
-                <h2 class="text-2xl font-bold text-text_main mb-2">냉각탑 수자원 절감 (Water Conservation)</h2>
-                <p class="text-text_muted mb-4">냉각탑 증발수(Plume) 물리적 포집 한계, 하수 재생수(NEWater) 재사용, 무방류(Zero Liquid Discharge) 및 블로우다운 최적화.</p>
-            </div>
-            <div class="flex flex-wrap gap-2">
-                <span class="text-xs font-medium px-2 py-1 rounded bg-surface_border text-text_muted">Zero Liquid Discharge</span>
-                <span class="text-xs font-medium px-2 py-1 rounded bg-surface_border text-text_muted">Water Positive</span>
-            </div>
-        </a>
-
-        <!-- Pillar 4 -->
-        <a href="./docs/04_refrigerants.html" class="glass-card group hover:!border-pillar4">
-            <div>
-                <div class="flex items-center justify-between mb-4">
-                    <div class="w-12 h-12 rounded-lg bg-pillar4/10 flex items-center justify-center text-pillar4 text-xl group-hover:scale-110 transition-transform"><i class="fas fa-server"></i></div>
-                    <i class="fas fa-arrow-right text-text_muted group-hover:text-pillar4 transition-colors"></i>
+                <div class="flex flex-wrap gap-1.5 pt-3 border-t border-surface_border">
+                    <span class="text-xs font-medium px-2 py-0.5 rounded bg-surface_border text-text_muted">Heat Recovery</span>
+                    <span class="text-xs font-medium px-2 py-0.5 rounded bg-surface_border text-text_muted">Mag-Lev Turbo</span>
+                    <span class="text-xs font-medium px-2 py-0.5 rounded bg-surface_border text-text_muted">Scope 1 감축</span>
                 </div>
-                <h2 class="text-2xl font-bold text-text_main mb-2">신냉매 및 액침 냉각 (Immersion Cooling)</h2>
-                <p class="text-text_muted mb-4">Low-GWP 대안 냉매(HFO 등) 전환의 열역학적 딜레마, AI 데이터센터용 단상/2상 액침 냉각 및 3D 증기 챔버 방열판.</p>
-            </div>
-            <div class="flex flex-wrap gap-2">
-                <span class="text-xs font-medium px-2 py-1 rounded bg-surface_border text-text_muted">Low-GWP</span>
-                <span class="text-xs font-medium px-2 py-1 rounded bg-surface_border text-text_muted">Immersion Cooling</span>
-            </div>
-        </a>
+            </a>
 
-        <!-- Tech Pillar 5: AI & Predictive Control -->
-        <a href="./docs/05_ai_control.html" class="glass-card group hover:!border-pillar5" style="text-decoration:none;">
-            <div class="flex flex-col h-full">
-                <div class="flex items-center justify-between mb-4">
-                    <div class="w-12 h-12 rounded-lg bg-pillar5/10 flex items-center justify-center text-pillar5 text-xl group-hover:scale-110 transition-transform"><i class="fas fa-brain"></i></div>
-                    <i class="fas fa-arrow-right text-text_muted group-hover:text-pillar5 transition-colors group-hover:translate-x-1"></i>
+            <!-- Pillar 3 -->
+            <a href="./docs/03_cooling_tower.html" class="glass-card group hover:!border-pillar3">
+                <div>
+                    <div class="flex items-center justify-between mb-4">
+                        <div class="flex items-center gap-2">
+                            <div class="w-11 h-11 rounded-lg bg-pillar3/10 flex items-center justify-center text-pillar3 text-xl group-hover:scale-110 transition-transform"><i class="fas fa-tint"></i></div>
+                            <span class="text-xs font-mono font-bold text-pillar3 px-2 py-0.5 rounded bg-pillar3/10">PILLAR 03</span>
+                        </div>
+                        <i class="fas fa-arrow-right text-text_muted group-hover:text-pillar3 transition-colors"></i>
+                    </div>
+                    <h3 class="text-xl font-bold text-text_main mb-2">냉각탑 수자원 절감 및 증기 포집</h3>
+                    <p class="text-text_muted text-sm mb-4">정전기 유도(Electrostatic) 백연/수증기 포집, 반도체 공정 폐수(UPW Reject·CMP) 메이크업 재이용 및 무방류(ZLD) 시스템.</p>
                 </div>
-                <h2 class="text-xl font-bold text-text_main mb-2">Pillar 05.<br><span class="text-2xl text-pillar5">AI & Predictive Control</span></h2>
-                <p class="text-text_muted text-sm flex-grow mb-4">강화학습 및 디지털 트윈을 활용한 예측 제어, MES 생산 일정 연동 시스템, Cloud-Edge 분산 처리</p>
-                <div class="pt-4 border-t border-surface_border mt-auto">
-                    <span class="text-xs font-semibold text-text_muted uppercase tracking-wider">Key Players</span>
-                    <p class="text-sm text-text_main mt-1">TSMC, Delta Electronics, JCI, Schneider</p>
+                <div class="flex flex-wrap gap-1.5 pt-3 border-t border-surface_border">
+                    <span class="text-xs font-medium px-2 py-0.5 rounded bg-surface_border text-text_muted">정전식 수증기 포집</span>
+                    <span class="text-xs font-medium px-2 py-0.5 rounded bg-surface_border text-text_muted">UPW/CMP 폐수 재이용</span>
+                    <span class="text-xs font-medium px-2 py-0.5 rounded bg-surface_border text-text_muted">ZLD</span>
                 </div>
-            </div>
-        </a>
+            </a>
 
+            <!-- Pillar 4 -->
+            <a href="./docs/04_refrigerants.html" class="glass-card group hover:!border-pillar4">
+                <div>
+                    <div class="flex items-center justify-between mb-4">
+                        <div class="flex items-center gap-2">
+                            <div class="w-11 h-11 rounded-lg bg-pillar4/10 flex items-center justify-center text-pillar4 text-xl group-hover:scale-110 transition-transform"><i class="fas fa-server"></i></div>
+                            <span class="text-xs font-mono font-bold text-pillar4 px-2 py-0.5 rounded bg-pillar4/10">PILLAR 04</span>
+                        </div>
+                        <i class="fas fa-arrow-right text-text_muted group-hover:text-pillar4 transition-colors"></i>
+                    </div>
+                    <h3 class="text-xl font-bold text-text_main mb-2">신냉매 및 액침 냉각 (Immersion)</h3>
+                    <p class="text-text_muted text-sm mb-4">Low-GWP HFO 냉매(R-1234ze, R-1233zd)의 체적용량 손실과 IHX/이코노마이저 보완, AI 서버용 단상/2상 액침 냉각.</p>
+                </div>
+                <div class="flex flex-wrap gap-1.5 pt-3 border-t border-surface_border">
+                    <span class="text-xs font-medium px-2 py-0.5 rounded bg-surface_border text-text_muted">Low-GWP HFO</span>
+                    <span class="text-xs font-medium px-2 py-0.5 rounded bg-surface_border text-text_muted">2-Phase Immersion</span>
+                    <span class="text-xs font-medium px-2 py-0.5 rounded bg-surface_border text-text_muted">3D Vapor Chamber</span>
+                </div>
+            </a>
 
-    </main>
+            <!-- Pillar 5 -->
+            <a href="./docs/05_ai_control.html" class="glass-card group hover:!border-pillar5 md:col-span-2 lg:col-span-2">
+                <div>
+                    <div class="flex items-center justify-between mb-4">
+                        <div class="flex items-center gap-2">
+                            <div class="w-11 h-11 rounded-lg bg-pillar5/10 flex items-center justify-center text-pillar5 text-xl group-hover:scale-110 transition-transform"><i class="fas fa-brain"></i></div>
+                            <span class="text-xs font-mono font-bold text-pillar5 px-2 py-0.5 rounded bg-pillar5/10">PILLAR 05</span>
+                        </div>
+                        <i class="fas fa-arrow-right text-text_muted group-hover:text-pillar5 transition-colors"></i>
+                    </div>
+                    <h3 class="text-xl font-bold text-text_main mb-2">AI 자율 제어 및 디지털 트윈 (Predictive Control)</h3>
+                    <p class="text-text_muted text-sm mb-4">심층 강화학습(DRL) 및 물리 법칙 내장 신경망(PINN)을 통한 냉동기·냉각탑 전역(Global) 최적 제어, 반도체 공정 스케줄러(MES) 피드포워드 연동 및 Cloud-Edge 하이브리드 안전 아키텍처.</p>
+                </div>
+                <div class="flex flex-wrap items-center justify-between gap-2 pt-3 border-t border-surface_border">
+                    <div class="flex flex-wrap gap-1.5">
+                        <span class="text-xs font-medium px-2 py-0.5 rounded bg-surface_border text-text_muted">Deep RL / PINN</span>
+                        <span class="text-xs font-medium px-2 py-0.5 rounded bg-surface_border text-text_muted">MES Feed-Forward</span>
+                        <span class="text-xs font-medium px-2 py-0.5 rounded bg-surface_border text-text_muted">Cloud-Edge Twin</span>
+                    </div>
+                    <span class="text-xs text-text_muted">Key Players: <strong class="text-text_main">TSMC, Samsung, Intel, JCI</strong></span>
+                </div>
+            </a>
+
+        </div>
+    </section>
+
+    <!-- Section 2: 6 Global Semiconductor Companies Archive -->
+    <section class="max-w-5xl mx-auto">
+        <div class="flex items-center justify-between mb-6 pb-2 border-b border-surface_border">
+            <h2 class="text-xl font-bold text-text_main flex items-center gap-2"><i class="fas fa-building text-primary"></i> 글로벌 6대 반도체 기업별 HVAC & ESG 실증 아카이브</h2>
+            <span class="text-xs font-mono text-text_muted">Company BM Case Studies</span>
+        </div>
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+            <a href="./docs/archive/samsung.html" class="p-4 rounded-xl bg-surface_card border border-surface_border hover:border-[#3b82f6] transition-all flex items-center justify-between group">
+                <div>
+                    <div class="flex items-center gap-2 mb-1">
+                        <span class="w-2.5 h-2.5 rounded-full bg-[#1428A0]"></span>
+                        <span class="font-bold text-text_main">Samsung Electronics</span>
+                    </div>
+                    <p class="text-xs text-text_muted">광주 CDU 액체냉각 라인 · 평택/화성 폐열 회수 및 Free Cooling</p>
+                </div>
+                <i class="fas fa-chevron-right text-text_muted group-hover:text-primary transition-colors"></i>
+            </a>
+
+            <a href="./docs/archive/sk_hynix.html" class="p-4 rounded-xl bg-surface_card border border-surface_border hover:border-[#EA002C] transition-all flex items-center justify-between group">
+                <div>
+                    <div class="flex items-center gap-2 mb-1">
+                        <span class="w-2.5 h-2.5 rounded-full bg-[#EA002C]"></span>
+                        <span class="font-bold text-text_main">SK Hynix</span>
+                    </div>
+                    <p class="text-xs text-text_muted">일일 17만 톤 재이용수 · HBM 고밀도 팹 유틸리티 최적화</p>
+                </div>
+                <i class="fas fa-chevron-right text-text_muted group-hover:text-[#EA002C] transition-colors"></i>
+            </a>
+
+            <a href="./docs/archive/tsmc.html" class="p-4 rounded-xl bg-surface_card border border-surface_border hover:border-[#CC0000] transition-all flex items-center justify-between group">
+                <div>
+                    <div class="flex items-center gap-2 mb-1">
+                        <span class="w-2.5 h-2.5 rounded-full bg-[#CC0000]"></span>
+                        <span class="font-bold text-text_main">TSMC</span>
+                    </div>
+                    <p class="text-xs text-text_muted">AI 신경망 칠러 10-19% 절감 · IRWP 재생수 및 응축수 100% 회수</p>
+                </div>
+                <i class="fas fa-chevron-right text-text_muted group-hover:text-[#CC0000] transition-colors"></i>
+            </a>
+
+            <a href="./docs/archive/intel.html" class="p-4 rounded-xl bg-surface_card border border-surface_border hover:border-[#0068B5] transition-all flex items-center justify-between group">
+                <div>
+                    <div class="flex items-center gap-2 mb-1">
+                        <span class="w-2.5 h-2.5 rounded-full bg-[#0068B5]"></span>
+                        <span class="font-bold text-text_main">Intel</span>
+                    </div>
+                    <p class="text-xs text-text_muted">액침 냉각 오픈 IP & 산호형 증기챔버 · Fab 34 열회수 칠러</p>
+                </div>
+                <i class="fas fa-chevron-right text-text_muted group-hover:text-[#0068B5] transition-colors"></i>
+            </a>
+
+            <a href="./docs/archive/micron.html" class="p-4 rounded-xl bg-surface_card border border-surface_border hover:border-[#007BB6] transition-all flex items-center justify-between group">
+                <div>
+                    <div class="flex items-center gap-2 mb-1">
+                        <span class="w-2.5 h-2.5 rounded-full bg-[#007BB6]"></span>
+                        <span class="font-bold text-text_main">Micron</span>
+                    </div>
+                    <p class="text-xs text-text_muted">WEF 등대공장(싱가포르) 재생수 98% · 대만 팹 가뭄 헷징</p>
+                </div>
+                <i class="fas fa-chevron-right text-text_muted group-hover:text-[#007BB6] transition-colors"></i>
+            </a>
+
+            <a href="./docs/archive/cxmt.html" class="p-4 rounded-xl bg-surface_card border border-surface_border hover:border-[#E63946] transition-all flex items-center justify-between group">
+                <div>
+                    <div class="flex items-center gap-2 mb-1">
+                        <span class="w-2.5 h-2.5 rounded-full bg-[#E63946]"></span>
+                        <span class="font-bold text-text_main">CXMT</span>
+                    </div>
+                    <p class="text-xs text-text_muted">HBM3E 수랭식 인프라 · 폐쇄루프(Closed-loop) 냉각 및 VFD 제어</p>
+                </div>
+                <i class="fas fa-chevron-right text-text_muted group-hover:text-[#E63946] transition-colors"></i>
+            </a>
+        </div>
+    </section>
 </body>
 </html>
